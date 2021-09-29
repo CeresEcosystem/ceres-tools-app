@@ -18,25 +18,29 @@ class CeresHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: Dimensions.DEFAULT_MARGIN,
         left: Dimensions.DEFAULT_MARGIN,
-        bottom: Dimensions.DEFAULT_MARGIN,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: _launchURL,
-            child: LimitedBox(
-              maxWidth: Dimensions.HEADER_LOGO_WIDTH,
-              child: Image.asset('lib/core/assets/images/ceres_logo.png'),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: _launchURL,
+              child: LimitedBox(
+                maxWidth: Dimensions.HEADER_LOGO_WIDTH,
+                child: Image.asset('lib/core/assets/images/ceres_logo.png'),
+              ),
             ),
           ),
-          GestureDetector(
-            onTap: () => scaffoldKey.currentState?.openEndDrawer(),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
-              child: Icon(Icons.menu_sharp, size: Dimensions.ICON_SIZE),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => scaffoldKey.currentState?.openEndDrawer(),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+                child: Icon(Icons.menu_sharp, size: Dimensions.ICON_SIZE),
+              ),
             ),
           ),
         ],

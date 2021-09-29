@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/token.dart';
 import 'package:ceres_locker_app/domain/models/token_list.dart';
@@ -12,6 +13,8 @@ import 'package:get/get.dart';
 class TokensController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
 
+  Timer? _timer;
+
   final _loadingStatus = LoadingStatus.READY.obs;
   List<Token>? _tokens;
   var searchQueary = ''.obs;
@@ -20,6 +23,7 @@ class TokensController extends GetxController {
   List<Token> get tokens {
     if (_tokens != null && _tokens!.isNotEmpty) {
       return _tokens!.where((token) {
+        if (token.price != null && token.price! <= 0) return false;
         if (token.fullName != null && token.assetId != null) {
           return token.fullName!.toUpperCase().contains(searchQueary.value.toUpperCase()) || token.assetId!.toUpperCase().contains(searchQueary.value.toUpperCase());
         }
@@ -33,8 +37,20 @@ class TokensController extends GetxController {
 
   @override
   void onInit() {
+    _timer = Timer.periodic(const Duration(minutes: 2), (timer) {
+      fetchTokens(true);
+    });
+
     fetchTokens();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    super.onClose();
   }
 
   void onTyping(String text) {
@@ -59,9 +75,11 @@ class TokensController extends GetxController {
           return 0;
         });
       }
-    }
 
-    _loadingStatus.value = LoadingStatus.READY;
+      _loadingStatus.value = LoadingStatus.READY;
+    } else {
+      _loadingStatus.value = LoadingStatus.ERROR;
+    }
   }
 
   void copyAsset(String assetId) {
@@ -72,9 +90,10 @@ class TokensController extends GetxController {
       backgroundColor: backgroundColorLight,
       snackPosition: SnackPosition.BOTTOM,
       duration: const Duration(seconds: 2),
+      animationDuration: const Duration(milliseconds: 500),
       isDismissible: false,
-      margin: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
-      forwardAnimationCurve: Curves.fastOutSlowIn,
+      margin: const EdgeInsets.all(0),
+      snackStyle: SnackStyle.GROUNDED,
     );
   }
 }

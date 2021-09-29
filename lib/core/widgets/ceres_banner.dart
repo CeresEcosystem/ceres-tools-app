@@ -20,26 +20,29 @@ class CeresBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Responsive(
       builder: (context, sizingInformation) {
-        return GestureDetector(
-          onTap: _launchURL,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN),
-            color: backgroundColorLight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  kBannerTitle,
-                  style: bannerTitleStyle(sizingInformation),
-                  textAlign: TextAlign.center,
-                ),
-                UIHelper.verticalSpaceExtraSmall(),
-                Text(
-                  kBannerSubtitle,
-                  style: bannerSubtitleStyle(sizingInformation),
-                  textAlign: TextAlign.center,
-                )
-              ],
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: _launchURL,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN),
+              color: backgroundColorLight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    kBannerTitle,
+                    style: bannerTitleStyle(sizingInformation),
+                    textAlign: TextAlign.center,
+                  ),
+                  UIHelper.verticalSpaceExtraSmall(),
+                  Text(
+                    kBannerSubtitle,
+                    style: bannerSubtitleStyle(sizingInformation),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
             ),
           ),
         );

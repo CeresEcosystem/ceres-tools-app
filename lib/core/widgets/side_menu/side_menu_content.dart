@@ -2,10 +2,10 @@ import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/routes/app_routes.dart';
 
 List<Map<String, dynamic>> sideMenuOptions = [
-  {'icon': 'lib/core/assets/images/tokens_icon.png', 'title': kSideMenuTokens, 'path': Routes.TOKENS},
-  {'icon': 'lib/core/assets/images/pairs_icon.png', 'title': kSideMenuPairs, 'path': Routes.PAIRS},
-  {'icon': 'lib/core/assets/images/farming_icon.png', 'title': kSideMenuFarming, 'path': Routes.FARMING},
-  {'icon': 'lib/core/assets/images/tracker_icon.png', 'title': kSideMenuTracker, 'path': Routes.TRACKER},
+  {'icon': 'lib/core/assets/images/tokens_icon.png', 'title': kSideMenuTokens, 'path': Routes.TOKENS, 'disabled': false},
+  {'icon': 'lib/core/assets/images/pairs_icon.png', 'title': kSideMenuPairs, 'path': Routes.PAIRS, 'disabled': false},
+  {'icon': 'lib/core/assets/images/farming_icon.png', 'title': kSideMenuFarming, 'path': Routes.FARMING, 'disabled': false},
+  {'icon': 'lib/core/assets/images/tracker_icon.png', 'title': kSideMenuTracker, 'path': Routes.TRACKER, 'disabled': true},
 ];
 
 List<Map<String, dynamic>> sideMenuSocials = [

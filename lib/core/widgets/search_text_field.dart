@@ -28,15 +28,18 @@ class SearchTextField extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(Dimensions.DEFAULT_MARGIN_SMALL)),
               borderSide: BorderSide(color: backgroundPink, width: 1.0),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN_SMALL, horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
+            contentPadding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN_SMALL, horizontal: Dimensions.DEFAULT_MARGIN_SMALL / 2),
             filled: true,
             hintText: hint,
             hintStyle: searchTextFieldHintStyle(sizingInformation),
             fillColor: backgroundColorDark,
-            prefixIcon: const Icon(
-              Icons.search,
-              size: Dimensions.ICON_SIZE,
-              color: Colors.white,
+            prefixIcon: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
+              child: Icon(
+                Icons.search,
+                size: Dimensions.ICON_SIZE,
+                color: Colors.white,
+              ),
             ),
           ),
           onChanged: (text) => onChanged(text),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/farm.dart';
@@ -7,6 +9,8 @@ import 'package:get/get.dart';
 class FarmingController extends GetxController {
   final getFarming = Injector.resolve!<GetFarming>();
 
+  Timer? _timer;
+
   final _loadingStatus = LoadingStatus.READY.obs;
   Farm? _farm;
 
@@ -15,8 +19,19 @@ class FarmingController extends GetxController {
 
   @override
   void onInit() {
+    _timer = Timer.periodic(const Duration(minutes: 2), (timer) {
+      fetchFarming(true);
+    });
     fetchFarming();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    super.onClose();
   }
 
   void fetchFarming([bool refresh = false]) async {
@@ -26,8 +41,9 @@ class FarmingController extends GetxController {
 
     if (response != null) {
       _farm = Farm.fromJson(response);
+      _loadingStatus.value = LoadingStatus.READY;
+    } else {
+      _loadingStatus.value = LoadingStatus.ERROR;
     }
-
-    _loadingStatus.value = LoadingStatus.READY;
   }
 }
