@@ -1,4 +1,5 @@
 const kAppName = 'Ceres';
+const kAppTitle = 'Ceres Tools';
 const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
 const kImageStorage = 'https://cerestoken.io/storage/icons/';

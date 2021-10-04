@@ -109,7 +109,10 @@ class TokensView extends StatelessWidget {
 
     return Row(
       children: [
-        RoundImage(image: '$kImageStorage${token.shortName}$imageExtension'),
+        RoundImage(
+          image: '$kImageStorage${token.shortName}$imageExtension',
+          extension: imageExtension,
+        ),
         UIHelper.horizontalSpaceSmall(),
         Expanded(
           child: Column(

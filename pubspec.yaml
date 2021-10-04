@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.17.0
   fl_chart: ^0.40.0
   flutter_native_splash: ^1.2.4
+  bitsdojo_window: ^0.1.1+1
 
 flutter_native_splash:
   color: "#3A0054"

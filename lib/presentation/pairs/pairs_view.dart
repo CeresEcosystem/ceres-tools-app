@@ -239,6 +239,8 @@ class PairsView extends StatelessWidget {
   }
 
   Widget pairImage(Pair pair) {
+    final String imageExtension = pair.shortName != null && pair.shortName!.isNotEmpty && pair.shortName!.contains('COCO') ? kImagePNGExtension : kImageExtension;
+
     return SizedBox(
       width: Dimensions.PAIRS_IMAGE_SIZE * 2,
       child: Stack(
@@ -246,8 +248,9 @@ class PairsView extends StatelessWidget {
           Positioned(
             left: Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}$kImageExtension',
+              image: '$kImageStorage${pair.shortName}$imageExtension',
               size: Dimensions.PAIRS_IMAGE_SIZE,
+              extension: imageExtension,
             ),
           ),
           const RoundImage(
