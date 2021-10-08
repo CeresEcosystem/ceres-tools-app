@@ -1,17 +1,24 @@
+import 'package:ceres_locker_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_locker_app/core/constants/constants.dart';
+import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
+import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_banner.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
+import 'package:ceres_locker_app/core/widgets/error_text.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
+import 'package:ceres_locker_app/core/widgets/round_image.dart';
+import 'package:ceres_locker_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
+import 'package:ceres_locker_app/domain/models/block.dart';
 import 'package:ceres_locker_app/presentation/tracker/tracker_controller.dart';
 import 'package:ceres_locker_app/presentation/tracker/widgets/faqs_item.dart';
 import 'package:ceres_locker_app/presentation/tracker/widgets/tracker_chart.dart';
@@ -28,130 +35,159 @@ class TrackerView extends StatelessWidget {
   Widget build(BuildContext context) {
     TrackerController controller = Get.put(TrackerController());
 
-    return Scaffold(
-      key: _scaffoldKey,
-      endDrawer: SideMenu(),
-      body: Column(
-        children: [
-          const StatusBar(),
-          renderBody(controller),
-        ],
-      ),
+    return Responsive(
+      builder: (context, sizingInformation) {
+        return Scaffold(
+          key: _scaffoldKey,
+          endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? SideMenu() : null,
+          body: Column(
+            children: [
+              const StatusBar(),
+              renderBody(controller, sizingInformation),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget renderBody(TrackerController controller) {
-    return Responsive(
-      builder: (context, sizingInformation) {
-        return Obx(() {
-          if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
+  Widget renderBody(TrackerController controller, SizingInformation sizingInformation) {
+    return Obx(() {
+      if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
 
-          return Expanded(
-            child: RefreshIndicator(
-              child: CustomScrollView(
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      const CeresBanner(),
-                      CeresHeader(
+      if (controller.loadingStatus == LoadingStatus.ERROR) return Expanded(child: ErrorText(onButtonPress: () => controller.fetchTracker(true)));
+
+      return Expanded(
+        child: RefreshIndicator(
+          child: ScrollBarContainer(
+            isAlwaysShown: false,
+            sizingInformation: sizingInformation,
+            child: CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    const CeresBanner(),
+                    UIHelper.verticalSpaceMediumLarge(),
+                    if (sizingInformation.deviceScreenType == DeviceScreenType.Mobile)
+                      (CeresHeader(
                         scaffoldKey: _scaffoldKey,
+                      )),
+                    UIHelper.verticalSpaceMediumLarge(),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
+                      child: Column(
+                        children: [
+                          Text(
+                            kTrackCeresToken,
+                            style: pageTitleStyle(sizingInformation),
+                          ),
+                          UIHelper.verticalSpaceExtraSmall(),
+                          Text(
+                            kTrackCeresTokenSubtitle,
+                            style: pageSubtitleStyle(sizingInformation),
+                          ),
+                          UIHelper.verticalSpaceMedium(),
+                        ],
                       ),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Padding(
-                        padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
-                        child: Column(
-                          children: [
-                            Text(
-                              kTrackCeresToken,
-                              style: pageTitleStyle(sizingInformation),
-                            ),
-                            UIHelper.verticalSpaceExtraSmall(),
-                            Text(
-                              kTrackCeresTokenSubtitle,
-                              style: pageSubtitleStyle(sizingInformation),
-                            ),
-                            UIHelper.verticalSpaceMedium(),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  ),
-                  SliverList(
+                    ),
+                  ]),
+                ),
+                if (controller.burnData != null)
+                  (SliverList(
                     delegate: SliverChildListDelegate([
                       firstBlock(controller, sizingInformation),
                     ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      UIHelper.verticalSpaceSmall(),
-                    ]),
-                  ),
-                  SliverList(
+                  )),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceSmall(),
+                  ]),
+                ),
+                if (controller.xorSpent != null && controller.xorSpent!.isNotEmpty)
+                  (SliverList(
                     delegate: SliverChildListDelegate([
                       secondBlock(controller, sizingInformation),
                     ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      UIHelper.verticalSpaceSmall(),
-                    ]),
-                  ),
-                  SliverList(
+                  )),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceSmall(),
+                  ]),
+                ),
+                if (controller.mainTableData != null && controller.mainTableData!.isNotEmpty)
+                  (SliverList(
                     delegate: SliverChildListDelegate([
                       thirdBlock(controller, sizingInformation),
                     ]),
-                  ),
-                  SliverList(
+                  )),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceLarge(),
+                  ]),
+                ),
+                if (controller.pswapBurningGraphData != null && controller.pswapBurningGraphData!.isNotEmpty)
+                  (SliverList(
                     delegate: SliverChildListDelegate([
-                      UIHelper.verticalSpaceLarge(),
+                      fourthBlock(sizingInformation, controller),
                     ]),
-                  ),
-                  SliverList(
+                  )),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceLarge(),
+                  ]),
+                ),
+                if (controller.pswapSupplyGraphData != null && controller.pswapSupplyGraphData!.isNotEmpty)
+                  (SliverList(
                     delegate: SliverChildListDelegate([
-                      fourthBlock(sizingInformation),
+                      fifthBlock(sizingInformation, controller),
                     ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      UIHelper.verticalSpaceLarge(),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      fifthBlock(sizingInformation),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      UIHelper.verticalSpaceLarge(),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      sixthBlock(controller, sizingInformation),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      UIHelper.verticalSpaceLarge(),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      seventhBlock(controller, sizingInformation),
-                    ]),
-                  ),
-                ],
-              ),
-              onRefresh: () async {},
+                  )),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceLarge(),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    seventhBlock(controller, sizingInformation),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceLarge(),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    sixthBlock(controller, sizingInformation),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceLarge(),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    eightBlock(sizingInformation),
+                  ]),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    UIHelper.verticalSpaceLarge(),
+                  ]),
+                ),
+              ],
             ),
-          );
-        });
-      },
-    );
+          ),
+          onRefresh: () async => controller.fetchTracker(true),
+        ),
+      );
+    });
   }
 
   Widget buttons(TrackerController controller, SizingInformation sizingInformation, Function onPress, String selectedFilter, {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start}) {
@@ -187,8 +223,8 @@ class TrackerView extends StatelessWidget {
           buttons(
             controller,
             sizingInformation,
-            (filter) => controller.setFilter(filter),
-            controller.selectedFilter,
+            (filter) => controller.setFilterPSWAPBurn(filter),
+            controller.selectedFilterPSWAPBurn,
           ),
           UIHelper.verticalSpaceMediumLarge(),
           Text(
@@ -198,7 +234,7 @@ class TrackerView extends StatelessWidget {
           UIHelper.verticalSpaceExtraSmall(),
           RichText(
             text: TextSpan(
-              text: '138,782.98',
+              text: formatToCurrency(controller.burnData?['gross']),
               style: trackerBlockPriceStyle(sizingInformation),
               children: <TextSpan>[
                 TextSpan(
@@ -216,7 +252,7 @@ class TrackerView extends StatelessWidget {
           UIHelper.verticalSpaceExtraSmall(),
           RichText(
             text: TextSpan(
-              text: '32,810.21',
+              text: formatToCurrency(controller.burnData?['net']),
               style: trackerBlockPriceStyle(sizingInformation).copyWith(
                 fontSize: subtitle1,
               ),
@@ -235,15 +271,22 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget pagination(int currentPage, int lastPage, Function onPreviousClick, Function onNextClick, SizingInformation sizingInformation) {
+  Widget pagination(int currentPage, int lastPage, Function onPreviousClick, Function onNextClick, Function onFirstClick, Function onLastClick, SizingInformation sizingInformation) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
+          onPressed: () => onFirstClick(),
+          icon: const Icon(
+            Flaticon.arrowLeftDouble,
+            size: Dimensions.ICON_SIZE_SMALL,
+          ),
+        ),
+        IconButton(
           onPressed: () => onPreviousClick(),
           icon: const Icon(
-            Icons.chevron_left,
-            size: Dimensions.ICON_SIZE,
+            Flaticon.arrowLeft,
+            size: Dimensions.ICON_SIZE_SMALL,
           ),
         ),
         Text(
@@ -253,8 +296,15 @@ class TrackerView extends StatelessWidget {
         IconButton(
           onPressed: () => onNextClick(),
           icon: const Icon(
-            Icons.chevron_right,
-            size: Dimensions.ICON_SIZE,
+            Flaticon.arrowRight,
+            size: Dimensions.ICON_SIZE_SMALL,
+          ),
+        ),
+        IconButton(
+          onPressed: () => onLastClick(),
+          icon: const Icon(
+            Flaticon.arrowRightDouble,
+            size: Dimensions.ICON_SIZE_SMALL,
           ),
         ),
       ],
@@ -277,15 +327,15 @@ class TrackerView extends StatelessWidget {
               buttons(
                 controller,
                 sizingInformation,
-                (filter) => controller.setFilter(filter),
-                controller.selectedFilter,
+                (filter) => controller.setFilterXORSpent(filter),
+                controller.selectedFilterXORSpent,
                 mainAxisAlignment: MainAxisAlignment.end,
               ),
             ],
           ),
           UIHelper.verticalSpaceMediumLarge(),
           Column(
-            children: controller.xorSpent.map((item) {
+            children: controller.xorSpent!.map((Block block) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN_SMALL / 2),
                 child: Row(
@@ -293,14 +343,14 @@ class TrackerView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '$kBlock ${item['block']}',
+                        '$kBlock #${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
                         style: trackerBlockBlockStyle(sizingInformation),
                       ),
                     ),
                     UIHelper.horizontalSpaceSmall(),
                     Expanded(
                       child: Text(
-                        '${item['xor']} $kXOR',
+                        '${formatToCurrency(block.xorSpent, decimalDigits: 4)} $kXOR',
                         style: trackerBlockBlockStyle(sizingInformation),
                         textAlign: TextAlign.end,
                       ),
@@ -316,6 +366,8 @@ class TrackerView extends StatelessWidget {
             controller.xorSpentTotalPages,
             () => controller.setXorSpentPage(controller.xorSpentPagination - 1),
             () => controller.setXorSpentPage(controller.xorSpentPagination + 1),
+            () => controller.setXorSpentPage(1),
+            () => controller.setXorSpentPage(controller.xorSpentTotalPages),
             sizingInformation,
           ),
         ],
@@ -347,7 +399,7 @@ class TrackerView extends StatelessWidget {
                   }).toList(),
                 ),
                 UIHelper.verticalSpaceMediumLarge(),
-                ...controller.mainTableData.map((item) {
+                ...controller.mainTableData!.map((Block block) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN_SMALL / 2),
                     child: Row(
@@ -355,31 +407,31 @@ class TrackerView extends StatelessWidget {
                       children: [
                         rowItem(
                           Text(
-                            item['block'],
+                            '#${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            item['gross'],
+                            formatToCurrency(block.pswapGrossBurn, decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            item['remintedlp'],
+                            formatToCurrency(block.pswapRemintedLP, decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            item['remintedp'],
+                            formatToCurrency(block.pswapRemintedParliament, decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            item['pswap'],
+                            formatToCurrency(block.pswapNetBurn, decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
@@ -396,6 +448,8 @@ class TrackerView extends StatelessWidget {
             controller.mainTableTotalPages,
             () => controller.setMainTablePage(controller.mainTablePagination - 1),
             () => controller.setMainTablePage(controller.mainTablePagination + 1),
+            () => controller.setMainTablePage(1),
+            () => controller.setMainTablePage(controller.mainTableTotalPages),
             sizingInformation,
           ),
         ],
@@ -410,7 +464,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget fourthBlock(SizingInformation sizingInformation) {
+  Widget fourthBlock(SizingInformation sizingInformation, TrackerController controller) {
     return Column(
       children: [
         Text(
@@ -420,13 +474,16 @@ class TrackerView extends StatelessWidget {
         UIHelper.verticalSpaceMedium(),
         ItemContainer(
           sizingInformation: sizingInformation,
-          child: const TrackerChart(),
+          child: TrackerChart(
+            graphData: controller.pswapBurningGraphData!,
+            getTooltipData: controller.getTooltipData,
+          ),
         ),
       ],
     );
   }
 
-  Widget fifthBlock(SizingInformation sizingInformation) {
+  Widget fifthBlock(SizingInformation sizingInformation, TrackerController controller) {
     return Column(
       children: [
         Text(
@@ -436,7 +493,11 @@ class TrackerView extends StatelessWidget {
         UIHelper.verticalSpaceMedium(),
         ItemContainer(
           sizingInformation: sizingInformation,
-          child: const TrackerChart(),
+          child: TrackerChart(
+            graphData: controller.pswapSupplyGraphData!,
+            getTooltipData: controller.getSupplyTooltipData,
+            showFullValue: true,
+          ),
         ),
       ],
     );
@@ -509,30 +570,31 @@ class TrackerView extends StatelessWidget {
   }
 
   Widget seventhBlock(TrackerController controller, SizingInformation sizingInformation) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: sizingInformation.bottomSafeAreaSize + Dimensions.DEFAULT_MARGIN),
-      child: Column(
-        children: [
-          Text(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+          child: Text(
             kFAQSTitle,
             style: trackerTitleStyle(sizingInformation),
+            textAlign: TextAlign.center,
           ),
-          UIHelper.verticalSpaceExtraSmall(),
-          Text(
-            kFAQSSubtitle,
-            style: trackerSubtitleStyle(sizingInformation),
-          ),
-          UIHelper.verticalSpaceMediumLarge(),
-          Column(
-            children: controller.faqs.map((e) {
-              return FaqsItem(
-                item: e,
-                scrollToSelectedContent: _scrollToSelectedContent,
-              );
-            }).toList(),
-          ),
-        ],
-      ),
+        ),
+        UIHelper.verticalSpaceExtraSmall(),
+        Text(
+          kFAQSSubtitle,
+          style: trackerSubtitleStyle(sizingInformation),
+        ),
+        UIHelper.verticalSpaceMediumLarge(),
+        Column(
+          children: controller.faqs.map((e) {
+            return FaqsItem(
+              item: e,
+              scrollToSelectedContent: _scrollToSelectedContent,
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
@@ -543,5 +605,28 @@ class TrackerView extends StatelessWidget {
         Scrollable.ensureVisible(keyContext, duration: const Duration(milliseconds: 200));
       });
     }
+  }
+
+  Widget eightBlock(SizingInformation sizingInformation) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+      child: Column(
+        children: [
+          Text(
+            kSponsoredBy,
+            style: trackerTitleStyle(sizingInformation),
+          ),
+          UIHelper.verticalSpaceMediumLarge(),
+          GestureDetector(
+            onTap: () => _launchURL(kPSWAPCommunity),
+            child: const RoundImage(
+              image: 'lib/core/assets/images/pococo_icon.png',
+              localImage: true,
+              size: Dimensions.SPONSORS_IMAGE_SIZE,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

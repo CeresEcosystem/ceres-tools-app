@@ -8,6 +8,7 @@ class RoundImage extends StatelessWidget {
   final String image;
   final BoxFit? boxFit;
   final String extension;
+  final bool localImage;
 
   const RoundImage({
     Key? key,
@@ -15,6 +16,7 @@ class RoundImage extends StatelessWidget {
     required this.image,
     this.boxFit = BoxFit.cover,
     this.extension = kImageExtension,
+    this.localImage = false,
   }) : super(key: key);
 
   @override
@@ -33,15 +35,20 @@ class RoundImage extends StatelessWidget {
             width: size,
             height: size,
             child: image.isNotEmpty
-                ? extension == kImageExtension
-                    ? SvgPicture.network(
-                        image,
-                        fit: boxFit!,
-                      )
-                    : Image.network(
+                ? localImage
+                    ? Image.asset(
                         image,
                         fit: boxFit,
                       )
+                    : extension == kImageExtension
+                        ? SvgPicture.network(
+                            image,
+                            fit: boxFit!,
+                          )
+                        : Image.network(
+                            image,
+                            fit: boxFit,
+                          )
                 : const EmptyWidget(),
           ),
         ),

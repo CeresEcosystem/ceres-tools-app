@@ -15,6 +15,7 @@ const subtitle1 = 16.0;
 const subtitle2 = 14.0;
 const caption = 12.0;
 const overline = 10.0;
+const overline2 = 8.0;
 
 TextStyle bannerTitleStyle(SizingInformation sizingInformation) {
   return const TextStyle(
@@ -68,7 +69,7 @@ TextStyle tokensTitleStyle(SizingInformation sizingInformation) {
 
 TextStyle tokensAssetIdStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? subtitle2: caption,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? subtitle2 : caption,
     fontWeight: FontWeight.w500,
     color: Colors.white.withOpacity(0.5),
   );
@@ -234,7 +235,7 @@ TextStyle trackerSubtitleStyle(SizingInformation sizingInformation) {
 
 TextStyle faqsTitleStyle(SizingInformation sizingInformation) {
   return const TextStyle(
-    fontSize: title,
+    fontSize: subtitle1,
     fontWeight: FontWeight.w700,
     color: Colors.white,
   );
@@ -253,5 +254,21 @@ TextStyle trackerContactTitleStyle(SizingInformation sizingInformation) {
     fontSize: subtitle1,
     fontWeight: FontWeight.w500,
     color: backgroundOrange,
+  );
+}
+
+TextStyle graphTooltipTextStyle() {
+  return const TextStyle(
+    fontSize: overline,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
+TextStyle graphTitleTextStyle() {
+  return TextStyle(
+    color: Colors.white.withOpacity(0.5),
+    fontWeight: FontWeight.w500,
+    fontSize: overline2,
   );
 }

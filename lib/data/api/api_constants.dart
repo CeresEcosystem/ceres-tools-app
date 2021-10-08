@@ -5,4 +5,5 @@ class ApiConstants {
   static const TOKENS_PERMALINK = '/pairs';
   static const PAIRS_PERMALINK = '/pairs';
   static const FARMING_PERMALINK = '/rewards';
+  static const TRACKER_PERMALINK = '/tracker';
 }

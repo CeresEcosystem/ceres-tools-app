@@ -10,7 +10,7 @@ ThemeData darkThemeData() {
   return ThemeData.dark().copyWith(
     scaffoldBackgroundColor: backgroundColor,
     textTheme: ThemeData.dark().textTheme.apply(
-          fontFamily: 'Montserrat',
+          fontFamily: 'Sora',
         ),
     canvasColor: backgroundColorDark,
     colorScheme: const ColorScheme.dark(

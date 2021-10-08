@@ -1,3 +1,4 @@
+import 'package:ceres_locker_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
@@ -36,7 +37,7 @@ class SearchTextField extends StatelessWidget {
             prefixIcon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
               child: Icon(
-                Icons.search,
+                Flaticon.magnifier,
                 size: Dimensions.ICON_SIZE,
                 color: Colors.white,
               ),

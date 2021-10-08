@@ -48,7 +48,7 @@ class TokensController extends GetxController {
   @override
   void onClose() {
     if (_timer != null) {
-      _timer!.cancel();
+      _timer?.cancel();
     }
     super.onClose();
   }

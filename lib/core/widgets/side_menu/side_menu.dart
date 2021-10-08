@@ -6,6 +6,7 @@ import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
+import 'package:ceres_locker_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu_content.dart';
 import 'package:ceres_locker_app/domain/models/side_menu_page.dart';
 import 'package:flutter/material.dart';
@@ -102,18 +103,23 @@ class SideMenu extends StatelessWidget {
 
   Widget drawerOptions(SizingInformation sizingInformation) {
     return Expanded(
-      child: Scrollbar(
+      child: ScrollBarContainer(
         controller: controller,
         isAlwaysShown: true,
-        child: SingleChildScrollView(
-          controller: controller,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: sideMenuOptions.map((option) {
-              return drawerOptionitem(option, sizingInformation);
-            }).toList(),
-          ),
-        ),
+        child: drawerScroll(sizingInformation),
+        sizingInformation: sizingInformation,
+      ),
+    );
+  }
+
+  Widget drawerScroll(SizingInformation sizingInformation) {
+    return SingleChildScrollView(
+      controller: controller,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: sideMenuOptions.map((option) {
+          return drawerOptionitem(option, sizingInformation);
+        }).toList(),
       ),
     );
   }
@@ -135,9 +141,9 @@ class SideMenu extends StatelessWidget {
                 color: selected ? backgroundPink : Colors.transparent,
               ),
               UIHelper.horizontalSpace(Dimensions.DEFAULT_MARGIN),
-              LimitedBox(
-                maxWidth: Dimensions.SIDE_MENU_ICON_SIZE,
-                child: Image.asset(option['icon']),
+              Icon(
+                option['icon'],
+                size: Dimensions.SIDE_MENU_ICON_SIZE,
               ),
               UIHelper.horizontalSpaceMedium(),
               Text(
@@ -160,18 +166,19 @@ class SideMenu extends StatelessWidget {
       ),
       child: Column(
         children: [
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => _launchURL(kPolkaswapWebsite),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: Dimensions.POLKASWAP_LOGO_SIZE,
+          if (sizingInformation.screenSize.height > 600.0)
+            (MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => _launchURL(kPolkaswapWebsite),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: Dimensions.POLKASWAP_LOGO_SIZE,
+                  ),
+                  child: Image.asset('lib/core/assets/images/polkaswap_logo.png'),
                 ),
-                child: Image.asset('lib/core/assets/images/polkaswap_logo.png'),
               ),
-            ),
-          ),
+            )),
           Divider(
             height: Dimensions.DEFAULT_MARGIN * 2,
             thickness: Dimensions.DIVIDER_THICKNESS_SIZE,
@@ -230,7 +237,7 @@ class SideMenu extends StatelessWidget {
               }
             },
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
+              margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL / 2),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: Dimensions.TOKEN_ICONS_SIZE,

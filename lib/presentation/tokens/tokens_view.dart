@@ -14,6 +14,7 @@ import 'package:ceres_locker_app/core/widgets/error_text.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
+import 'package:ceres_locker_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_locker_app/core/widgets/search_text_field.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
@@ -55,8 +56,9 @@ class TokensView extends StatelessWidget {
 
       return Expanded(
         child: RefreshIndicator(
-          child: Scrollbar(
+          child: ScrollBarContainer(
             isAlwaysShown: false,
+            sizingInformation: sizingInformation,
             child: CustomScrollView(
               slivers: [
                 SliverList(

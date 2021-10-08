@@ -1,22 +1,56 @@
 import 'package:ceres_locker_app/core/style/app_colors.dart';
+import 'package:ceres_locker_app/core/style/app_text_style.dart';
+import 'package:ceres_locker_app/core/theme/dimensions.dart';
+import 'package:ceres_locker_app/core/utils/currency_format.dart';
+import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class TrackerChart extends StatelessWidget {
-  const TrackerChart({Key? key}) : super(key: key);
+  final Function getTooltipData;
+  final Map<String, dynamic> graphData;
+  final bool showFullValue;
+
+  const TrackerChart({
+    Key? key,
+    required this.getTooltipData,
+    required this.graphData,
+    this.showFullValue = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.70,
-      child: LineChart(mainData()),
+    return Responsive(
+      builder: (context, sizingInformation) {
+        return AspectRatio(
+          aspectRatio: 1.70,
+          child: LineChart(
+            mainData(sizingInformation),
+          ),
+        );
+      },
     );
   }
 
-  LineChartData mainData() {
+  List<LineTooltipItem> defaultTooltipItem(List<LineBarSpot> touchedSpots) {
+    return touchedSpots.map((LineBarSpot touchedSpot) {
+      return LineTooltipItem(getTooltipData(touchedSpot), graphTooltipTextStyle(), textAlign: TextAlign.left);
+    }).toList();
+  }
+
+  LineChartData mainData(SizingInformation sizingInformation) {
     return LineChartData(
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipItems: defaultTooltipItem,
+          tooltipBgColor: backgroundColorLight,
+          maxContentWidth: sizingInformation.screenSize.width - Dimensions.DEFAULT_MARGIN_LARGE,
+          fitInsideHorizontally: true,
+        ),
+      ),
       gridData: FlGridData(
-        //show: true,
+        show: false,
         drawVerticalLine: false,
         drawHorizontalLine: false,
       ),
@@ -24,55 +58,55 @@ class TrackerChart extends StatelessWidget {
         show: true,
         rightTitles: SideTitles(showTitles: false),
         topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(showTitles: false),
+        bottomTitles: SideTitles(
+          showTitles: true,
+          interval: graphData['intervalX'],
+          getTextStyles: (context, value) => graphTitleTextStyle(),
+          getTitles: (value) => formatDate(value, showDay: showFullValue),
+          reservedSize: 10,
+          margin: 10,
+        ),
         leftTitles: SideTitles(
           showTitles: true,
-          interval: 1,
-          getTextStyles: (context, value) => TextStyle(
-            color: Colors.white.withOpacity(0.5),
-            fontWeight: FontWeight.w500,
-            fontSize: 11,
-          ),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return '0k';
-              case 1:
-                return '10k';
-              case 3:
-                return '30k';
-              case 5:
-                return '50k';
-            }
-            return '';
-          },
-          reservedSize: 25,
+          interval: graphData['intervalY'],
+          getTextStyles: (context, value) => graphTitleTextStyle(),
+          getTitles: (value) => showFullValue ? formatToCurrency(value, decimalDigits: 3) : formatCurrencyGraph(value),
+          reservedSize: showFullValue ? 80 : 30,
           margin: 10,
         ),
       ),
-      borderData: FlBorderData(show: true, border: Border(left: BorderSide(width: 2, color: Colors.white.withOpacity(0.5)), bottom: BorderSide(width: 2, color: Colors.white.withOpacity(0.5)))),
-      minX: 0,
-      maxX: 8,
-      minY: 0,
-      maxY: 6,
+      borderData: FlBorderData(
+        show: true,
+        border: Border(
+          left: BorderSide(
+            width: 2,
+            color: Colors.white.withOpacity(0.5),
+          ),
+          bottom: BorderSide(
+            width: 2,
+            color: Colors.white.withOpacity(0.5),
+          ),
+        ),
+      ),
+      minX: graphData['minX'] ?? 0,
+      maxX: graphData['maxX'],
+      minY: graphData['minY'] ?? 0,
+      maxY: graphData['maxY'],
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            FlSpot(0, 3),
-            FlSpot(3, 5),
-            FlSpot(6, 6),
-            FlSpot(8, 6),
-          ],
+          spots: List.from(graphData['data']).map((spot) {
+            return FlSpot(dateStringToDouble(spot['x']), spot['y']);
+          }).toList(),
           isCurved: false,
           colors: [Colors.white],
-          barWidth: 4,
+          barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors: [backgroundColorLight],
+            colors: [backgroundPink],
           ),
         ),
       ],

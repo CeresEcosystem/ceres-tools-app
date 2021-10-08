@@ -16,4 +16,7 @@ abstract class RestClient {
 
   @GET(ApiConstants.FARMING_PERMALINK)
   Future getFarming();
+
+  @GET(ApiConstants.TRACKER_PERMALINK)
+  Future getTracker();
 }

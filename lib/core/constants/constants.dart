@@ -2,6 +2,7 @@ const kAppName = 'Ceres';
 const kAppTitle = 'Ceres Tools';
 const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
+const kPSWAPCommunity = 'https://twitter.com/PSWAPCommunity';
 const kImageStorage = 'https://cerestoken.io/storage/icons/';
 const kImageExtension = '.svg';
 const kImagePNGExtension = '.png';
@@ -25,8 +26,8 @@ const kFarmingPart5 = ' PSWAP per day or about ';
 const kFarmingPart6 = ' APR';
 const kTotalLiquidity = 'Total liquidity';
 const kTotalVolume = 'Total volume';
-const kTrackCeresToken = 'Track Ceres Token';
-const kTrackCeresTokenSubtitle = 'Follow the progression of Ceres Token.';
+const kTrackCeresToken = 'Track PSWAP';
+const kTrackCeresTokenSubtitle = 'Follow the burning of PSWAP';
 const kPswapBurn = 'PSWAP gross burn';
 const kPswap = 'PSWAP';
 const kPswapNetBurn ='PSWAP net burn';
@@ -37,6 +38,7 @@ const kFAQSTitle = 'Frequently Ask Questions';
 const kFAQSSubtitle = 'Here’s most asked questions';
 const kContactTitle = 'CONTACT US';
 const kContactSubtitle = 'Join us on Social';
+const kSponsoredBy = 'Sponsored by';
 
 // SIDE MENU //
 const kSideMenuTokens = 'Tokens';

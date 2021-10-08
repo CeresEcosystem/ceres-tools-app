@@ -1,12 +1,13 @@
 import 'package:ceres_locker_app/presentation/farming/farming_view.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_view.dart';
 import 'package:ceres_locker_app/presentation/tokens/tokens_view.dart';
+import 'package:ceres_locker_app/presentation/tracker/tracker_view.dart';
 import 'package:ceres_locker_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainController extends GetxController {
-  final List _pages = [Routes.TOKENS, Routes.PAIRS, Routes.FARMING];
+  final List _pages = [Routes.TOKENS, Routes.PAIRS, Routes.FARMING, Routes.TRACKER];
   final _selectedPage = 0.obs;
   Widget currentWidget = TokensView();
 
@@ -28,6 +29,7 @@ class MainController extends GetxController {
       case Routes.TOKENS: return TokensView();
       case Routes.PAIRS: return PairsView();
       case Routes.FARMING: return FarmingView();
+      case Routes.TRACKER: return TrackerView();
       default: return TokensView();
     }
   }

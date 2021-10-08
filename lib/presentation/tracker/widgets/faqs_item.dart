@@ -1,9 +1,12 @@
+import 'package:ceres_locker_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FaqsItem extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -46,6 +49,12 @@ class _FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin
     });
   }
 
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Responsive(
@@ -71,8 +80,8 @@ class _FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin
                     RotationTransition(
                       turns: _iconTurns!,
                       child: const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: Dimensions.ICON_SIZE,
+                        Flaticon.arrowDown,
+                        size: Dimensions.ICON_SIZE_SMALL,
                         color: Colors.white,
                       ),
                     ),
@@ -82,14 +91,35 @@ class _FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin
               title: Text(
                 widget.item['question'],
                 style: faqsTitleStyle(sizingInformation),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
               children: [
-                Text(
-                  widget.item['answer'],
-                  style: faqsDescriptionStyle(sizingInformation),
-                ),
+                (() {
+                  if (widget.item['link'] != null) {
+                    return RichText(
+                      text: TextSpan(
+                        text: widget.item['answer'],
+                        style: faqsDescriptionStyle(sizingInformation),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' here.',
+                            style: faqsDescriptionStyle(sizingInformation).copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                _launchURL(widget.item['link']);
+                              },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Text(
+                    widget.item['answer'],
+                    style: faqsDescriptionStyle(sizingInformation),
+                  );
+                })()
               ],
             ),
           ),
