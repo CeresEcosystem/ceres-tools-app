@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
@@ -12,7 +10,6 @@ import 'package:get/get.dart';
 
 class TrackerController extends GetxController {
   final getTracker = Injector.resolve!<GetTracker>();
-  Timer? _timer;
 
   final _loadingStatus = LoadingStatus.READY.obs;
 
@@ -243,20 +240,8 @@ class TrackerController extends GetxController {
 
   @override
   void onInit() {
-    _timer = Timer.periodic(const Duration(minutes: 2), (timer) {
-      fetchTracker(true);
-    });
-
     fetchTracker();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    if (_timer != null) {
-      _timer?.cancel();
-    }
-    super.onClose();
   }
 
   void fetchTracker([bool refresh = false]) async {

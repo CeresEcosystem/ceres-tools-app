@@ -1,6 +1,5 @@
 import 'package:ceres_locker_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
@@ -15,7 +14,6 @@ import 'package:ceres_locker_app/core/widgets/error_text.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
-import 'package:ceres_locker_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
 import 'package:ceres_locker_app/domain/models/block.dart';
@@ -26,24 +24,22 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
-class TrackerView extends StatelessWidget {
+class TrackerView extends GetView<TrackerController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TrackerView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    TrackerController controller = Get.put(TrackerController());
-
     return Responsive(
       builder: (context, sizingInformation) {
         return Scaffold(
           key: _scaffoldKey,
-          endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? SideMenu() : null,
+          endDrawer: SideMenu(),
           body: Column(
             children: [
               const StatusBar(),
-              renderBody(controller, sizingInformation),
+              renderBody(sizingInformation),
             ],
           ),
         );
@@ -51,7 +47,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget renderBody(TrackerController controller, SizingInformation sizingInformation) {
+  Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
       if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
 
@@ -59,130 +55,125 @@ class TrackerView extends StatelessWidget {
 
       return Expanded(
         child: RefreshIndicator(
-          child: ScrollBarContainer(
-            isAlwaysShown: false,
-            sizingInformation: sizingInformation,
-            child: CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    const CeresBanner(),
-                    UIHelper.verticalSpaceMediumLarge(),
-                    if (sizingInformation.deviceScreenType == DeviceScreenType.Mobile)
-                      (CeresHeader(
-                        scaffoldKey: _scaffoldKey,
-                      )),
-                    UIHelper.verticalSpaceMediumLarge(),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
-                      child: Column(
-                        children: [
-                          Text(
-                            kTrackCeresToken,
-                            style: pageTitleStyle(sizingInformation),
-                          ),
-                          UIHelper.verticalSpaceExtraSmall(),
-                          Text(
-                            kTrackCeresTokenSubtitle,
-                            style: pageSubtitleStyle(sizingInformation),
-                          ),
-                          UIHelper.verticalSpaceMedium(),
-                        ],
-                      ),
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  const CeresBanner(),
+                  UIHelper.verticalSpaceMediumLarge(),
+                  CeresHeader(
+                    scaffoldKey: _scaffoldKey,
+                  ),
+                  UIHelper.verticalSpaceMediumLarge(),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
+                    child: Column(
+                      children: [
+                        Text(
+                          kTrackCeresToken,
+                          style: pageTitleStyle(sizingInformation),
+                        ),
+                        UIHelper.verticalSpaceExtraSmall(),
+                        Text(
+                          kTrackCeresTokenSubtitle,
+                          style: pageSubtitleStyle(sizingInformation),
+                        ),
+                        UIHelper.verticalSpaceMedium(),
+                      ],
                     ),
-                  ]),
-                ),
-                if (controller.burnData != null)
-                  (SliverList(
-                    delegate: SliverChildListDelegate([
-                      firstBlock(controller, sizingInformation),
-                    ]),
-                  )),
-                SliverList(
+                  ),
+                ]),
+              ),
+              if (controller.burnData != null)
+                (SliverList(
                   delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceSmall(),
+                    firstBlock(sizingInformation),
                   ]),
-                ),
-                if (controller.xorSpent != null && controller.xorSpent!.isNotEmpty)
-                  (SliverList(
-                    delegate: SliverChildListDelegate([
-                      secondBlock(controller, sizingInformation),
-                    ]),
-                  )),
-                SliverList(
+                )),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceSmall(),
+                ]),
+              ),
+              if (controller.xorSpent != null && controller.xorSpent!.isNotEmpty)
+                (SliverList(
                   delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceSmall(),
+                    secondBlock(sizingInformation),
                   ]),
-                ),
-                if (controller.mainTableData != null && controller.mainTableData!.isNotEmpty)
-                  (SliverList(
-                    delegate: SliverChildListDelegate([
-                      thirdBlock(controller, sizingInformation),
-                    ]),
-                  )),
-                SliverList(
+                )),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceSmall(),
+                ]),
+              ),
+              if (controller.mainTableData != null && controller.mainTableData!.isNotEmpty)
+                (SliverList(
                   delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceLarge(),
+                    thirdBlock(sizingInformation),
                   ]),
-                ),
-                if (controller.pswapBurningGraphData != null && controller.pswapBurningGraphData!.isNotEmpty)
-                  (SliverList(
-                    delegate: SliverChildListDelegate([
-                      fourthBlock(sizingInformation, controller),
-                    ]),
-                  )),
-                SliverList(
+                )),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceLarge(),
+                ]),
+              ),
+              if (controller.pswapBurningGraphData != null && controller.pswapBurningGraphData!.isNotEmpty)
+                (SliverList(
                   delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceLarge(),
+                    fourthBlock(sizingInformation),
                   ]),
-                ),
-                if (controller.pswapSupplyGraphData != null && controller.pswapSupplyGraphData!.isNotEmpty)
-                  (SliverList(
-                    delegate: SliverChildListDelegate([
-                      fifthBlock(sizingInformation, controller),
-                    ]),
-                  )),
-                SliverList(
+                )),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceLarge(),
+                ]),
+              ),
+              if (controller.pswapSupplyGraphData != null && controller.pswapSupplyGraphData!.isNotEmpty)
+                (SliverList(
                   delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceLarge(),
+                    fifthBlock(sizingInformation),
                   ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    seventhBlock(controller, sizingInformation),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceLarge(),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    sixthBlock(controller, sizingInformation),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceLarge(),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    eightBlock(sizingInformation),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    UIHelper.verticalSpaceLarge(),
-                  ]),
-                ),
-              ],
-            ),
+                )),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceLarge(),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  seventhBlock(sizingInformation),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceLarge(),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  sixthBlock(sizingInformation),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceLarge(),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  eightBlock(sizingInformation),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  UIHelper.verticalSpaceLarge(),
+                ]),
+              ),
+            ],
           ),
           onRefresh: () async => controller.fetchTracker(true),
         ),
@@ -190,7 +181,7 @@ class TrackerView extends StatelessWidget {
     });
   }
 
-  Widget buttons(TrackerController controller, SizingInformation sizingInformation, Function onPress, String selectedFilter, {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start}) {
+  Widget buttons(SizingInformation sizingInformation, Function onPress, String selectedFilter, {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start}) {
     double rightPadding = mainAxisAlignment == MainAxisAlignment.start ? Dimensions.DEFAULT_MARGIN_SMALL : 0;
     double leftPadding = mainAxisAlignment == MainAxisAlignment.end ? Dimensions.DEFAULT_MARGIN_SMALL : 0;
 
@@ -214,14 +205,13 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget firstBlock(TrackerController controller, SizingInformation sizingInformation) {
+  Widget firstBlock(SizingInformation sizingInformation) {
     return ItemContainer(
       sizingInformation: sizingInformation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buttons(
-            controller,
             sizingInformation,
             (filter) => controller.setFilterPSWAPBurn(filter),
             controller.selectedFilterPSWAPBurn,
@@ -311,7 +301,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget secondBlock(TrackerController controller, SizingInformation sizingInformation) {
+  Widget secondBlock(SizingInformation sizingInformation) {
     return ItemContainer(
       sizingInformation: sizingInformation,
       child: Column(
@@ -325,7 +315,6 @@ class TrackerView extends StatelessWidget {
                 style: trackerBlockLabelTitleStyle(sizingInformation),
               ),
               buttons(
-                controller,
                 sizingInformation,
                 (filter) => controller.setFilterXORSpent(filter),
                 controller.selectedFilterXORSpent,
@@ -375,7 +364,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget thirdBlock(TrackerController controller, SizingInformation sizingInformation) {
+  Widget thirdBlock(SizingInformation sizingInformation) {
     return ItemContainer(
       sizingInformation: sizingInformation,
       child: Column(
@@ -464,7 +453,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget fourthBlock(SizingInformation sizingInformation, TrackerController controller) {
+  Widget fourthBlock(SizingInformation sizingInformation) {
     return Column(
       children: [
         Text(
@@ -483,7 +472,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget fifthBlock(SizingInformation sizingInformation, TrackerController controller) {
+  Widget fifthBlock(SizingInformation sizingInformation) {
     return Column(
       children: [
         Text(
@@ -503,7 +492,7 @@ class TrackerView extends StatelessWidget {
     );
   }
 
-  Widget sixthBlock(TrackerController controller, SizingInformation sizingInformation) {
+  Widget sixthBlock(SizingInformation sizingInformation) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
       child: Column(
@@ -518,13 +507,13 @@ class TrackerView extends StatelessWidget {
             style: trackerTitleStyle(sizingInformation),
           ),
           UIHelper.verticalSpaceMediumLarge(),
-          socialsGroup(controller),
+          socialsGroup(),
         ],
       ),
     );
   }
 
-  Widget socialsGroup(TrackerController controller) {
+  Widget socialsGroup() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -535,20 +524,17 @@ class TrackerView extends StatelessWidget {
           ),
         ),
         ...controller.contactSocials.map((social) {
-          return MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => _launchURL(social['url']!),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
-                padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: Dimensions.SOCIAL_ICONS_SIZE * 1.2,
-                  ),
-                  child: Image.asset(social['icon']!),
+          return GestureDetector(
+            onTap: () => _launchURL(social['url']!),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
+              padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: Dimensions.SOCIAL_ICONS_SIZE * 1.2,
                 ),
+                child: Image.asset(social['icon']!),
               ),
             ),
           );
@@ -569,7 +555,7 @@ class TrackerView extends StatelessWidget {
     }
   }
 
-  Widget seventhBlock(TrackerController controller, SizingInformation sizingInformation) {
+  Widget seventhBlock(SizingInformation sizingInformation) {
     return Column(
       children: [
         Padding(

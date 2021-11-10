@@ -14,7 +14,6 @@ import 'package:ceres_locker_app/core/widgets/error_text.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
-import 'package:ceres_locker_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_locker_app/core/widgets/search_text_field.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
@@ -23,24 +22,23 @@ import 'package:ceres_locker_app/presentation/pairs/pairs_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PairsView extends StatelessWidget {
+class PairsView extends GetView<PairsController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   PairsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    PairsController controller = Get.put(PairsController());
-
     return Responsive(
       builder: (context, sizingInformation) {
         return Scaffold(
           key: _scaffoldKey,
-          endDrawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? SideMenu() : null,
+          resizeToAvoidBottomInset: false,
+          endDrawer: SideMenu(),
           body: Column(
             children: [
               const StatusBar(),
-              renderBody(controller, sizingInformation),
+              renderBody(sizingInformation),
             ],
           ),
         );
@@ -48,7 +46,7 @@ class PairsView extends StatelessWidget {
     );
   }
 
-  Widget renderBody(PairsController controller, SizingInformation sizingInformation) {
+  Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
       if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
 
@@ -56,71 +54,66 @@ class PairsView extends StatelessWidget {
 
       return Expanded(
         child: RefreshIndicator(
-          child: ScrollBarContainer(
-            isAlwaysShown: false,
-            sizingInformation: sizingInformation,
-            child: CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    const CeresBanner(),
-                    UIHelper.verticalSpaceMediumLarge(),
-                    if (sizingInformation.deviceScreenType == DeviceScreenType.Mobile)
-                      (CeresHeader(
-                        scaffoldKey: _scaffoldKey,
-                      )),
-                    UIHelper.verticalSpaceMediumLarge(),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? Dimensions.DEFAULT_MARGIN_LARGE * 4 : Dimensions.DEFAULT_MARGIN,
-                      ),
-                      child: Row(
-                        children: [
-                          sumContainer(kTotalLiquidity, controller.totalLiquidity, sizingInformation),
-                          UIHelper.horizontalSpaceSmall(),
-                          sumContainer(kTotalVolume, controller.totalVolume, sizingInformation),
-                        ],
-                      ),
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  const CeresBanner(),
+                  UIHelper.verticalSpaceMediumLarge(),
+                  CeresHeader(
+                    scaffoldKey: _scaffoldKey,
+                  ),
+                  UIHelper.verticalSpaceMediumLarge(),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.pagePadding(sizingInformation),
                     ),
-                    UIHelper.verticalSpaceMediumLarge(),
-                  ]),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? Dimensions.DEFAULT_MARGIN_LARGE * 4 : Dimensions.DEFAULT_MARGIN,
-                      ),
-                      child: SearchTextField(
-                        onChanged: controller.onTyping,
-                        hint: kSearchTextFieldHintOnlyToken,
-                      ),
+                    child: Row(
+                      children: [
+                        sumContainer(kTotalLiquidity, controller.totalLiquidity, sizingInformation),
+                        UIHelper.horizontalSpaceSmall(),
+                        sumContainer(kTotalVolume, controller.totalVolume, sizingInformation),
+                      ],
                     ),
-                    UIHelper.verticalSpaceMediumLarge(),
-                  ]),
-                ),
-                if (controller.pairs.isNotEmpty)
-                  (SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        Pair pair = controller.pairs[index];
+                  ),
+                  UIHelper.verticalSpaceMediumLarge(),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.pagePadding(sizingInformation),
+                    ),
+                    child: SearchTextField(
+                      onChanged: controller.onTyping,
+                      hint: kSearchTextFieldHintOnlyToken,
+                    ),
+                  ),
+                  UIHelper.verticalSpaceMediumLarge(),
+                ]),
+              ),
+              if (controller.pairs.isNotEmpty)
+                (SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      Pair pair = controller.pairs[index];
 
-                        if (pair.shortName == kXOR) return null;
+                      if (pair.shortName == kXOR) return null;
 
-                        return ItemContainer(
-                          child: pairItem(pair, sizingInformation),
-                          sizingInformation: sizingInformation,
-                        );
-                      },
-                      childCount: controller.pairs.length,
-                    ),
-                  )),
-              ],
-            ),
+                      return ItemContainer(
+                        child: pairItem(pair, sizingInformation),
+                        sizingInformation: sizingInformation,
+                      );
+                    },
+                    childCount: controller.pairs.length,
+                  ),
+                )),
+            ],
           ),
           onRefresh: () async => controller.fetchPairs(true),
         ),

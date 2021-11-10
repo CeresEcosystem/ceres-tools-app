@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/di/injector.dart';
@@ -10,8 +8,6 @@ import 'package:get/get.dart';
 
 class PairsController extends GetxController {
   final getPairs = Injector.resolve!<GetPairs>();
-
-  Timer? _timer;
 
   final _loadingStatus = LoadingStatus.READY.obs;
   var searchQueary = ''.obs;
@@ -46,19 +42,8 @@ class PairsController extends GetxController {
 
   @override
   void onInit() {
-    _timer = Timer.periodic(const Duration(minutes: 2), (timer) {
-      fetchPairs(true);
-    });
     fetchPairs();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    super.onClose();
   }
 
   void fetchPairs([bool refresh = false]) async {

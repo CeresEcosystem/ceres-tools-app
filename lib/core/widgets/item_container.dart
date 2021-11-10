@@ -1,7 +1,7 @@
-import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:flutter/material.dart';
 
 class ItemContainer extends StatelessWidget {
@@ -21,7 +21,7 @@ class ItemContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? Dimensions.DEFAULT_MARGIN_LARGE * 4 : Dimensions.DEFAULT_MARGIN, vertical: Dimensions.DEFAULT_MARGIN / 4),
+      margin: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation), vertical: Dimensions.DEFAULT_MARGIN / 4),
       padding: EdgeInsets.all(smallMargin ? Dimensions.DEFAULT_MARGIN_SMALL : Dimensions.DEFAULT_MARGIN),
       decoration: BoxDecoration(
         color: backgroundColor,

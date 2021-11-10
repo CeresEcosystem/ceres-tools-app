@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/di/injector.dart';
@@ -12,8 +10,6 @@ import 'package:get/get.dart';
 
 class TokensController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
-
-  Timer? _timer;
 
   final _loadingStatus = LoadingStatus.READY.obs;
   List<Token>? _tokens;
@@ -37,20 +33,8 @@ class TokensController extends GetxController {
 
   @override
   void onInit() {
-    _timer = Timer.periodic(const Duration(minutes: 2), (timer) {
-      fetchTokens(true);
-    });
-
     fetchTokens();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    if (_timer != null) {
-      _timer?.cancel();
-    }
-    super.onClose();
   }
 
   void onTyping(String text) {

@@ -75,25 +75,19 @@ class SideMenu extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => _launchURL(kCeresWebsite),
-              child: LimitedBox(
-                maxWidth: Dimensions.HEADER_LOGO_WIDTH,
-                child: Image.asset('lib/core/assets/images/ceres_logo.png'),
-              ),
+          GestureDetector(
+            onTap: () => _launchURL(kCeresWebsite),
+            child: LimitedBox(
+              maxWidth: Dimensions.HEADER_LOGO_WIDTH,
+              child: Image.asset('lib/core/assets/images/ceres_logo.png'),
             ),
           ),
           if (!largeScreen)
-            (MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () => Get.back(),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
-                  child: Icon(Icons.close, size: Dimensions.ICON_SIZE),
-                ),
+            (GestureDetector(
+              onTap: () => Get.back(),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+                child: Icon(Icons.close, size: Dimensions.ICON_SIZE),
               ),
             )),
         ],
@@ -167,16 +161,13 @@ class SideMenu extends StatelessWidget {
       child: Column(
         children: [
           if (sizingInformation.screenSize.height > 600.0)
-            (MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () => _launchURL(kPolkaswapWebsite),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: Dimensions.POLKASWAP_LOGO_SIZE,
-                  ),
-                  child: Image.asset('lib/core/assets/images/polkaswap_logo.png'),
+            (GestureDetector(
+              onTap: () => _launchURL(kPolkaswapWebsite),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: Dimensions.POLKASWAP_LOGO_SIZE,
                 ),
+                child: Image.asset('lib/core/assets/images/polkaswap_logo.png'),
               ),
             )),
           Divider(
@@ -201,20 +192,17 @@ class SideMenu extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: sideMenuSocials.map((social) {
-        return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () => _launchURL(social['url']!),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
-              padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN / 1.5),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: Dimensions.SOCIAL_ICONS_SIZE,
-                ),
-                child: Image.asset(social['icon']!),
+        return GestureDetector(
+          onTap: () => _launchURL(social['url']!),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
+            padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN / 1.5),
+            decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: Dimensions.SOCIAL_ICONS_SIZE,
               ),
+              child: Image.asset(social['icon']!),
             ),
           ),
         );
@@ -228,22 +216,19 @@ class SideMenu extends StatelessWidget {
       children: sideMenuTokens.map((token) {
         String? url = token['url'];
 
-        return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              if (url != null) {
-                _launchURL(url);
-              }
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL / 2),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: Dimensions.TOKEN_ICONS_SIZE,
-                ),
-                child: Image.asset(token['icon']!),
+        return GestureDetector(
+          onTap: () {
+            if (url != null) {
+              _launchURL(url);
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL / 2),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: Dimensions.TOKEN_ICONS_SIZE,
               ),
+              child: Image.asset(token['icon']!),
             ),
           ),
         );

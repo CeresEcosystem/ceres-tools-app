@@ -1,5 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
+import 'package:ceres_locker_app/core/theme/dimensions.dart';
+import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:flutter/material.dart';
 
 class UIHelper {
@@ -70,5 +73,13 @@ class UIHelper {
     return SizedBox(
       width: width,
     );
+  }
+
+  static double pagePadding(SizingInformation sizingInformation) {
+    return sizingInformation.deviceScreenType == DeviceScreenType.Desktop
+        ? Dimensions.DEFAULT_MARGIN_LARGE * 4
+        : sizingInformation.deviceScreenType == DeviceScreenType.Tablet
+            ? Dimensions.DEFAULT_MARGIN_LARGE * 2
+            : Dimensions.DEFAULT_MARGIN;
   }
 }

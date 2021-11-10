@@ -24,7 +24,7 @@ class ScrollBarContainer extends StatelessWidget {
 
     return Scrollbar(
       controller: controller,
-      isAlwaysShown: true,
+      isAlwaysShown: isAlwaysShown,
       child: child,
     );
   }
