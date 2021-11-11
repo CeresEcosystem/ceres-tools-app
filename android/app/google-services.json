@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "336544383126",
+    "project_id": "ceres-tools",
+    "storage_bucket": "ceres-tools.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336544383126:android:ac23d842ee2998451a82b7",
+        "android_client_info": {
+          "package_name": "io.cerestoken.tools"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336544383126-5lpv6eu48ubl87i4dapp6h5rmjlqdkmj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA7I_lKmPbbpFiJV9YfeY2cn4aNDo2ua8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "336544383126-5lpv6eu48ubl87i4dapp6h5rmjlqdkmj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

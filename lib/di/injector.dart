@@ -1,3 +1,4 @@
+import 'package:ceres_locker_app/core/network/network_info.dart';
 import 'package:ceres_locker_app/data/api/api.dart';
 import 'package:ceres_locker_app/data/datasource/farming_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/pairs_datasource.dart';
@@ -15,6 +16,7 @@ import 'package:ceres_locker_app/domain/usecase/get_farming.dart';
 import 'package:ceres_locker_app/domain/usecase/get_pairs.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tracker.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
 
@@ -31,9 +33,14 @@ abstract class Injector {
   static final resolve = container?.resolve;
 
   void _configure() {
+    _configureCore();
     _configureFeatureModule();
     _configureTokensModuleFactories();
   }
+
+  @Register.singleton(Connectivity)
+  @Register.singleton(NetworkInfoI, from: NetworkInfo)
+  void _configureCore();
 
   void _configureFeatureModule() {
     _configureRestClient();

@@ -32,6 +32,13 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  
+  pod 'Firebase/Analytics'
+end
+
+target 'OneSignalNotificationServiceExtension' do
+  use_frameworks!
+  pod 'OneSignalXCFramework', '>= 3.4.3', '< 4.0'
 end
 
 post_install do |installer|

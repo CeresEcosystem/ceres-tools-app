@@ -16,4 +16,5 @@ class Dimensions {
   static const ROW_ITEM_WIDTH = 130.0;
   static const ROW_TRAILING_MAX_WIDTH = 40.0;
   static const SPONSORS_IMAGE_SIZE = 128.0;
+  static const CHIP_SIZE = 40.0;
 }

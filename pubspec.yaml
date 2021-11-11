@@ -44,6 +44,10 @@ dependencies:
   intl: ^0.17.0
   fl_chart: ^0.40.0
   flutter_native_splash: ^1.2.4
+  sqflite: ^2.0.0+4
+  path: ^1.8.0
+  connectivity: ^3.0.6
+  onesignal_flutter: ^3.2.4
 
 flutter_native_splash:
   color: "#3A0054"

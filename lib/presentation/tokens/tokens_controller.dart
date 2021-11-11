@@ -1,6 +1,8 @@
+import 'package:ceres_locker_app/core/db/database_helper.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/di/injector.dart';
+import 'package:ceres_locker_app/domain/models/favorite_token.dart';
 import 'package:ceres_locker_app/domain/models/token.dart';
 import 'package:ceres_locker_app/domain/models/token_list.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
@@ -15,13 +17,19 @@ class TokensController extends GetxController {
   List<Token>? _tokens;
   var searchQueary = ''.obs;
 
+  var favoriteTokens = <FavoriteToken>[].obs;
+  final _showOnlyFavorites = false.obs;
+
+  bool get showOnlyFavorites => _showOnlyFavorites.value;
+
   LoadingStatus get loadingStatus => _loadingStatus.value;
   List<Token> get tokens {
     if (_tokens != null && _tokens!.isNotEmpty) {
       return _tokens!.where((token) {
+        token.isFavorite = checkIfFavorite(token);
         if (token.price != null && token.price! <= 0) return false;
         if (token.fullName != null && token.assetId != null) {
-          return token.fullName!.toUpperCase().contains(searchQueary.value.toUpperCase()) || token.assetId!.toUpperCase().contains(searchQueary.value.toUpperCase());
+          return (token.fullName!.toUpperCase().contains(searchQueary.value.toUpperCase()) || token.assetId!.toUpperCase().contains(searchQueary.value.toUpperCase())) && (!_showOnlyFavorites.value || token.isFavorite);
         }
 
         return false;
@@ -31,10 +39,48 @@ class TokensController extends GetxController {
     return [];
   }
 
+  Future favorites() async {
+    DatabaseHelper.instance.queryAllRows().then((favorites) {
+      for (var token in favorites) {
+        favoriteTokens.add(FavoriteToken(id: token['id']));
+      }
+    });
+  }
+
+  void setShowOnlyFavorites(bool show) {
+    if (show != _showOnlyFavorites.value) {
+      _showOnlyFavorites.value = show;
+    }
+  }
+
   @override
   void onInit() {
+    favorites();
     fetchTokens();
     super.onInit();
+  }
+
+  bool checkIfFavorite(Token t) {
+    FavoriteToken fToken = favoriteTokens.firstWhere((FavoriteToken token) => token.id == t.id, orElse: () => FavoriteToken(id: -1));
+    return fToken.id != -1;
+  }
+
+  void addTokenToFavorites(Token t) async {
+    if (t.id != null) {
+      int success = await DatabaseHelper.instance.insert(FavoriteToken(id: t.id!));
+
+      if (success != 0) {
+        favoriteTokens.add(FavoriteToken(id: t.id!));
+      }
+    }
+  }
+
+  void removeTokenFromFavorites(Token t) async {
+    if (t.id != null) {
+      await DatabaseHelper.instance.delete(t.id!);
+
+      favoriteTokens.removeWhere((element) => element.id == t.id);
+    }
   }
 
   void onTyping(String text) {

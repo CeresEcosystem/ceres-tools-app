@@ -16,8 +16,8 @@ List<Map<String, dynamic>> sideMenuSocials = [
 ];
 
 List<Map<String, dynamic>> sideMenuTokens = [
-  {'icon': 'lib/core/assets/images/ceres_icon.png', 'url': 'https://04990320fa84123c2e4f-10907fb2d518f3940ba5c7cf5313918e.ssl.cf5.rackcdn.com/docs/CeresToken%20Litepaper.pdf'},
-  {'icon': 'lib/core/assets/images/demeter_icon.png', 'url': null},
+  {'icon': 'lib/core/assets/images/ceres_icon.png', 'url': 'https://cerestoken.s3.eu-central-1.amazonaws.com/docs/Ceres+Token+-+Litepaper.pdf'},
+  {'icon': 'lib/core/assets/images/demeter_icon.png', 'url': 'https://cerestoken.s3.eu-central-1.amazonaws.com/docs/Ceres+Token+-+Demeter+Litepaper.pdf'},
   {'icon': 'lib/core/assets/images/hermes_icon.png', 'url': null},
   {'icon': 'lib/core/assets/images/apollo_icon.png', 'url': null},
 ];

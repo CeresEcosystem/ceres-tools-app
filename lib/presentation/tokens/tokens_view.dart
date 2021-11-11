@@ -1,6 +1,8 @@
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
+import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
+import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
@@ -68,12 +70,60 @@ class TokensView extends GetView<TokensController> {
                 delegate: SliverChildListDelegate([
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation)),
-                    child: SearchTextField(
-                      onChanged: (text) => controller.onTyping(text),
-                      hint: kSearchTextFieldHint,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SearchTextField(
+                          onChanged: (text) => controller.onTyping(text),
+                          hint: kSearchTextFieldHint,
+                        ),
+                        UIHelper.verticalSpaceMediumLarge(),
+                        Row(
+                          children: [
+                            ActionChip(
+                              labelPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: EdgeInsets.zero,
+                              label: SizedBox(
+                                height: Dimensions.CHIP_SIZE,
+                                width: Dimensions.CHIP_SIZE * 1.2,
+                                child: Center(
+                                  child: Opacity(
+                                    opacity: controller.showOnlyFavorites ? 0.3 : 1,
+                                    child: Text(
+                                      kAll,
+                                      style: allButtonTextStyle(sizingInformation),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () => controller.setShowOnlyFavorites(false),
+                            ),
+                            UIHelper.horizontalSpaceSmall(),
+                            ActionChip(
+                              labelPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: EdgeInsets.zero,
+                              label: SizedBox(
+                                height: Dimensions.CHIP_SIZE,
+                                width: Dimensions.CHIP_SIZE * 1.2,
+                                child: Center(
+                                  child: Opacity(
+                                    opacity: !controller.showOnlyFavorites ? 0.3 : 1,
+                                    child: const Icon(Icons.star),
+                                  ),
+                                ),
+                              ),
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () => controller.setShowOnlyFavorites(true),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  UIHelper.verticalSpaceMediumLarge(),
+                  UIHelper.verticalSpaceExtraSmall(),
                 ]),
               ),
               if (controller.tokens.isNotEmpty)
@@ -137,8 +187,17 @@ class TokensView extends GetView<TokensController> {
           ),
         ),
         IconButton(
-          onPressed: () => print('dosao'),
-          icon: const Icon(Icons.star),
+          onPressed: () {
+            if (token.isFavorite) {
+              controller.removeTokenFromFavorites(token);
+            } else {
+              controller.addTokenToFavorites(token);
+            }
+          },
+          icon: Icon(
+            token.isFavorite ? Icons.star : Icons.star_border,
+            color: backgroundOrange,
+          ),
         ),
       ],
     );

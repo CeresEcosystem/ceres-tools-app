@@ -7,6 +7,7 @@ class Token {
   final double? price;
   final String? assetId;
   final int? priceOrder;
+  bool isFavorite = false;
 
   Token({
     this.id,

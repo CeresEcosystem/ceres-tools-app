@@ -7,12 +7,13 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'core/constants/constants.dart';
 
-const kReleaseMode = false;
+const kReleaseMode = true;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Injector.setup();
@@ -22,6 +23,10 @@ void main() {
     statusBarIconBrightness: Brightness.light,
     systemNavigationBarColor: backgroundColorDark,
   ));
+
+  OneSignal.shared.setAppId(kPushNotificationID);
+
+  OneSignal.shared.promptUserForPushNotificationPermission();
 
   runApp(
     DevicePreview(
