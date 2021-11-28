@@ -39,9 +39,18 @@ double dateStringToDouble(dynamic date) {
 }
 
 String formatDate(dynamic value, {bool formatFullDate = false, bool showDay = false}) {
-  if (value != null) {
+  if (value != null && value.toString().length >= 8) {
     final date = value.toString();
-    final d = date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6, 8);
+
+    final year = date.substring(0, 4);
+    final month = date.substring(4, 6);
+    final day = date.substring(6, 8);
+
+    if ((int.tryParse(month) != null && int.tryParse(month)! > 12) || (int.tryParse(day) != null && int.tryParse(day)! > 31)) {
+      return '';
+    }
+
+    final d = year + '-' + month + '-' + day;
     DateTime dateTime = DateFormat('yyyy-MM-dd').parse(d);
 
     if (formatFullDate) {

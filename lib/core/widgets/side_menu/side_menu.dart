@@ -75,12 +75,9 @@ class SideMenu extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: () => _launchURL(kCeresWebsite),
-            child: LimitedBox(
-              maxWidth: Dimensions.HEADER_LOGO_WIDTH,
-              child: Image.asset('lib/core/assets/images/ceres_logo.png'),
-            ),
+          LimitedBox(
+            maxWidth: Dimensions.HEADER_LOGO_WIDTH,
+            child: Image.asset('lib/core/assets/images/ceres_tools_logo.png'),
           ),
           if (!largeScreen)
             (GestureDetector(

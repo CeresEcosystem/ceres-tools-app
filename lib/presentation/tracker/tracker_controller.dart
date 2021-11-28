@@ -43,7 +43,7 @@ class TrackerController extends GetxController {
       List<Map<String, dynamic>> data = [];
 
       for (var i = 0; i < _pswapBurningGraph!.length; i++) {
-        var value = _pswapBurningGraph![i];
+        final value = _pswapBurningGraph![i];
         if (value is Map<String, dynamic>) {
           if (value['y'] != null && value['y'] > maxY) {
             maxY = getDefaultDoubleValue(value['y'])!;
@@ -58,7 +58,7 @@ class TrackerController extends GetxController {
         }
       }
 
-      _pswapBurningGraphData = {'maxY': maxY, 'maxX': maxX, 'minX': minX, 'intervalY': maxY / 4, 'intervalX': (maxX - minX) / 4, 'data': data};
+      _pswapBurningGraphData = {'maxY': maxY, 'maxX': maxX, 'minX': minX, 'intervalY': maxY / 4, 'intervalX': (maxX - minX) / 2, 'data': data};
     } else {
       _pswapBurningGraphData = null;
     }
@@ -73,7 +73,7 @@ class TrackerController extends GetxController {
       List<Map<String, dynamic>> data = [];
 
       for (var i = 0; i < _pswapSupplyGraph!.length; i++) {
-        var value = _pswapSupplyGraph![i];
+        final value = _pswapSupplyGraph![i];
         if (value is Map<String, dynamic>) {
           double x = dateStringToDouble(value['x']);
           double y = getDefaultDoubleValue(value['y'])!;
@@ -95,7 +95,7 @@ class TrackerController extends GetxController {
         }
       }
 
-      _pswapSupplyGraphData = {'maxY': maxY, 'minY': minY, 'maxX': maxX, 'minX': minX, 'intervalY': (maxY - minY) / 4, 'intervalX': (maxX - minX) / 3, 'data': data};
+      _pswapSupplyGraphData = {'maxY': maxY, 'minY': minY, 'maxX': maxX, 'minX': minX, 'intervalY': (maxY - minY) / 4, 'intervalX': (maxX - minX) / 2, 'data': data};
     } else {
       _pswapSupplyGraphData = null;
     }
