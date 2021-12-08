@@ -5,4 +5,5 @@ abstract class Routes {
   static const PAIRS = '/pairs';
   static const FARMING = '/farming';
   static const TRACKER = '/tracker';
+  static const CHART = '/chart';
 }

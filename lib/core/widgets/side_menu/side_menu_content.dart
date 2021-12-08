@@ -7,6 +7,7 @@ List<Map<String, dynamic>> sideMenuOptions = [
   {'icon': Flaticon.ring, 'title': kSideMenuPairs, 'path': Routes.PAIRS, 'disabled': false},
   {'icon': Flaticon.sprout, 'title': kSideMenuFarming, 'path': Routes.FARMING, 'disabled': false},
   {'icon': Flaticon.flame, 'title': kSideMenuTracker, 'path': Routes.TRACKER, 'disabled': false},
+  //{'icon': Flaticon.flame, 'title': 'Chart', 'path': Routes.CHART, 'disabled': false},
 ];
 
 List<Map<String, dynamic>> sideMenuSocials = [

@@ -1,3 +1,5 @@
+import 'package:ceres_locker_app/presentation/chart/chart_binding.dart';
+import 'package:ceres_locker_app/presentation/chart/chart_view.dart';
 import 'package:ceres_locker_app/presentation/farming/farming_binding.dart';
 import 'package:ceres_locker_app/presentation/farming/farming_view.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_binding.dart';
@@ -31,6 +33,11 @@ class AppPages {
       name: Routes.TRACKER,
       page: () => TrackerView(),
       binding: TrackerBinding(),
+    ),
+    GetPage(
+      name: Routes.CHART,
+      page: () => const ChartView(),
+      binding: ChartBinding(),
     ),
   ];
 }

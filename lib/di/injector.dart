@@ -1,5 +1,6 @@
 import 'package:ceres_locker_app/core/network/network_info.dart';
 import 'package:ceres_locker_app/data/api/api.dart';
+import 'package:ceres_locker_app/data/datasource/banner_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/farming_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/pairs_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/tokens_datasource.dart';
@@ -54,6 +55,7 @@ abstract class Injector {
   @Register.factory(PairsDatasource)
   @Register.factory(FarmingDatasource)
   @Register.factory(TrackerDatasource)
+  @Register.factory(BannerDatasource)
   @Register.factory(GetTokens)
   @Register.factory(GetPairs)
   @Register.factory(GetFarming)

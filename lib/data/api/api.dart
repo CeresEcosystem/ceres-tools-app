@@ -19,4 +19,7 @@ abstract class RestClient {
 
   @GET(ApiConstants.TRACKER_PERMALINK)
   Future getTracker();
+
+  @GET(ApiConstants.BANNERS_PERMALINK)
+  Future getBanners();
 }

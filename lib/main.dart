@@ -1,3 +1,4 @@
+import 'package:ceres_locker_app/core/services/global_service.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/theme/theme.dart';
 import 'package:ceres_locker_app/di/injector.dart';
@@ -17,6 +18,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Injector.setup();
+
+  await Get.putAsync(() => GlobalService().init());
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark,
