@@ -6,6 +6,7 @@ import 'package:ceres_locker_app/domain/models/favorite_token.dart';
 import 'package:ceres_locker_app/domain/models/token.dart';
 import 'package:ceres_locker_app/domain/models/token_list.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
+import 'package:ceres_locker_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -125,5 +126,11 @@ class TokensController extends GetxController {
       margin: const EdgeInsets.all(0),
       snackStyle: SnackStyle.GROUNDED,
     );
+  }
+
+  void openChartForToken(String? token) {
+    if (token != null) {
+      Get.toNamed(Routes.CHART, arguments: token);
+    }
   }
 }

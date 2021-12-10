@@ -5,6 +5,7 @@ const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
 const kPSWAPCommunity = 'https://twitter.com/PSWAPCommunity';
 const kImageStorage = 'https://cerestoken.io/storage/icons/';
+const kChartURL = 'https://tools.cerestoken.io/tradings/index.php?token=';
 const kImageExtension = '.svg';
 const kImagePNGExtension = '.png';
 const kBannerTitle = 'Ceres is live!';

@@ -7,7 +7,6 @@ List<Map<String, dynamic>> sideMenuOptions = [
   {'icon': Flaticon.ring, 'title': kSideMenuPairs, 'path': Routes.PAIRS, 'disabled': false},
   {'icon': Flaticon.sprout, 'title': kSideMenuFarming, 'path': Routes.FARMING, 'disabled': false},
   {'icon': Flaticon.flame, 'title': kSideMenuTracker, 'path': Routes.TRACKER, 'disabled': false},
-  //{'icon': Flaticon.flame, 'title': 'Chart', 'path': Routes.CHART, 'disabled': false},
 ];
 
 List<Map<String, dynamic>> sideMenuSocials = [
@@ -18,7 +17,7 @@ List<Map<String, dynamic>> sideMenuSocials = [
 
 List<Map<String, dynamic>> sideMenuTokens = [
   {'icon': 'lib/core/assets/images/ceres_icon.png', 'url': 'https://cerestoken.s3.eu-central-1.amazonaws.com/docs/Ceres+Token+-+Litepaper.pdf'},
-  {'icon': 'lib/core/assets/images/demeter_icon.png', 'url': 'https://cerestoken.s3.eu-central-1.amazonaws.com/docs/Ceres+Token+-+Demeter+Litepaper.pdf'},
+  {'icon': 'lib/core/assets/images/demeter_icon.png', 'url': 'https://cerestoken.s3.eu-central-1.amazonaws.com/docs/Ceres+Token+-+Demeter+Litepaper+09.12.2021.pdf'},
   {'icon': 'lib/core/assets/images/hermes_icon.png', 'url': null},
   {'icon': 'lib/core/assets/images/apollo_icon.png', 'url': null},
 ];

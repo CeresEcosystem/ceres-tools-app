@@ -48,7 +48,7 @@ class CeresBanner extends StatelessWidget {
               aspectRatio: 1,
               viewportFraction: 1,
               autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 10),
+              autoPlayInterval: const Duration(seconds: 7),
               enableInfiniteScroll: Banners.instance.banners.length > 1
             ),
           );

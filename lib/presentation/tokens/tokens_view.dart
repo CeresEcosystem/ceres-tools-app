@@ -134,6 +134,7 @@ class TokensView extends GetView<TokensController> {
                     return ItemContainer(
                       sizingInformation: sizingInformation,
                       child: tokenItem(token, sizingInformation),
+                      onPress: () => controller.openChartForToken(token.shortName),
                     );
                   }, childCount: controller.tokens.length),
                 )),

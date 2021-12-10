@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ceres_locker_app/core/services/global_service.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/theme/theme.dart';
@@ -44,6 +46,7 @@ void main() async {
         themeMode: ThemeMode.dark,
         theme: lightThemeData(),
         darkTheme: darkThemeData(),
+        defaultTransition: Platform.isAndroid ? Transition.noTransition : Transition.native,
       ),
     ),
   );

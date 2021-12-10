@@ -9,6 +9,7 @@ class ItemContainer extends StatelessWidget {
   final Color backgroundColor;
   final bool smallMargin;
   final SizingInformation sizingInformation;
+  final Function? onPress;
 
   const ItemContainer({
     Key? key,
@@ -16,10 +17,22 @@ class ItemContainer extends StatelessWidget {
     this.backgroundColor = backgroundColorDark,
     this.smallMargin = false,
     required this.sizingInformation,
+    this.onPress,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (onPress != null) {
+      return GestureDetector(
+        onTap: () => onPress!(),
+        child: itemContainer(),
+      );
+    }
+
+    return itemContainer();
+  }
+
+  Widget itemContainer() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation), vertical: Dimensions.DEFAULT_MARGIN / 4),
       padding: EdgeInsets.all(smallMargin ? Dimensions.DEFAULT_MARGIN_SMALL : Dimensions.DEFAULT_MARGIN),
