@@ -1,5 +1,6 @@
 const kAppName = 'Ceres';
 const kAppTitle = 'Ceres Tools';
+const kTokenName = 'Ceres';
 const kPushNotificationID = '30318207-4f3e-41ea-9ed8-9a1f0c5abcc1';
 const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
@@ -43,8 +44,11 @@ const kContactSubtitle = 'Join us on Social';
 const kSponsoredBy = 'Sponsored by';
 const kAll = 'All';
 
+const kChartIcon = 'https://tools.cerestoken.io/assets/font/svg/chart.svg';
+
 // SIDE MENU //
 const kSideMenuTokens = 'Tokens';
 const kSideMenuPairs = 'Pairs';
 const kSideMenuFarming = 'Farming';
 const kSideMenuTracker = 'Burning Tracker';
+const kSideMenuCharts = 'Charts';

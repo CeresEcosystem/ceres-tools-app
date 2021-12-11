@@ -3,10 +3,11 @@ import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/routes/app_routes.dart';
 
 List<Map<String, dynamic>> sideMenuOptions = [
-  {'icon': Flaticon.token, 'title': kSideMenuTokens, 'path': Routes.TOKENS, 'disabled': false},
-  {'icon': Flaticon.ring, 'title': kSideMenuPairs, 'path': Routes.PAIRS, 'disabled': false},
-  {'icon': Flaticon.sprout, 'title': kSideMenuFarming, 'path': Routes.FARMING, 'disabled': false},
-  {'icon': Flaticon.flame, 'title': kSideMenuTracker, 'path': Routes.TRACKER, 'disabled': false},
+  {'icon': Flaticon.token, 'title': kSideMenuTokens, 'path': Routes.TOKENS, 'type': 'icon'},
+  {'icon': Flaticon.ring, 'title': kSideMenuPairs, 'path': Routes.PAIRS, 'type': 'icon'},
+  {'icon': Flaticon.sprout, 'title': kSideMenuFarming, 'path': Routes.FARMING, 'type': 'icon'},
+  {'icon': Flaticon.flame, 'title': kSideMenuTracker, 'path': Routes.TRACKER, 'type': 'icon'},
+  {'icon': kChartIcon, 'title': kSideMenuCharts, 'path': Routes.CHART, 'type': 'svg'},
 ];
 
 List<Map<String, dynamic>> sideMenuSocials = [

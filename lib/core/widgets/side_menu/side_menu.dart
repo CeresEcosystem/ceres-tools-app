@@ -10,6 +10,7 @@ import 'package:ceres_locker_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu_content.dart';
 import 'package:ceres_locker_app/domain/models/side_menu_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,14 +29,12 @@ class SideMenu extends StatelessWidget {
   }
 
   void _navigate(Map<String, dynamic> option) {
-    if (!option['disabled']) {
-      SideMenuPage.sideMenuPage.setActivePage(option['title']);
+    SideMenuPage.sideMenuPage.setActivePage(option['title']);
 
-      if (onMenuItemPress != null) {
-        onMenuItemPress!(option['path']);
-      } else {
-        Get.offNamed(option['path']);
-      }
+    if (onMenuItemPress != null) {
+      onMenuItemPress!(option['path']);
+    } else {
+      Get.offNamed(option['path']);
     }
   }
 
@@ -123,7 +122,7 @@ class SideMenu extends StatelessWidget {
       child: Opacity(
         opacity: selected ? 1 : 0.5,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN / 2),
+          padding: EdgeInsets.symmetric(vertical: sizingInformation.screenSize.height > 600.0 ? Dimensions.DEFAULT_MARGIN / 3 : Dimensions.DEFAULT_MARGIN / 4),
           child: Row(
             children: [
               Container(
@@ -132,10 +131,19 @@ class SideMenu extends StatelessWidget {
                 color: selected ? backgroundPink : Colors.transparent,
               ),
               UIHelper.horizontalSpace(Dimensions.DEFAULT_MARGIN),
-              Icon(
-                option['icon'],
-                size: Dimensions.SIDE_MENU_ICON_SIZE,
-              ),
+              (() {
+                if (option['type'] == 'icon') {
+                  return Icon(
+                    option['icon'],
+                    size: Dimensions.SIDE_MENU_ICON_SIZE,
+                  );
+                }
+
+                return SvgPicture.network(
+                  option['icon'],
+                  width: Dimensions.SIDE_MENU_ICON_SIZE,
+                );
+              })(),
               UIHelper.horizontalSpaceMedium(),
               Text(
                 option['title'],
@@ -172,8 +180,13 @@ class SideMenu extends StatelessWidget {
             thickness: Dimensions.DIVIDER_THICKNESS_SIZE,
             color: Colors.white.withOpacity(0.1),
           ),
-          socialsGroup(),
-          UIHelper.verticalSpace(Dimensions.DEFAULT_MARGIN),
+          if (sizingInformation.screenSize.height > 600.0)
+            (Column(
+              children: [
+                socialsGroup(),
+                UIHelper.verticalSpace(Dimensions.DEFAULT_MARGIN),
+              ],
+            )),
           tokensGroup(),
           UIHelper.verticalSpace(Dimensions.DEFAULT_MARGIN),
           Text(

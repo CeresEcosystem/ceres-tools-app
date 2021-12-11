@@ -2,6 +2,7 @@ import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
+import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -11,7 +12,7 @@ class ChartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String token = Get.arguments;
+    String? token = Get.arguments;
 
     return Responsive(
       builder: (context, sizingInformation) {
@@ -21,6 +22,7 @@ class ChartView extends StatelessWidget {
             centerTitle: true,
             title: Image.asset('lib/core/assets/images/ceres_tools_logo.png', height: Dimensions.HEADER_LOGO),
           ),
+          endDrawer: token == null ? SideMenu() : null,
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: Container(
             height: sizingInformation.bottomSafeAreaSize,
@@ -29,7 +31,7 @@ class ChartView extends StatelessWidget {
           body: SafeArea(
             top: false,
             child: WebView(
-              initialUrl: '$kChartURL$token',
+              initialUrl: '$kChartURL${token ?? kTokenName}',
               javascriptMode: JavascriptMode.unrestricted,
               backgroundColor: backgroundColor,
             ),
