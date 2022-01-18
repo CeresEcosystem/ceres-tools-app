@@ -2,6 +2,8 @@ import 'package:ceres_locker_app/presentation/chart/chart_binding.dart';
 import 'package:ceres_locker_app/presentation/chart/chart_view.dart';
 import 'package:ceres_locker_app/presentation/farming/farming_binding.dart';
 import 'package:ceres_locker_app/presentation/farming/farming_view.dart';
+import 'package:ceres_locker_app/presentation/locker/locker_binding.dart';
+import 'package:ceres_locker_app/presentation/locker/locker_view.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_binding.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_view.dart';
 import 'package:ceres_locker_app/presentation/tokens/tokens_binding.dart';
@@ -38,6 +40,11 @@ class AppPages {
       name: Routes.CHART,
       page: () => const ChartView(),
       binding: ChartBinding(),
+    ),
+    GetPage(
+      name: Routes.LOCKER,
+      page: () => const LockerView(),
+      binding: LockerBinding(),
     ),
   ];
 }

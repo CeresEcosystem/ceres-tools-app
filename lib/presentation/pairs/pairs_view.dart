@@ -19,6 +19,7 @@ import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
 import 'package:ceres_locker_app/domain/models/pair.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_controller.dart';
+import 'package:ceres_locker_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -153,18 +154,28 @@ class PairsView extends GetView<PairsController> {
           children: [
             pairImage(pair),
             UIHelper.horizontalSpaceSmall(),
-            Text(
-              '$kXOR / ${pair.shortName}',
-              style: tokensTitleStyle(sizingInformation),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: Text(
+                '$kXOR / ${pair.shortName}',
+                style: tokensTitleStyle(sizingInformation),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            UIHelper.horizontalSpaceExtraSmall(),
+            IconButton(
+              onPressed: () => Get.toNamed(Routes.LOCKER, arguments: {'isPair': true, 'lockerItem': pair}),
+              icon: Icon(
+                Icons.lock_outline_sharp,
+                color: Colors.white.withOpacity(0.5),
+              ),
             ),
           ],
         ),
         UIHelper.verticalSpaceMedium(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(
@@ -222,6 +233,15 @@ class PairsView extends GetView<PairsController> {
                   ),
                   Text(
                     formatToCurrency(pair.volume, showSymbol: true),
+                    style: pairsLiquidityStyle(sizingInformation),
+                  ),
+                  UIHelper.verticalSpaceSmall(),
+                  Text(
+                    kPairLockedLiquidity,
+                    style: pairsInfoStyle(sizingInformation),
+                  ),
+                  Text(
+                    '${formatToCurrency(pair.lockedLiquidity, showSymbol: false)}%',
                     style: pairsLiquidityStyle(sizingInformation),
                   ),
                 ],

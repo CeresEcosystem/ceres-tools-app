@@ -6,3 +6,4 @@ const Color backgroundColorDark = Color.fromARGB(255, 53, 0, 75);
 const Color backgroundPink = Color.fromARGB(255, 240, 57, 140);
 const Color backgroundOrange = Color.fromARGB(255, 241, 179, 80);
 const Color chartBackground = Color.fromARGB(255, 36, 6, 51);
+const Color blue = Color.fromARGB(255, 46, 35, 161);

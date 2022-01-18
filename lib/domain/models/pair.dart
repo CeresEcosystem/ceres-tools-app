@@ -9,6 +9,7 @@ class Pair {
   final double? xorLiquidity;
   final double? targetAssetLiquidity;
   final double? volume;
+  final double? lockedLiquidity;
 
   Pair({
     this.id,
@@ -19,6 +20,7 @@ class Pair {
     this.xorLiquidity,
     this.targetAssetLiquidity,
     this.volume,
+    this.lockedLiquidity,
   });
 
   factory Pair.fromJson(Map<String, dynamic> json) => Pair(
@@ -30,5 +32,6 @@ class Pair {
         xorLiquidity: getDefaultDoubleValue(json['xor_liq']),
         targetAssetLiquidity: getDefaultDoubleValue(json['target_asset_liq']),
         volume: getDefaultDoubleValue(json['volume']),
+        lockedLiquidity: getDefaultDoubleValue(json['locked_liquidity'])
       );
 }

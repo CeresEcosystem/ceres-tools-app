@@ -6,4 +6,5 @@ abstract class Routes {
   static const FARMING = '/farming';
   static const TRACKER = '/tracker';
   static const CHART = '/chart';
+  static const LOCKER = '/locker';
 }

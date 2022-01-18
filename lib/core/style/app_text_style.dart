@@ -117,7 +117,7 @@ TextStyle pairsInfoStyle(SizingInformation sizingInformation) {
 
 TextStyle pairsLiquidityStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? subtitle2 : title,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? caption : title,
     fontWeight: FontWeight.w700,
     color: backgroundPink,
   );
@@ -277,6 +277,21 @@ TextStyle allButtonTextStyle(SizingInformation sizingInformation) {
   return const TextStyle(
     fontSize: subtitle1,
     fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
+TextStyle tokenButtonTextStyle(SizingInformation sizingInformation) {
+  return const TextStyle(
+    fontSize: overline,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
+TextStyle emptyListTextStyle(SizingInformation sizingInformation) {
+  return const TextStyle(
+    fontSize: subtitle2,
     color: Colors.white,
   );
 }

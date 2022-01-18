@@ -22,4 +22,10 @@ abstract class RestClient {
 
   @GET(ApiConstants.BANNERS_PERMALINK)
   Future getBanners();
+
+  @GET(ApiConstants.LOCK_TOKEN_PERMALINK)
+  Future getLockedTokens(@Path("token") String token);
+
+  @GET(ApiConstants.LOCK_PAIR_PERMALINK)
+  Future getLockedPairs(@Path("token") String token);
 }

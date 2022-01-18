@@ -21,6 +21,11 @@ const kBlock = 'block';
 const kPoolDetails = 'Pool details';
 const kPairLiquidity = 'Pair liquidity';
 const kPairVolume = 'Volume';
+const kAccount = 'Account:';
+const kLocked = 'Locked:';
+const kUnlockDate = 'Unlock date:';
+const kUnlockTime = 'Unlock time:';
+const kPairLockedLiquidity = 'Locked liquidity';
 const kFarmingPart1 = 'Every 1 XOR in PSWAP/VAL/ETH/DAI pool yields about ';
 const kFarmingPart2 = ' PSWAP per day or about ';
 const kFarmingPart3 = ' APR\n\n';
@@ -43,6 +48,11 @@ const kContactTitle = 'CONTACT US';
 const kContactSubtitle = 'Join us on Social';
 const kSponsoredBy = 'Sponsored by';
 const kAll = 'All';
+const kAddToFavorites = 'Add to favorites';
+const kRemoveFromFavorites = 'Remove';
+const kShowLocks = 'View locks';
+const kEmptyLockedTokensList = 'Token has no lockups';
+const kEmptyLockedPairsList = 'Pair has no liquidity lockups';
 
 const kChartIcon = 'https://tools.cerestoken.io/assets/font/svg/chart.svg';
 

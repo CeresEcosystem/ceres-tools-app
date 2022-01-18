@@ -7,4 +7,6 @@ class ApiConstants {
   static const FARMING_PERMALINK = '/rewards';
   static const TRACKER_PERMALINK = '/tracker';
   static const BANNERS_PERMALINK = '/banners/mobile';
+  static const LOCK_TOKEN_PERMALINK = '/lock/view/tokens/{token}';
+  static const LOCK_PAIR_PERMALINK = '/lock/view/pairs/{token}';
 }

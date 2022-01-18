@@ -2,18 +2,23 @@ import 'package:ceres_locker_app/core/network/network_info.dart';
 import 'package:ceres_locker_app/data/api/api.dart';
 import 'package:ceres_locker_app/data/datasource/banner_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/farming_datasource.dart';
+import 'package:ceres_locker_app/data/datasource/locker_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/pairs_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/tokens_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/tracker_datasource.dart';
 import 'package:ceres_locker_app/data/repository/farming_repository_impl.dart';
+import 'package:ceres_locker_app/data/repository/locker_repository_impl.dart';
 import 'package:ceres_locker_app/data/repository/pairs_repository_impl.dart';
 import 'package:ceres_locker_app/data/repository/tokens_repository_impl.dart';
 import 'package:ceres_locker_app/data/repository/tracker_repository_impl.dart';
 import 'package:ceres_locker_app/domain/repository/farming_repository.dart';
+import 'package:ceres_locker_app/domain/repository/locker_repository.dart';
 import 'package:ceres_locker_app/domain/repository/pairs_repository.dart';
 import 'package:ceres_locker_app/domain/repository/tokens_repository.dart';
 import 'package:ceres_locker_app/domain/repository/tracker_repository.dart';
 import 'package:ceres_locker_app/domain/usecase/get_farming.dart';
+import 'package:ceres_locker_app/domain/usecase/get_locked_pairs.dart';
+import 'package:ceres_locker_app/domain/usecase/get_locked_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_pairs.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tracker.dart';
@@ -56,13 +61,17 @@ abstract class Injector {
   @Register.factory(FarmingDatasource)
   @Register.factory(TrackerDatasource)
   @Register.factory(BannerDatasource)
+  @Register.factory(LockerDatasource)
   @Register.factory(GetTokens)
   @Register.factory(GetPairs)
   @Register.factory(GetFarming)
   @Register.factory(GetTracker)
+  @Register.factory(GetLockedTokens)
+  @Register.factory(GetLockedPairs)
   @Register.factory(TokensRepository, from: TokensRepositoryImpl)
   @Register.factory(PairsRepository, from: PairsRepositoryImpl)
   @Register.factory(FarmingRepository, from: FarmingRepositoryImpl)
   @Register.factory(TrackerRepository, from: TrackerRepositoryImpl)
+  @Register.factory(LockerRepository, from: LockerRepositoryImpl)
   void _configureTokensModuleFactories();
 }

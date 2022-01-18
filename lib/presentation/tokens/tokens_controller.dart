@@ -107,6 +107,10 @@ class TokensController extends GetxController {
         });
       }
 
+      if (favoriteTokens.isNotEmpty) {
+        _showOnlyFavorites.value = true;
+      }
+
       _loadingStatus.value = LoadingStatus.READY;
     } else {
       _loadingStatus.value = LoadingStatus.ERROR;

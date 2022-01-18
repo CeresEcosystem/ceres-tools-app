@@ -47,6 +47,7 @@ void main() async {
         theme: lightThemeData(),
         darkTheme: darkThemeData(),
         defaultTransition: Platform.isAndroid ? Transition.noTransition : Transition.native,
+        transitionDuration: Platform.isAndroid ? Duration.zero : const Duration(milliseconds: 300),
       ),
     ),
   );
