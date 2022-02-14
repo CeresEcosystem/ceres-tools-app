@@ -4,31 +4,29 @@ import 'package:intl/intl.dart';
 class LockedItem {
   final String? account;
   final double? locked;
-  final String? date;
-  final String? time;
+  final int? dateTimestamp;
 
   LockedItem({
     this.account,
     this.locked,
-    this.date,
-    this.time,
+    this.dateTimestamp,
   });
 
   String get formattedDate {
-    if (date != null) {
+    if (dateTimestamp != null) {
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp! * 1000);
       DateFormat format = DateFormat("MMMM dd, yyyy");
-      DateTime dateTime = DateFormat('yyyy-MM-dd').parse(date!);
-      return format.format(dateTime);
+      return format.format(date);
     }
 
     return '';
   }
 
   String get formattedTime {
-    if (time != null) {
+    if (dateTimestamp != null) {
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp! * 1000);
       DateFormat format = DateFormat("HH:mm");
-      DateTime dateTime = DateFormat('HH:mm:ss').parse(time!);
-      return '${format.format(dateTime)}h';
+      return format.format(date);
     }
 
     return '';
@@ -37,7 +35,6 @@ class LockedItem {
   factory LockedItem.fromJson(Map<String, dynamic> json) => LockedItem(
         account: getDefaultStringValue(json['account']),
         locked: getDefaultDoubleValue(json['locked']),
-        date: getDefaultStringValue(json['date']),
-        time: getDefaultStringValue(json['time']),
+        dateTimestamp: getDefaultIntValue(json['timestamp']),
       );
 }

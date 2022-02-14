@@ -59,7 +59,7 @@ class LockerController extends GetxController {
     if (assetId != null && assetId.isNotEmpty) {
       Clipboard.setData(ClipboardData(text: assetId));
       Get.snackbar(
-        'Copied assetID:',
+        'Copied Account:',
         assetId,
         backgroundColor: backgroundColorLight,
         snackPosition: SnackPosition.BOTTOM,
