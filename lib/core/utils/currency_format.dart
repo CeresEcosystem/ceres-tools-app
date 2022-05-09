@@ -31,8 +31,9 @@ String formatCurrencyGraph(dynamic value) {
 
 double dateStringToDouble(dynamic date) {
   if (date != null && date is String) {
-    String d = date.replaceAll('-', '');
-    return getDefaultDoubleValue(d)!;
+    DateTime dt = DateTime.parse(date);
+    double timestamp = dt.millisecondsSinceEpoch.toDouble();
+    return timestamp;
   }
 
   return 0;
@@ -40,28 +41,24 @@ double dateStringToDouble(dynamic date) {
 
 String formatDate(dynamic value, {bool formatFullDate = false, bool showDay = false}) {
   if (value != null && value.toString().length >= 8) {
-    final date = value.toString();
+    var dd = DateTime.fromMicrosecondsSinceEpoch(getDefaultIntValue(value)! * 1000);
 
-    final year = date.substring(0, 4);
-    final month = date.substring(4, 6);
-    final day = date.substring(6, 8);
+    final month = dd.month;
+    final day = dd.day;
 
-    if ((int.tryParse(month) != null && int.tryParse(month)! > 12) || (int.tryParse(day) != null && int.tryParse(day)! > 31)) {
+    if (month > 12 || day > 31) {
       return '';
     }
 
-    final d = year + '-' + month + '-' + day;
-    DateTime dateTime = DateFormat('yyyy-MM-dd').parse(d);
-
     if (formatFullDate) {
-      return DateFormat('yyyy-MM-dd').format(dateTime);
+      return DateFormat('yyyy-MM-dd').format(dd);
     }
 
     if (showDay) {
-      return DateFormat.MMMd().format(dateTime);
+      return DateFormat.MMMd().format(dd);
     }
 
-    return DateFormat.yMMM().format(dateTime);
+    return DateFormat.yMMM().format(dd);
   }
 
   return '';

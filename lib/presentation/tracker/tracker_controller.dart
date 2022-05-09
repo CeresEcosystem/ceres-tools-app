@@ -45,16 +45,21 @@ class TrackerController extends GetxController {
       for (var i = 0; i < _pswapBurningGraph!.length; i++) {
         final value = _pswapBurningGraph![i];
         if (value is Map<String, dynamic>) {
-          if (value['y'] != null && value['y'] > maxY) {
-            maxY = getDefaultDoubleValue(value['y'])!;
+          double x = dateStringToDouble(value['x']);
+          double y = getDefaultDoubleValue(value['y'])!;
+
+          if (x > 0 && y > 0) {
+            if (value['y'] != null && value['y'] > maxY) {
+              maxY = y;
+            }
+            if (i == _pswapBurningGraph!.length - 1 && value['x'] != null) {
+              maxX = x;
+            }
+            if (i == 0 && value['x'] != null) {
+              minX = x;
+            }
+            data.add(value);
           }
-          if (i == _pswapBurningGraph!.length - 1 && value['x'] != null) {
-            maxX = dateStringToDouble(value['x']);
-          }
-          if (i == 0 && value['x'] != null) {
-            minX = dateStringToDouble(value['x']);
-          }
-          data.add(value);
         }
       }
 
@@ -78,20 +83,22 @@ class TrackerController extends GetxController {
           double x = dateStringToDouble(value['x']);
           double y = getDefaultDoubleValue(value['y'])!;
 
-          if (i == 0) {
-            minY = y;
-            minX = x;
+          if (x > 0 && y > 0) {
+            if (i == 0) {
+              minY = y;
+              minX = x;
+            }
+            if (y > maxY) {
+              maxY = y;
+            }
+            if (y < minY) {
+              minY = y;
+            }
+            if (i == _pswapSupplyGraph!.length - 1 && value['x'] != null) {
+              maxX = x;
+            }
+            data.add({'x': value['x'], 'y': y});
           }
-          if (y > maxY) {
-            maxY = y;
-          }
-          if (y < minY) {
-            minY = y;
-          }
-          if (i == _pswapSupplyGraph!.length - 1 && value['x'] != null) {
-            maxX = x;
-          }
-          data.add({'x': value['x'], 'y': y});
         }
       }
 
