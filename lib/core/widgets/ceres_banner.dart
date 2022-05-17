@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
 import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/domain/models/banners.dart';
@@ -20,7 +21,7 @@ class CeresBanner extends StatelessWidget {
     if (Banners.instance.banners.isNotEmpty) {
       return Responsive(
         builder: (context, sizingInformation) {
-          final height = sizingInformation.screenSize.width / 3.54;
+          final height = sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? sizingInformation.screenSize.width / 5 : sizingInformation.screenSize.width / 8.88;
 
           return CarouselSlider(
             items: Banners.instance.banners
@@ -29,7 +30,7 @@ class CeresBanner extends StatelessWidget {
                     onTap: () => _launchURL(item['link']),
                     child: Center(
                       child: CachedNetworkImage(
-                        imageUrl: item['lg'],
+                        imageUrl: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? item['sm'] : item['md'],
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -43,14 +44,7 @@ class CeresBanner extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            options: CarouselOptions(
-              height: height,
-              aspectRatio: 1,
-              viewportFraction: 1,
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 7),
-              enableInfiniteScroll: Banners.instance.banners.length > 1
-            ),
+            options: CarouselOptions(height: height, aspectRatio: 1, viewportFraction: 1, autoPlay: true, autoPlayInterval: const Duration(seconds: 7), enableInfiniteScroll: Banners.instance.banners.length > 1),
           );
         },
       );
