@@ -149,7 +149,7 @@ class TokensView extends GetView<TokensController> {
   }
 
   Widget tokenItem(Token token, SizingInformation sizingInformation) {
-    final String imageExtension = token.shortName != null && token.shortName!.isNotEmpty && token.shortName!.contains('COCO') ? kImagePNGExtension : kImageExtension;
+    final String imageExtension = token.shortName != null && token.shortName!.isNotEmpty && (token.shortName!.contains('COCO') || token.shortName!.contains('NOIR')) ? kImagePNGExtension : kImageExtension;
 
     return Column(
       children: [

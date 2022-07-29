@@ -254,7 +254,7 @@ class PairsView extends GetView<PairsController> {
   }
 
   Widget pairImage(Pair pair) {
-    final String imageExtension = pair.shortName != null && pair.shortName!.isNotEmpty && pair.shortName!.contains('COCO') ? kImagePNGExtension : kImageExtension;
+    final String imageExtension = pair.shortName != null && pair.shortName!.isNotEmpty && (pair.shortName!.contains('COCO') || pair.shortName!.contains('NOIR')) ? kImagePNGExtension : kImageExtension;
 
     return SizedBox(
       width: Dimensions.PAIRS_IMAGE_SIZE * 2,

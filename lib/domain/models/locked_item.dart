@@ -14,7 +14,7 @@ class LockedItem {
 
   String get formattedDate {
     if (dateTimestamp != null) {
-      DateTime date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp! * 1000);
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp!);
       DateFormat format = DateFormat("MMMM dd, yyyy");
       return format.format(date);
     }
@@ -24,7 +24,7 @@ class LockedItem {
 
   String get formattedTime {
     if (dateTimestamp != null) {
-      DateTime date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp! * 1000);
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(dateTimestamp!);
       DateFormat format = DateFormat("HH:mm");
       return format.format(date);
     }
