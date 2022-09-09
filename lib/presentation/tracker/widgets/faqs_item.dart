@@ -15,10 +15,10 @@ class FaqsItem extends StatefulWidget {
   const FaqsItem({Key? key, required this.item, required this.scrollToSelectedContent}) : super(key: key);
 
   @override
-  _FaqsItemState createState() => _FaqsItemState();
+  FaqsItemState createState() => FaqsItemState();
 }
 
-class _FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin {
+class FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin {
   final GlobalKey _expansionTileKey = GlobalKey();
   AnimationController? _controller;
   Animation<double>? _iconTurns;
@@ -29,8 +29,7 @@ class _FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    const Duration _kExpand = Duration(milliseconds: 200);
-    _controller = AnimationController(duration: _kExpand, vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
     _iconTurns = _controller?.drive(_halfTween.chain(_easeInTween));
 
     super.initState();
@@ -50,8 +49,10 @@ class _FaqsItemState extends State<FaqsItem> with SingleTickerProviderStateMixin
   }
 
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    final Uri uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 

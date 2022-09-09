@@ -23,8 +23,10 @@ class SideMenu extends StatelessWidget {
   SideMenu({Key? key, this.largeScreen = false, this.onMenuItemPress}) : super(key: key);
 
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    final Uri uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 
@@ -96,8 +98,8 @@ class SideMenu extends StatelessWidget {
       child: ScrollBarContainer(
         controller: controller,
         isAlwaysShown: true,
-        child: drawerScroll(sizingInformation),
         sizingInformation: sizingInformation,
+        child: drawerScroll(sizingInformation),
       ),
     );
   }

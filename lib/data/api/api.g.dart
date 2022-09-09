@@ -6,6 +6,8 @@ part of 'api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl}) {
     baseUrl ??= 'https://cerestoken.io/api';
@@ -19,9 +21,10 @@ class _RestClient implements RestClient {
   Future<dynamic> getTokens() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+        Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/pairs',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
@@ -33,9 +36,10 @@ class _RestClient implements RestClient {
   Future<dynamic> getPairs() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+        Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/pairs',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
@@ -47,9 +51,10 @@ class _RestClient implements RestClient {
   Future<dynamic> getFarming() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+        Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/rewards',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
@@ -61,9 +66,10 @@ class _RestClient implements RestClient {
   Future<dynamic> getTracker() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+        Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/tracker',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
@@ -75,9 +81,10 @@ class _RestClient implements RestClient {
   Future<dynamic> getBanners() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+        Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/banners/mobile',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
@@ -89,10 +96,11 @@ class _RestClient implements RestClient {
   Future<dynamic> getLockedTokens(token) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
-            .compose(_dio.options, '/lock/view/tokens/$token',
+        Options(method: 'GET', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/lock/view/tokens/${token}',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -103,10 +111,11 @@ class _RestClient implements RestClient {
   Future<dynamic> getLockedPairs(token) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
-            .compose(_dio.options, '/lock/view/pairs/$token',
+        Options(method: 'GET', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/lock/view/pairs/${token}',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;

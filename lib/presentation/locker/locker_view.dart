@@ -5,6 +5,7 @@ import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
+import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
@@ -91,16 +92,16 @@ class LockerView extends GetView<LockerController> {
   }
 
   Widget tokenHeaderTitle(Token token, SizingInformation sizingInformation) {
-    final String imageExtension = token.shortName != null && token.shortName!.isNotEmpty && token.shortName!.contains('COCO') ? kImagePNGExtension : kImageExtension;
+    final String imgExtension = imageExtension(token.shortName);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation)),
       child: Row(
         children: [
           RoundImage(
-            image: '$kImageStorage${token.shortName}$imageExtension',
+            image: '$kImageStorage${token.shortName}$imgExtension',
             size: Dimensions.PAIRS_IMAGE_SIZE,
-            extension: imageExtension,
+            extension: imgExtension,
           ),
           UIHelper.horizontalSpaceSmall(),
           Text(
@@ -133,7 +134,7 @@ class LockerView extends GetView<LockerController> {
   }
 
   Widget pairImage(Pair pair) {
-    final String imageExtension = pair.shortName != null && pair.shortName!.isNotEmpty && pair.shortName!.contains('COCO') ? kImagePNGExtension : kImageExtension;
+    final String imgExtension = imageExtension(pair.shortName);
 
     return SizedBox(
       width: Dimensions.PAIRS_IMAGE_SIZE * 2,
@@ -142,9 +143,9 @@ class LockerView extends GetView<LockerController> {
           Positioned(
             left: Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}$imageExtension',
+              image: '$kImageStorage${pair.shortName}$imgExtension',
               size: Dimensions.PAIRS_IMAGE_SIZE,
-              extension: imageExtension,
+              extension: imgExtension,
             ),
           ),
           const RoundImage(

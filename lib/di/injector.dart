@@ -22,7 +22,7 @@ import 'package:ceres_locker_app/domain/usecase/get_locked_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_pairs.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tracker.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
 

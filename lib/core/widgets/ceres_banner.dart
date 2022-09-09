@@ -4,15 +4,17 @@ import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/domain/models/banners.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CeresBanner extends StatelessWidget {
   const CeresBanner({Key? key}) : super(key: key);
 
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    final Uri uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 

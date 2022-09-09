@@ -21,8 +21,8 @@ import 'package:ceres_locker_app/presentation/tracker/tracker_controller.dart';
 import 'package:ceres_locker_app/presentation/tracker/widgets/faqs_item.dart';
 import 'package:ceres_locker_app/presentation/tracker/widgets/tracker_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TrackerView extends GetView<TrackerController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -550,8 +550,10 @@ class TrackerView extends GetView<TrackerController> {
   }
 
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    final Uri uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
+import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
@@ -107,8 +108,8 @@ class PairsView extends GetView<PairsController> {
                       if (pair.shortName == kXOR) return null;
 
                       return ItemContainer(
-                        child: pairItem(pair, sizingInformation),
                         sizingInformation: sizingInformation,
+                        child: pairItem(pair, sizingInformation),
                       );
                     },
                     childCount: controller.pairs.length,
@@ -254,7 +255,7 @@ class PairsView extends GetView<PairsController> {
   }
 
   Widget pairImage(Pair pair) {
-    final String imageExtension = pair.shortName != null && pair.shortName!.isNotEmpty && (pair.shortName!.contains('COCO') || pair.shortName!.contains('NOIR')) ? kImagePNGExtension : kImageExtension;
+    final String imgExtension = imageExtension(pair.shortName);
 
     return SizedBox(
       width: Dimensions.PAIRS_IMAGE_SIZE * 2,
@@ -263,9 +264,9 @@ class PairsView extends GetView<PairsController> {
           Positioned(
             left: Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}$imageExtension',
+              image: '$kImageStorage${pair.shortName}$imgExtension',
               size: Dimensions.PAIRS_IMAGE_SIZE,
-              extension: imageExtension,
+              extension: imgExtension,
             ),
           ),
           const RoundImage(
