@@ -58,7 +58,7 @@ class TrackerController extends GetxController {
             if (i == 0 && value['x'] != null) {
               minX = x;
             }
-            data.add(value);
+            data.add({...value, 'y': y, 'x': x});
           }
         }
       }
@@ -97,7 +97,7 @@ class TrackerController extends GetxController {
             if (i == _pswapSupplyGraph!.length - 1 && value['x'] != null) {
               maxX = x;
             }
-            data.add({'x': value['x'], 'y': y});
+            data.add({...value, 'y': y, 'x': x});
           }
         }
       }
@@ -109,13 +109,13 @@ class TrackerController extends GetxController {
   }
 
   String getTooltipData(LineBarSpot touchedSpot) {
-    Map<String, dynamic> item = List.from(pswapBurningGraphData!['data']).firstWhere((spot) => dateStringToDouble(spot['x']) == touchedSpot.x && spot['y'] == touchedSpot.y);
-    return 'DATE: ${formatDate(dateStringToDouble(item['x']), formatFullDate: true)}\nPSWAP Gross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR Spent: ${formatToCurrency(item['spent'])}\nPSWAP Reminted LP: ${formatToCurrency(item['lp'])}\nPSWAP Reminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nPSWAP Net Burn: ${formatToCurrency(item['net'])}';
+    Map<String, dynamic> item = List.from(pswapBurningGraphData!['data']).firstWhere((spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
+    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nPSWAP Gross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR Spent: ${formatToCurrency(item['spent'])}\nPSWAP Reminted LP: ${formatToCurrency(item['lp'])}\nPSWAP Reminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nPSWAP Net Burn: ${formatToCurrency(item['net'])}';
   }
 
   String getSupplyTooltipData(LineBarSpot touchedSpot) {
-    Map<String, dynamic> item = List.from(pswapSupplyGraphData!['data']).firstWhere((spot) => dateStringToDouble(spot['x']) == touchedSpot.x && spot['y'] == touchedSpot.y);
-    return 'DATE: ${formatDate(dateStringToDouble(item['x']), formatFullDate: true)}\nPSWAP supply: ${formatToCurrency(touchedSpot.y, decimalDigits: 4)}';
+    Map<String, dynamic> item = List.from(pswapSupplyGraphData!['data']).firstWhere((spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
+    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nPSWAP supply: ${formatToCurrency(touchedSpot.y, decimalDigits: 4)}';
   }
 
   // GRAPH DATA //

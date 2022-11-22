@@ -95,7 +95,7 @@ class TrackerChart extends StatelessWidget {
       lineBarsData: [
         LineChartBarData(
           spots: List.from(graphData['data']).map((spot) {
-            return FlSpot(dateStringToDouble(spot['x']), spot['y']);
+            return FlSpot(spot['x'], spot['y']);
           }).toList(),
           isCurved: false,
           colors: [Colors.white],
