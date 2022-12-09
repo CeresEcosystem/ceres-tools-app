@@ -82,7 +82,7 @@ class PairsView extends GetView<PairsController> {
                       ],
                     ),
                   ),
-                  UIHelper.verticalSpaceMediumLarge(),
+                  UIHelper.verticalSpaceMedium(),
                 ]),
               ),
               SliverList(
@@ -96,8 +96,55 @@ class PairsView extends GetView<PairsController> {
                       hint: kSearchTextFieldHintOnlyToken,
                     ),
                   ),
-                  UIHelper.verticalSpaceMediumLarge(),
                 ]),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: UIHelper.pagePadding(sizingInformation),
+                  ),
+                  height: Dimensions.CHIP_SIZE * 2,
+                  child: ListView.separated(
+                    itemBuilder: (_, index) {
+                      String item = controller.baseAssets[index];
+                      bool showIcon = item == 'All';
+
+                      return ActionChip(
+                        labelPadding: EdgeInsets.zero,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
+                        label: SizedBox(
+                          height: Dimensions.CHIP_SIZE,
+                          child: Center(
+                            child: Opacity(
+                              opacity: item == controller.baseAsset ? 1 : 0.7,
+                              child: Row(
+                                children: [
+                                  if (!showIcon) ...[
+                                    RoundImage(
+                                      image: '$kImageStorage$item$kImageExtension',
+                                      size: Dimensions.SOCIAL_ICONS_SIZE,
+                                    ),
+                                    UIHelper.horizontalSpaceExtraSmall(),
+                                  ],
+                                  Text(
+                                    item,
+                                    style: allButtonTextStyle(sizingInformation),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () => controller.setBaseAsset(item),
+                      );
+                    },
+                    separatorBuilder: (_, __) => UIHelper.horizontalSpaceSmall(),
+                    itemCount: controller.baseAssets.length,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
               ),
               if (controller.pairs.isNotEmpty)
                 (SliverList(
@@ -157,7 +204,7 @@ class PairsView extends GetView<PairsController> {
             UIHelper.horizontalSpaceSmall(),
             Expanded(
               child: Text(
-                '$kXOR / ${pair.shortName}',
+                '${pair.baseToken} / ${pair.shortName}',
                 style: tokensTitleStyle(sizingInformation),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -189,11 +236,11 @@ class PairsView extends GetView<PairsController> {
                   UIHelper.verticalSpaceSmall(),
                   RichText(
                     text: TextSpan(
-                      text: '$kXOR: ',
+                      text: '${pair.baseToken}: ',
                       style: pairsInfoStyle(sizingInformation),
                       children: <TextSpan>[
                         TextSpan(
-                          text: formatToCurrency(pair.xorLiquidity),
+                          text: formatToCurrency(pair.baseAssetLiquidity),
                           style: pairsLabelStyle(sizingInformation),
                         ),
                       ],
@@ -269,8 +316,8 @@ class PairsView extends GetView<PairsController> {
               extension: imgExtension,
             ),
           ),
-          const RoundImage(
-            image: '$kImageStorage$kXOR$kImageExtension',
+          RoundImage(
+            image: '$kImageStorage${pair.baseToken}$kImageExtension',
             size: Dimensions.PAIRS_IMAGE_SIZE,
           ),
         ],

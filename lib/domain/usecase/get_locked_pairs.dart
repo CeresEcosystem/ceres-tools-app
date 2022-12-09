@@ -5,7 +5,7 @@ class GetLockedPairs {
 
   GetLockedPairs({required this.repository});
 
-  Future execute(String token) async {
-    return repository.getLockedPairs(token);
+  Future execute(String baseToken, String token) async {
+    return repository.getLockedPairs(baseToken, token);
   }
 }

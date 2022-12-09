@@ -123,7 +123,7 @@ class LockerView extends GetView<LockerController> {
           pairImage(pair),
           UIHelper.horizontalSpaceSmall(),
           Text(
-            '$kXOR / ${pair.shortName}',
+            '${pair.baseToken} / ${pair.shortName}',
             style: tokensTitleStyle(sizingInformation),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -148,8 +148,8 @@ class LockerView extends GetView<LockerController> {
               extension: imgExtension,
             ),
           ),
-          const RoundImage(
-            image: '$kImageStorage$kXOR$kImageExtension',
+          RoundImage(
+            image: '$kImageStorage${pair.baseToken}$kImageExtension',
             size: Dimensions.PAIRS_IMAGE_SIZE,
           ),
         ],

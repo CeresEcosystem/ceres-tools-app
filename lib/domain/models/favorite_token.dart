@@ -1,9 +1,9 @@
 class FavoriteToken {
-  int id;
+  String assetId;
 
-  FavoriteToken({required this.id});
+  FavoriteToken({required this.assetId});
 
   Map<String, dynamic> toMap() {
-    return {'id': id};
+    return {'assetId': assetId};
   }
 }

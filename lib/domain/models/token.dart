@@ -1,7 +1,6 @@
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 
 class Token {
-  final int? id;
   final String? shortName;
   final String? fullName;
   final double? price;
@@ -10,7 +9,6 @@ class Token {
   bool isFavorite = false;
 
   Token({
-    this.id,
     this.shortName,
     this.fullName,
     this.price,
@@ -19,11 +17,10 @@ class Token {
   });
 
   factory Token.fromJson(Map<String, dynamic> json) => Token(
-        id: getDefaultIntValue(json['id']),
         shortName: getDefaultStringValue(json['token']),
         fullName: getDefaultStringValue(json['full_name']),
         price: getDefaultDoubleValue(json['price']),
         assetId: getDefaultStringValue(json['asset_id']),
-        priceOrder: getDefaultIntValue(json['price_order']),
+        priceOrder: getDefaultIntValue(json['order']),
       );
 }

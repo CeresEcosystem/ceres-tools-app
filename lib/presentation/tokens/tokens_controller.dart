@@ -43,7 +43,7 @@ class TokensController extends GetxController {
   Future favorites() async {
     DatabaseHelper.instance.queryAllRows().then((favorites) {
       for (var token in favorites) {
-        favoriteTokens.add(FavoriteToken(id: token['id']));
+        favoriteTokens.add(FavoriteToken(assetId: token['assetId']));
       }
     });
   }
@@ -62,25 +62,25 @@ class TokensController extends GetxController {
   }
 
   bool checkIfFavorite(Token t) {
-    FavoriteToken fToken = favoriteTokens.firstWhere((FavoriteToken token) => token.id == t.id, orElse: () => FavoriteToken(id: -1));
-    return fToken.id != -1;
+    FavoriteToken fToken = favoriteTokens.firstWhere((FavoriteToken token) => token.assetId == t.assetId, orElse: () => FavoriteToken(assetId: ''));
+    return fToken.assetId.isNotEmpty;
   }
 
   void addTokenToFavorites(Token t) async {
-    if (t.id != null) {
-      int success = await DatabaseHelper.instance.insert(FavoriteToken(id: t.id!));
+    if (t.assetId != null) {
+      int success = await DatabaseHelper.instance.insert(FavoriteToken(assetId: t.assetId!));
 
       if (success != 0) {
-        favoriteTokens.add(FavoriteToken(id: t.id!));
+        favoriteTokens.add(FavoriteToken(assetId: t.assetId!));
       }
     }
   }
 
   void removeTokenFromFavorites(Token t) async {
-    if (t.id != null) {
-      await DatabaseHelper.instance.delete(t.id!);
+    if (t.assetId != null) {
+      await DatabaseHelper.instance.delete(t.assetId!);
 
-      favoriteTokens.removeWhere((element) => element.id == t.id);
+      favoriteTokens.removeWhere((element) => element.assetId == t.assetId);
     }
   }
 

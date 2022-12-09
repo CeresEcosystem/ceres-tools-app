@@ -4,9 +4,9 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static const _databaseName = "favorite_tokens.db";
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 2;
   static const table = "favorites";
-  static const columnId = 'id';
+  static const columnId = 'assetId';
 
   DatabaseHelper._privateConstructor();
 
@@ -28,7 +28,7 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
   CREATE TABLE $table (
-    $columnId INTEGER PRIMARY KEY
+    $columnId TEXT PRIMARY KEY
   )
   ''');
   }
@@ -45,8 +45,8 @@ class DatabaseHelper {
     return res;
   }
 
-  Future<int> delete(int id) async {
+  Future<int> delete(String assetId) async {
     Database db = await instance.database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    return await db.delete(table, where: '$columnId = ?', whereArgs: [assetId]);
   }
 }

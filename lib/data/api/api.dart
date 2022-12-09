@@ -27,5 +27,5 @@ abstract class RestClient {
   Future getLockedTokens(@Path("token") String token);
 
   @GET(ApiConstants.LOCK_PAIR_PERMALINK)
-  Future getLockedPairs(@Path("token") String token);
+  Future getLockedPairs(@Path("baseAsset") String baseAsset, @Path("token") String token);
 }

@@ -7,9 +7,9 @@ class LockerRepositoryImpl implements LockerRepository {
   LockerRepositoryImpl({required this.datasource});
 
   @override
-  Future getLockedPairs(String token) async {
+  Future getLockedPairs(String baseToken, String token) async {
     try {
-      return await datasource.getLockedPairs(token);
+      return await datasource.getLockedPairs(baseToken, token);
     } on Exception catch (_) {}
   }
 

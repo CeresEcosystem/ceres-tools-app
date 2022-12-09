@@ -11,17 +11,20 @@ class PairsController extends GetxController {
 
   final _loadingStatus = LoadingStatus.READY.obs;
   var searchQueary = ''.obs;
+  final _baseAsset = 'All'.obs;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
 
   List<Pair>? _pairs;
+  final Set<String> _baseAssets = {'All'};
 
   String? _totalLiquidity;
   String? _totalVolume;
 
   List<Pair> get pairs {
     if (_pairs != null && _pairs!.isNotEmpty) {
-      return _pairs!.where((pair) {
+      List<Pair>? pairsFiltered = _baseAsset.value == 'All' ? _pairs : _pairs!.where((Pair p) => p.baseToken == _baseAsset.value).toList();
+      return pairsFiltered!.where((pair) {
         if (pair.fullName != null && pair.fullName!.isNotEmpty) {
           return pair.fullName!.toUpperCase().contains(searchQueary.value.toUpperCase());
         }
@@ -39,11 +42,19 @@ class PairsController extends GetxController {
 
   String get totalLiquidity => _totalLiquidity ?? '0';
   String get totalVolume => _totalVolume ?? '0';
+  List<String> get baseAssets => _baseAssets.toList();
+  String get baseAsset => _baseAsset.value;
 
   @override
   void onInit() {
     fetchPairs();
     super.onInit();
+  }
+
+  void setBaseAsset(String asset) {
+    if (asset != _baseAsset.value) {
+      _baseAsset.value = asset;
+    }
   }
 
   void fetchPairs([bool refresh = false]) async {
@@ -63,6 +74,8 @@ class PairsController extends GetxController {
 
           return 0;
         });
+
+        _pairs!.where((Pair p) => _baseAssets.add(p.baseToken!)).toList();
 
         double liq = 0;
         double vol = 0;

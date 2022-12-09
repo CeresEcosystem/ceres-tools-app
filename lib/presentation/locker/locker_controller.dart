@@ -39,7 +39,7 @@ class LockerController extends GetxController {
 
     if (isPair) {
       Pair pair = item as Pair;
-      response = await getLockedPairs.execute(pair.shortName!.toLowerCase());
+      response = await getLockedPairs.execute(pair.baseToken!.toLowerCase(), pair.shortName!.toLowerCase());
     } else {
       Token token = item as Token;
       response = await getLockedTokens.execute(token.shortName!.toLowerCase());
