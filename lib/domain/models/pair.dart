@@ -26,7 +26,7 @@ class Pair {
   factory Pair.fromJson(Map<String, dynamic> json) => Pair(
         baseToken: getDefaultStringValue(json['base_asset']),
         shortName: getDefaultStringValue(json['token']),
-        fullName: getDefaultStringValue(json['full_name']),
+        fullName: getDefaultStringValue(json['token_full_name']),
         liquidityOrder: getDefaultIntValue(json['order']),
         liquidity: getDefaultDoubleValue(json['liquidity']),
         baseAssetLiquidity: getDefaultDoubleValue(json['base_asset_liq']),

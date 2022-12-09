@@ -4,9 +4,19 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static const _databaseName = "favorite_tokens.db";
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 3;
   static const table = "favorites";
   static const columnId = 'assetId';
+
+  final String _databaseInit = '''
+  CREATE TABLE $table (
+    $columnId TEXT PRIMARY KEY
+  )
+  ''';
+
+  final String _databaseMigration = '''
+  DROP TABLE IF EXISTS $table
+  ''';
 
   DatabaseHelper._privateConstructor();
 
@@ -22,15 +32,16 @@ class DatabaseHelper {
 
   _initDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
-    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
-    await db.execute('''
-  CREATE TABLE $table (
-    $columnId TEXT PRIMARY KEY
-  )
-  ''');
+    await db.execute(_databaseInit);
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    await db.execute(_databaseMigration);
+    await db.execute(_databaseInit);
   }
 
   Future<int> insert(FavoriteToken token) async {
