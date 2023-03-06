@@ -5,7 +5,7 @@ const kPushNotificationID = '30318207-4f3e-41ea-9ed8-9a1f0c5abcc1';
 const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
 const kPSWAPCommunity = 'https://twitter.com/PSWAPCommunity';
-const kImageStorage = 'https://cerestoken.io/storage/icons/';
+const kImageStorage = 'https://data.cerestoken.io/storage/icons/';
 const kChartURL = 'https://tools.cerestoken.io/tradings/index.php?token=';
 const kImageExtension = '.svg';
 const kImagePNGExtension = '.png';
