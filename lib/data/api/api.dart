@@ -4,28 +4,29 @@ import 'package:retrofit/retrofit.dart';
 
 part 'api.g.dart';
 
-@RestApi(baseUrl: ApiConstants.BASE_URL)
+@RestApi()
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET(ApiConstants.TOKENS_PERMALINK)
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TOKENS_PERMALINK}')
   Future getTokens();
 
-  @GET(ApiConstants.PAIRS_PERMALINK)
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIRS_PERMALINK}')
   Future getPairs();
 
-  @GET(ApiConstants.FARMING_PERMALINK)
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.FARMING_PERMALINK}')
   Future getFarming();
 
-  @GET(ApiConstants.TRACKER_PERMALINK)
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TRACKER_PERMALINK}')
   Future getTracker();
 
-  @GET(ApiConstants.BANNERS_PERMALINK)
+  @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.BANNERS_PERMALINK}')
   Future getBanners();
 
-  @GET(ApiConstants.LOCK_TOKEN_PERMALINK)
+  @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.LOCK_TOKEN_PERMALINK}')
   Future getLockedTokens(@Path("token") String token);
 
-  @GET(ApiConstants.LOCK_PAIR_PERMALINK)
-  Future getLockedPairs(@Path("baseAsset") String baseAsset, @Path("token") String token);
+  @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.LOCK_PAIR_PERMALINK}')
+  Future getLockedPairs(
+      @Path("baseAsset") String baseAsset, @Path("token") String token);
 }

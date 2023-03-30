@@ -23,10 +23,14 @@ class PairsController extends GetxController {
 
   List<Pair> get pairs {
     if (_pairs != null && _pairs!.isNotEmpty) {
-      List<Pair>? pairsFiltered = _baseAsset.value == 'All' ? _pairs : _pairs!.where((Pair p) => p.baseToken == _baseAsset.value).toList();
+      List<Pair>? pairsFiltered = _baseAsset.value == 'All'
+          ? _pairs
+          : _pairs!.where((Pair p) => p.baseToken == _baseAsset.value).toList();
       return pairsFiltered!.where((pair) {
         if (pair.fullName != null && pair.fullName!.isNotEmpty) {
-          return pair.fullName!.toUpperCase().contains(searchQueary.value.toUpperCase());
+          return pair.fullName!
+              .toUpperCase()
+              .contains(searchQueary.value.toUpperCase());
         }
 
         return false;
@@ -67,13 +71,6 @@ class PairsController extends GetxController {
 
       if (pairList.pairs != null && pairList.pairs!.isNotEmpty) {
         _pairs = pairList.pairs;
-        _pairs!.sort((pair1, pair2) {
-          if (pair1.liquidityOrder != null && pair2.liquidityOrder != null) {
-            return pair1.liquidityOrder!.compareTo(pair2.liquidityOrder!);
-          }
-
-          return 0;
-        });
 
         _pairs!.where((Pair p) => _baseAssets.add(p.baseToken!)).toList();
 
@@ -89,8 +86,10 @@ class PairsController extends GetxController {
           }
         }
 
-        _totalLiquidity = formatToCurrency(liq, showSymbol: true, decimalDigits: 0);
-        _totalVolume = formatToCurrency(vol, showSymbol: true, decimalDigits: 0);
+        _totalLiquidity =
+            formatToCurrency(liq, showSymbol: true, decimalDigits: 0);
+        _totalVolume =
+            formatToCurrency(vol, showSymbol: true, decimalDigits: 0);
       }
 
       _loadingStatus.value = LoadingStatus.READY;

@@ -4,7 +4,6 @@ class Pair {
   final String? baseToken;
   final String? shortName;
   final String? fullName;
-  final int? liquidityOrder;
   final double? liquidity;
   final double? baseAssetLiquidity;
   final double? targetAssetLiquidity;
@@ -15,7 +14,6 @@ class Pair {
     this.baseToken,
     this.shortName,
     this.fullName,
-    this.liquidityOrder,
     this.liquidity,
     this.baseAssetLiquidity,
     this.targetAssetLiquidity,
@@ -24,14 +22,13 @@ class Pair {
   });
 
   factory Pair.fromJson(Map<String, dynamic> json) => Pair(
-        baseToken: getDefaultStringValue(json['base_asset']),
+        baseToken: getDefaultStringValue(json['baseAsset']),
         shortName: getDefaultStringValue(json['token']),
-        fullName: getDefaultStringValue(json['token_full_name']),
-        liquidityOrder: getDefaultIntValue(json['order']),
+        fullName: getDefaultStringValue(json['tokenFullName']),
         liquidity: getDefaultDoubleValue(json['liquidity']),
-        baseAssetLiquidity: getDefaultDoubleValue(json['base_asset_liq']),
-        targetAssetLiquidity: getDefaultDoubleValue(json['target_asset_liq']),
+        baseAssetLiquidity: getDefaultDoubleValue(json['baseAssetLiq']),
+        targetAssetLiquidity: getDefaultDoubleValue(json['targetAssetLiq']),
         volume: getDefaultDoubleValue(json['volume']),
-        lockedLiquidity: getDefaultDoubleValue(json['locked_liquidity']),
+        lockedLiquidity: getDefaultDoubleValue(json['lockedLiquidity']),
       );
 }

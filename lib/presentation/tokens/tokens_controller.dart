@@ -30,7 +30,13 @@ class TokensController extends GetxController {
         token.isFavorite = checkIfFavorite(token);
         if (token.price != null && token.price! <= 0) return false;
         if (token.fullName != null && token.assetId != null) {
-          return (token.fullName!.toUpperCase().contains(searchQueary.value.toUpperCase()) || token.assetId!.toUpperCase().contains(searchQueary.value.toUpperCase())) && (!_showOnlyFavorites.value || token.isFavorite);
+          return (token.fullName!
+                      .toUpperCase()
+                      .contains(searchQueary.value.toUpperCase()) ||
+                  token.assetId!
+                      .toUpperCase()
+                      .contains(searchQueary.value.toUpperCase())) &&
+              (!_showOnlyFavorites.value || token.isFavorite);
         }
 
         return false;
@@ -62,13 +68,16 @@ class TokensController extends GetxController {
   }
 
   bool checkIfFavorite(Token t) {
-    FavoriteToken fToken = favoriteTokens.firstWhere((FavoriteToken token) => token.assetId == t.assetId, orElse: () => FavoriteToken(assetId: ''));
+    FavoriteToken fToken = favoriteTokens.firstWhere(
+        (FavoriteToken token) => token.assetId == t.assetId,
+        orElse: () => FavoriteToken(assetId: ''));
     return fToken.assetId.isNotEmpty;
   }
 
   void addTokenToFavorites(Token t) async {
     if (t.assetId != null) {
-      int success = await DatabaseHelper.instance.insert(FavoriteToken(assetId: t.assetId!));
+      int success = await DatabaseHelper.instance
+          .insert(FavoriteToken(assetId: t.assetId!));
 
       if (success != 0) {
         favoriteTokens.add(FavoriteToken(assetId: t.assetId!));
@@ -98,13 +107,6 @@ class TokensController extends GetxController {
 
       if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
         _tokens = tokenList.tokens;
-        _tokens!.sort((token1, token2) {
-          if (token1.priceOrder != null && token2.priceOrder != null) {
-            return token1.priceOrder!.compareTo(token2.priceOrder!);
-          }
-
-          return 0;
-        });
       }
 
       if (favoriteTokens.isNotEmpty) {

@@ -5,7 +5,7 @@ class BlockList {
 
   const BlockList(this._blocks);
 
-  List<Block>? get blocks => _blocks?.reversed.toList();
+  List<Block>? get blocks => _blocks?.toList();
 
   factory BlockList.fromJson(List<dynamic> json) {
     return BlockList(

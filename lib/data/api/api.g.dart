@@ -9,9 +9,7 @@ part of 'api.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _RestClient implements RestClient {
-  _RestClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://cerestoken.io/api';
-  }
+  _RestClient(this._dio, {this.baseUrl});
 
   final Dio _dio;
 
@@ -25,7 +23,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/prices',
+            .compose(_dio.options, 'https://data.cerestoken.io/api/prices',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -40,7 +38,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/pairs/v2',
+            .compose(_dio.options, 'https://data.cerestoken.io/api/pairs',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -55,7 +53,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/rewards',
+            .compose(_dio.options, 'https://data.cerestoken.io/api/rewards',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -70,7 +68,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/tracker',
+            .compose(_dio.options, 'https://data.cerestoken.io/api/tracker',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -85,7 +83,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/banners/mobile',
+            .compose(_dio.options, 'https://cerestoken.io/api/banners/mobile',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -100,7 +98,8 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/lock/tokens/${token}',
+            .compose(
+                _dio.options, 'https://cerestoken.io/api/lock/tokens/${token}',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -115,7 +114,8 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/lock/pairs/${baseAsset}/${token}',
+            .compose(_dio.options,
+                'https://cerestoken.io/api/lock/pairs/${baseAsset}/${token}',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;

@@ -18,11 +18,12 @@ class Block {
   });
 
   factory Block.fromJson(Map<String, dynamic> json) => Block(
-        blockNumber: getDefaultIntValue(json['block_num']),
-        xorSpent: getDefaultDoubleValue(json['xor_spent']),
-        pswapGrossBurn: getDefaultDoubleValue(json['pswap_gross_burn']),
-        pswapRemintedLP: getDefaultDoubleValue(json['pswap_reminted_lp']),
-        pswapRemintedParliament: getDefaultDoubleValue(json['pswap_reminted_parliament']),
-        pswapNetBurn: getDefaultDoubleValue(json['pswap_net_burn']),
+        blockNumber: getDefaultIntValue(json['blockNum']),
+        xorSpent: getDefaultDoubleValue(json['xorSpent']),
+        pswapGrossBurn: getDefaultDoubleValue(json['pswapGrossBurn']),
+        pswapRemintedLP: getDefaultDoubleValue(json['pswapRemintedLp']),
+        pswapRemintedParliament:
+            getDefaultDoubleValue(json['pswapRemintedParliament']),
+        pswapNetBurn: getDefaultDoubleValue(json['pswapNetBurn']),
       );
 }

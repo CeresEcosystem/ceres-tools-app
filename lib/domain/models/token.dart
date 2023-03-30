@@ -5,7 +5,6 @@ class Token {
   final String? fullName;
   final double? price;
   final String? assetId;
-  final int? priceOrder;
   bool isFavorite = false;
 
   Token({
@@ -13,14 +12,12 @@ class Token {
     this.fullName,
     this.price,
     this.assetId,
-    this.priceOrder,
   });
 
   factory Token.fromJson(Map<String, dynamic> json) => Token(
         shortName: getDefaultStringValue(json['token']),
-        fullName: getDefaultStringValue(json['full_name']),
+        fullName: getDefaultStringValue(json['fullName']),
         price: getDefaultDoubleValue(json['price']),
-        assetId: getDefaultStringValue(json['asset_id']),
-        priceOrder: getDefaultIntValue(json['order']),
+        assetId: getDefaultStringValue(json['assetId']),
       );
 }
