@@ -23,10 +23,10 @@ abstract class RestClient {
   @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.BANNERS_PERMALINK}')
   Future getBanners();
 
-  @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.LOCK_TOKEN_PERMALINK}')
+  @GET('${ApiConstants.LOCK_URL}${ApiConstants.LOCK_TOKEN_PERMALINK}')
   Future getLockedTokens(@Path("token") String token);
 
-  @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.LOCK_PAIR_PERMALINK}')
+  @GET('${ApiConstants.LOCK_URL}${ApiConstants.LOCK_PAIR_PERMALINK}')
   Future getLockedPairs(
       @Path("baseAsset") String baseAsset, @Path("token") String token);
 }
