@@ -1,7 +1,10 @@
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 import 'package:intl/intl.dart';
 
-String formatToCurrency(dynamic value, {bool showSymbol = false, int decimalDigits = 2, bool formatOnlyFirstPart = false}) {
+String formatToCurrency(dynamic value,
+    {bool showSymbol = false,
+    int decimalDigits = 2,
+    bool formatOnlyFirstPart = false}) {
   try {
     if (value != null) {
       String stringValue = value.toString();
@@ -9,11 +12,13 @@ String formatToCurrency(dynamic value, {bool showSymbol = false, int decimalDigi
 
       if (formatOnlyFirstPart) {
         List<String> parts = stringValue.split('.');
-        final formatCurrency = NumberFormat.currency(symbol: symbol, decimalDigits: 0);
+        final formatCurrency =
+            NumberFormat.currency(symbol: symbol, decimalDigits: 0);
         String firstPart = formatCurrency.format(int.tryParse(parts[0]));
         return '$firstPart.${parts[1]}';
       } else {
-        final formatCurrency = NumberFormat.currency(symbol: symbol, decimalDigits: decimalDigits);
+        final formatCurrency =
+            NumberFormat.currency(symbol: symbol, decimalDigits: decimalDigits);
         return formatCurrency.format(value);
       }
     }
@@ -43,9 +48,11 @@ double dateStringToDouble(dynamic date) {
   return 0;
 }
 
-String formatDate(dynamic value, {bool formatFullDate = false, bool showDay = false}) {
+String formatDate(dynamic value,
+    {bool formatFullDate = false, bool showDay = false}) {
   if (value != null && value.toString().length >= 8) {
-    var dd = DateTime.fromMicrosecondsSinceEpoch(getDefaultIntValue(value)! * 1000);
+    var dd =
+        DateTime.fromMicrosecondsSinceEpoch(getDefaultIntValue(value)! * 1000);
 
     final month = dd.month;
     final day = dd.day;
@@ -66,4 +73,12 @@ String formatDate(dynamic value, {bool formatFullDate = false, bool showDay = fa
   }
 
   return '';
+}
+
+bool checkNumberValue(dynamic number) {
+  if (number != null && number != 0 && number != double.infinity) {
+    return true;
+  }
+
+  return false;
 }

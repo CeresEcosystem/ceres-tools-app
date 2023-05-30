@@ -1,20 +1,17 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/default_value.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_banner.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
 import 'package:ceres_locker_app/core/widgets/error_text.dart';
-import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
 import 'package:ceres_locker_app/presentation/farming/farming_controller.dart';
+import 'package:ceres_locker_app/presentation/farming/widgets/demeter_farming.dart';
+import 'package:ceres_locker_app/presentation/farming/widgets/heading.dart';
+import 'package:ceres_locker_app/presentation/farming/widgets/pswap_farming.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,9 +41,15 @@ class FarmingView extends GetView<FarmingController> {
 
   Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
-      if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
+      if (controller.loadingStatus == LoadingStatus.LOADING) {
+        return const Expanded(child: CenterLoading());
+      }
 
-      if (controller.loadingStatus == LoadingStatus.ERROR) return Expanded(child: ErrorText(onButtonPress: () => controller.fetchFarming(true)));
+      if (controller.loadingStatus == LoadingStatus.ERROR) {
+        return Expanded(
+            child:
+                ErrorText(onButtonPress: () => controller.fetchFarming(true)));
+      }
 
       return Expanded(
         child: RefreshIndicator(
@@ -61,63 +64,57 @@ class FarmingView extends GetView<FarmingController> {
                   ),
                 ]),
               ),
-              if (controller.farm != null)
-                (SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.only(top: Dimensions.DEFAULT_MARGIN_LARGE),
-                      child: ItemContainer(
-                        sizingInformation: sizingInformation,
-                        backgroundColor: backgroundColorLight,
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: kFarmingPart1,
-                            style: farmingLabelStyle(sizingInformation),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: checkEmptyString(controller.farm!.rewardsDouble),
-                                style: farmingInfoStyle(sizingInformation),
-                              ),
-                              const TextSpan(
-                                text: kFarmingPart2,
-                              ),
-                              TextSpan(
-                                text: checkEmptyString(controller.farm!.aprDouble),
-                                style: farmingInfoStyle(sizingInformation),
-                              ),
-                              const TextSpan(
-                                text: kFarmingPart3,
-                              ),
-                              const TextSpan(
-                                text: kFarmingPart4,
-                              ),
-                              TextSpan(
-                                text: checkEmptyString(controller.farm!.rewards),
-                                style: farmingInfoStyle(sizingInformation),
-                              ),
-                              const TextSpan(
-                                text: kFarmingPart5,
-                              ),
-                              TextSpan(
-                                text: checkEmptyString(controller.farm!.apr),
-                                style: farmingInfoStyle(sizingInformation),
-                              ),
-                              const TextSpan(
-                                text: kFarmingPart6,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]),
-                )),
+              Heading(
+                sizingInformation: sizingInformation,
+                tabs: controller.tabs,
+                selectedTab: controller.selectedTab,
+                onTabChange: controller.onTabChange,
+                tvl: controller.tvl,
+                loadingStatus: controller.loadingStatus,
+              ),
+              renderFarmBody(sizingInformation, controller)
             ],
           ),
           onRefresh: () async => controller.fetchFarming(true),
         ),
       );
     });
+  }
+
+  Widget renderFarmBody(
+      SizingInformation sizingInformation, FarmingController controller) {
+    if (controller.loadingStatus == LoadingStatus.LOADING ||
+        controller.loadingStatus == LoadingStatus.IDLE) {
+      return SliverList(
+        delegate: SliverChildListDelegate([
+          const Padding(
+            padding: EdgeInsets.only(top: 10.0),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ]),
+      );
+    }
+
+    switch (controller.selectedTab) {
+      case 'Demeter':
+        return DemeterFarming(
+          farms: controller.demeterFarmsAndPools['farms']!,
+          pools: controller.demeterFarmsAndPools['pools']!,
+          sizingInformation: sizingInformation,
+        );
+      case 'Hermes':
+        return DemeterFarming(
+          farms: controller.demeterFarmsAndPools['farms']!,
+          pools: controller.demeterFarmsAndPools['pools']!,
+          sizingInformation: sizingInformation,
+        );
+      case 'PSWAP':
+        return PSWAPFarming(
+          sizingInformation: sizingInformation,
+          farm: controller.farm!,
+        );
+    }
+
+    return Container();
   }
 }

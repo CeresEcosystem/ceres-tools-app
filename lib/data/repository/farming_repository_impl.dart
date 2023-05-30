@@ -12,4 +12,32 @@ class FarmingRepositoryImpl implements FarmingRepository {
       return await datasource.getFarming();
     } on Exception catch (_) {}
   }
+
+  @override
+  Future getFarmingTVL(String farming) async {
+    try {
+      return await datasource.getFarmingTVL(farming);
+    } on Exception catch (_) {}
+  }
+
+  @override
+  Future getTokenInfos() async {
+    try {
+      return await datasource.getTokenInfos();
+    } on Exception catch (_) {}
+  }
+
+  @override
+  Future getDemeterFarms() async {
+    try {
+      return await datasource.getDemeterFarms();
+    } on Exception catch (_) {}
+  }
+
+  @override
+  Future getDemeterPools() async {
+    try {
+      return await datasource.getDemeterPools();
+    } on Exception catch (_) {}
+  }
 }

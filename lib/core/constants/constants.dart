@@ -1,12 +1,12 @@
 const kAppName = 'Ceres';
 const kAppTitle = 'Ceres Tools';
-const kTokenName = 'Ceres';
+const kTokenName = 'CERES';
 const kPushNotificationID = '30318207-4f3e-41ea-9ed8-9a1f0c5abcc1';
 const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
 const kPSWAPCommunity = 'https://twitter.com/PSWAPCommunity';
 const kImageStorage = 'https://data.cerestoken.io/storage/icons/';
-const kChartURL = 'https://tools.cerestoken.io/tradings/index.php?token=';
+const kChartURL = 'https://tools.cerestoken.io/trading?token=';
 const kImageExtension = '.svg';
 const kImagePNGExtension = '.png';
 const kBannerTitle = 'Ceres is live!';
@@ -53,8 +53,10 @@ const kRemoveFromFavorites = 'Remove';
 const kShowLocks = 'View locks';
 const kEmptyLockedTokensList = 'Token has no lockups';
 const kEmptyLockedPairsList = 'Pair has no liquidity lockups';
+const kHMXAddress =
+    '0x002d4e9e03f192cc33b128319a049f353db98fbf4d98f717fd0b7f66a0462142';
 
-const kChartIcon = 'https://tools.cerestoken.io/assets/font/svg/chart.svg';
+const kChartIcon = 'https://tools.cerestoken.io/chart.svg';
 
 // SIDE MENU //
 const kSideMenuTokens = 'Tokens';

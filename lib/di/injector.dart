@@ -16,10 +16,14 @@ import 'package:ceres_locker_app/domain/repository/locker_repository.dart';
 import 'package:ceres_locker_app/domain/repository/pairs_repository.dart';
 import 'package:ceres_locker_app/domain/repository/tokens_repository.dart';
 import 'package:ceres_locker_app/domain/repository/tracker_repository.dart';
+import 'package:ceres_locker_app/domain/usecase/get_demeter_farms.dart';
+import 'package:ceres_locker_app/domain/usecase/get_demeter_pools.dart';
 import 'package:ceres_locker_app/domain/usecase/get_farming.dart';
+import 'package:ceres_locker_app/domain/usecase/get_farming_tvl.dart';
 import 'package:ceres_locker_app/domain/usecase/get_locked_pairs.dart';
 import 'package:ceres_locker_app/domain/usecase/get_locked_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_pairs.dart';
+import 'package:ceres_locker_app/domain/usecase/get_token_infos.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tracker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -53,7 +57,8 @@ abstract class Injector {
   }
 
   void _configureRestClient() {
-    container?.registerInstance(RestClient(Dio(BaseOptions(contentType: 'application/json'))));
+    container?.registerInstance(
+        RestClient(Dio(BaseOptions(contentType: 'application/json'))));
   }
 
   @Register.factory(TokensDatasource)
@@ -65,6 +70,10 @@ abstract class Injector {
   @Register.factory(GetTokens)
   @Register.factory(GetPairs)
   @Register.factory(GetFarming)
+  @Register.factory(GetFarmingTVL)
+  @Register.factory(GetTokenInfos)
+  @Register.factory(GetDemeterFarms)
+  @Register.factory(GetDemeterPools)
   @Register.factory(GetTracker)
   @Register.factory(GetLockedTokens)
   @Register.factory(GetLockedPairs)

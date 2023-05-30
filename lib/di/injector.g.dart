@@ -29,6 +29,14 @@ class _$Injector extends Injector {
       ..registerFactory((c) => GetTokens(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetPairs(repository: c<PairsRepository>()))
       ..registerFactory((c) => GetFarming(repository: c<FarmingRepository>()))
+      ..registerFactory(
+          (c) => GetFarmingTVL(repository: c<FarmingRepository>()))
+      ..registerFactory(
+          (c) => GetTokenInfos(repository: c<FarmingRepository>()))
+      ..registerFactory(
+          (c) => GetDemeterFarms(repository: c<FarmingRepository>()))
+      ..registerFactory(
+          (c) => GetDemeterPools(repository: c<FarmingRepository>()))
       ..registerFactory((c) => GetTracker(repository: c<TrackerRepository>()))
       ..registerFactory(
           (c) => GetLockedTokens(repository: c<LockerRepository>()))

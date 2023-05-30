@@ -338,23 +338,8 @@ class TrackerController extends GetxController {
           'https://medium.com/polkaswap/pswap-rewards-part-3-polkaswap-market-making-rebates-1856f62ccfaa'
     },
   ];
-  final List<Map<String, dynamic>> _contactSocials = [
-    {
-      'icon': 'lib/core/assets/images/medium_icon.png',
-      'url': 'https://tokenceres.medium.com'
-    },
-    {
-      'icon': 'lib/core/assets/images/telegram_icon.png',
-      'url': 'https://t.me/cerestoken'
-    },
-    {
-      'icon': 'lib/core/assets/images/twitter_icon.png',
-      'url': 'https://twitter.com/TokenCeres'
-    },
-  ];
 
   List get faqs => _faqs;
-  List<Map<String, dynamic>> get contactSocials => _contactSocials;
 
   @override
   void onInit() {

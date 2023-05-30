@@ -1,7 +1,6 @@
 import 'package:ceres_locker_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
@@ -49,9 +48,15 @@ class TrackerView extends GetView<TrackerController> {
 
   Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
-      if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
+      if (controller.loadingStatus == LoadingStatus.LOADING) {
+        return const Expanded(child: CenterLoading());
+      }
 
-      if (controller.loadingStatus == LoadingStatus.ERROR) return Expanded(child: ErrorText(onButtonPress: () => controller.fetchTracker(true)));
+      if (controller.loadingStatus == LoadingStatus.ERROR) {
+        return Expanded(
+            child:
+                ErrorText(onButtonPress: () => controller.fetchTracker(true)));
+      }
 
       return Expanded(
         child: RefreshIndicator(
@@ -99,7 +104,8 @@ class TrackerView extends GetView<TrackerController> {
                   UIHelper.verticalSpaceSmall(),
                 ]),
               ),
-              if (controller.xorSpent != null && controller.xorSpent!.isNotEmpty)
+              if (controller.xorSpent != null &&
+                  controller.xorSpent!.isNotEmpty)
                 (SliverList(
                   delegate: SliverChildListDelegate([
                     secondBlock(sizingInformation),
@@ -110,7 +116,8 @@ class TrackerView extends GetView<TrackerController> {
                   UIHelper.verticalSpaceSmall(),
                 ]),
               ),
-              if (controller.mainTableData != null && controller.mainTableData!.isNotEmpty)
+              if (controller.mainTableData != null &&
+                  controller.mainTableData!.isNotEmpty)
                 (SliverList(
                   delegate: SliverChildListDelegate([
                     thirdBlock(sizingInformation),
@@ -121,7 +128,8 @@ class TrackerView extends GetView<TrackerController> {
                   UIHelper.verticalSpaceLarge(),
                 ]),
               ),
-              if (controller.pswapBurningGraphData != null && controller.pswapBurningGraphData!.isNotEmpty)
+              if (controller.pswapBurningGraphData != null &&
+                  controller.pswapBurningGraphData!.isNotEmpty)
                 (SliverList(
                   delegate: SliverChildListDelegate([
                     fourthBlock(sizingInformation),
@@ -132,7 +140,8 @@ class TrackerView extends GetView<TrackerController> {
                   UIHelper.verticalSpaceLarge(),
                 ]),
               ),
-              if (controller.pswapSupplyGraphData != null && controller.pswapSupplyGraphData!.isNotEmpty)
+              if (controller.pswapSupplyGraphData != null &&
+                  controller.pswapSupplyGraphData!.isNotEmpty)
                 (SliverList(
                   delegate: SliverChildListDelegate([
                     fifthBlock(sizingInformation),
@@ -146,16 +155,6 @@ class TrackerView extends GetView<TrackerController> {
               SliverList(
                 delegate: SliverChildListDelegate([
                   seventhBlock(sizingInformation),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceLarge(),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  sixthBlock(sizingInformation),
                 ]),
               ),
               SliverList(
@@ -181,9 +180,15 @@ class TrackerView extends GetView<TrackerController> {
     });
   }
 
-  Widget buttons(SizingInformation sizingInformation, Function onPress, String selectedFilter, {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start}) {
-    double rightPadding = mainAxisAlignment == MainAxisAlignment.start ? Dimensions.DEFAULT_MARGIN_SMALL : 0;
-    double leftPadding = mainAxisAlignment == MainAxisAlignment.end ? Dimensions.DEFAULT_MARGIN_SMALL : 0;
+  Widget buttons(SizingInformation sizingInformation, Function onPress,
+      String selectedFilter,
+      {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start}) {
+    double rightPadding = mainAxisAlignment == MainAxisAlignment.start
+        ? Dimensions.DEFAULT_MARGIN_SMALL
+        : 0;
+    double leftPadding = mainAxisAlignment == MainAxisAlignment.end
+        ? Dimensions.DEFAULT_MARGIN_SMALL
+        : 0;
 
     return Row(
       mainAxisAlignment: mainAxisAlignment,
@@ -195,8 +200,12 @@ class TrackerView extends GetView<TrackerController> {
             child: Text(
               filter,
               style: buttonFilterStyle(sizingInformation).copyWith(
-                color: selectedFilter == filter ? Colors.white : Colors.white.withOpacity(0.5),
-                fontWeight: selectedFilter == filter ? FontWeight.w700 : FontWeight.w500,
+                color: selectedFilter == filter
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.5),
+                fontWeight: selectedFilter == filter
+                    ? FontWeight.w700
+                    : FontWeight.w500,
               ),
             ),
           ),
@@ -249,7 +258,8 @@ class TrackerView extends GetView<TrackerController> {
               children: <TextSpan>[
                 TextSpan(
                   text: ' $kPswap',
-                  style: trackerBlockPriceLabelStyle(sizingInformation).copyWith(
+                  style:
+                      trackerBlockPriceLabelStyle(sizingInformation).copyWith(
                     fontSize: subtitle1,
                   ),
                 ),
@@ -261,7 +271,14 @@ class TrackerView extends GetView<TrackerController> {
     );
   }
 
-  Widget pagination(int currentPage, int lastPage, Function onPreviousClick, Function onNextClick, Function onFirstClick, Function onLastClick, SizingInformation sizingInformation) {
+  Widget pagination(
+      int currentPage,
+      int lastPage,
+      Function onPreviousClick,
+      Function onNextClick,
+      Function onFirstClick,
+      Function onLastClick,
+      SizingInformation sizingInformation) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -326,7 +343,8 @@ class TrackerView extends GetView<TrackerController> {
           Column(
             children: controller.xorSpent!.map((Block block) {
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN_SMALL / 2),
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.DEFAULT_MARGIN_SMALL / 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -390,7 +408,8 @@ class TrackerView extends GetView<TrackerController> {
                 UIHelper.verticalSpaceMediumLarge(),
                 ...controller.mainTableData!.map((Block block) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Dimensions.DEFAULT_MARGIN_SMALL / 2),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: Dimensions.DEFAULT_MARGIN_SMALL / 2),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -402,25 +421,29 @@ class TrackerView extends GetView<TrackerController> {
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapGrossBurn, decimalDigits: 3),
+                            formatToCurrency(block.pswapGrossBurn,
+                                decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapRemintedLP, decimalDigits: 3),
+                            formatToCurrency(block.pswapRemintedLP,
+                                decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapRemintedParliament, decimalDigits: 3),
+                            formatToCurrency(block.pswapRemintedParliament,
+                                decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapNetBurn, decimalDigits: 3),
+                            formatToCurrency(block.pswapNetBurn,
+                                decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
@@ -435,8 +458,10 @@ class TrackerView extends GetView<TrackerController> {
           pagination(
             controller.mainTablePagination,
             controller.mainTableTotalPages,
-            () => controller.setMainTablePage(controller.mainTablePagination - 1),
-            () => controller.setMainTablePage(controller.mainTablePagination + 1),
+            () =>
+                controller.setMainTablePage(controller.mainTablePagination - 1),
+            () =>
+                controller.setMainTablePage(controller.mainTablePagination + 1),
             () => controller.setMainTablePage(1),
             () => controller.setMainTablePage(controller.mainTableTotalPages),
             sizingInformation,
@@ -492,63 +517,6 @@ class TrackerView extends GetView<TrackerController> {
     );
   }
 
-  Widget sixthBlock(SizingInformation sizingInformation) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
-      child: Column(
-        children: [
-          Text(
-            kContactTitle,
-            style: trackerContactTitleStyle(sizingInformation),
-          ),
-          UIHelper.verticalSpaceExtraSmall(),
-          Text(
-            kContactSubtitle,
-            style: trackerTitleStyle(sizingInformation),
-          ),
-          UIHelper.verticalSpaceMediumLarge(),
-          socialsGroup(),
-        ],
-      ),
-    );
-  }
-
-  Widget socialsGroup() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Container(
-            height: 2,
-            color: backgroundColorLight,
-          ),
-        ),
-        ...controller.contactSocials.map((social) {
-          return GestureDetector(
-            onTap: () => _launchURL(social['url']!),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
-              padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: Dimensions.SOCIAL_ICONS_SIZE * 1.2,
-                ),
-                child: Image.asset(social['icon']!),
-              ),
-            ),
-          );
-        }).toList(),
-        Expanded(
-          child: Container(
-            height: 2,
-            color: backgroundColorLight,
-          ),
-        ),
-      ],
-    );
-  }
-
   void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
 
@@ -561,7 +529,8 @@ class TrackerView extends GetView<TrackerController> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+          padding:
+              const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
           child: Text(
             kFAQSTitle,
             style: trackerTitleStyle(sizingInformation),
@@ -590,14 +559,16 @@ class TrackerView extends GetView<TrackerController> {
     final keyContext = expansionTileKey.currentContext;
     if (keyContext != null) {
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
-        Scrollable.ensureVisible(keyContext, duration: const Duration(milliseconds: 200));
+        Scrollable.ensureVisible(keyContext,
+            duration: const Duration(milliseconds: 200));
       });
     }
   }
 
   Widget eightBlock(SizingInformation sizingInformation) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+      padding:
+          const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
       child: Column(
         children: [
           Text(

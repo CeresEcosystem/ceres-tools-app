@@ -62,14 +62,18 @@ TextStyle buttonTextStyle(SizingInformation sizingInformation) {
 
 TextStyle tokensTitleStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? title : subtitle1,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop
+        ? title
+        : subtitle1,
     fontWeight: FontWeight.w700,
   );
 }
 
 TextStyle tokensAssetIdStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? subtitle2 : caption,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop
+        ? subtitle2
+        : caption,
     fontWeight: FontWeight.w500,
     color: Colors.white.withOpacity(0.5),
   );
@@ -77,7 +81,9 @@ TextStyle tokensAssetIdStyle(SizingInformation sizingInformation) {
 
 TextStyle tokensPriceStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop ? headline6 : title,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop
+        ? headline6
+        : title,
     fontWeight: FontWeight.w700,
     color: backgroundPink,
   );
@@ -101,7 +107,9 @@ TextStyle searchTextFieldTextStyle(SizingInformation sizingInformation) {
 
 TextStyle pairsLabelStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? caption : subtitle1,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : subtitle1,
     fontWeight: FontWeight.w500,
     color: Colors.white,
   );
@@ -109,7 +117,9 @@ TextStyle pairsLabelStyle(SizingInformation sizingInformation) {
 
 TextStyle pairsInfoStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? caption : subtitle1,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : subtitle1,
     fontWeight: FontWeight.w500,
     color: Colors.white.withOpacity(0.5),
   );
@@ -117,7 +127,9 @@ TextStyle pairsInfoStyle(SizingInformation sizingInformation) {
 
 TextStyle pairsLiquidityStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? caption : title,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : title,
     fontWeight: FontWeight.w700,
     color: backgroundPink,
   );
@@ -125,23 +137,29 @@ TextStyle pairsLiquidityStyle(SizingInformation sizingInformation) {
 
 TextStyle farmingLabelStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? title : headline6,
-    fontWeight: FontWeight.w400,
-    color: Colors.white.withOpacity(0.7),
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? title
+        : headline6,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
   );
 }
 
 TextStyle farmingInfoStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? title : headline6,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? title
+        : headline6,
     fontWeight: FontWeight.w700,
-    color: Colors.white,
+    color: backgroundPink,
   );
 }
 
 TextStyle pairsSumContainerLabelStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? caption : title,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : title,
     fontWeight: FontWeight.w500,
     color: Colors.white.withOpacity(0.5),
   );
@@ -149,7 +167,9 @@ TextStyle pairsSumContainerLabelStyle(SizingInformation sizingInformation) {
 
 TextStyle pairsSumContainerInfoStyle(SizingInformation sizingInformation) {
   return TextStyle(
-    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? subtitle1 : headline6,
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? subtitle1
+        : headline6,
     fontWeight: FontWeight.w700,
     color: Colors.white,
   );
@@ -292,6 +312,46 @@ TextStyle tokenButtonTextStyle(SizingInformation sizingInformation) {
 TextStyle emptyListTextStyle(SizingInformation sizingInformation) {
   return const TextStyle(
     fontSize: subtitle2,
+    color: Colors.white,
+  );
+}
+
+TextStyle selectTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle1,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
+TextStyle tvlLabel() {
+  return TextStyle(
+    fontSize: subtitle1,
+    fontWeight: FontWeight.w700,
+    color: Colors.white.withOpacity(0.5),
+  );
+}
+
+TextStyle farmingTVL() {
+  return const TextStyle(
+    fontSize: subtitle1,
+    fontWeight: FontWeight.w700,
+    color: backgroundPink,
+  );
+}
+
+TextStyle gridHeadingTextStyle() {
+  return const TextStyle(
+    fontSize: headline45,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+}
+
+TextStyle gridItemTitleTextStyle() {
+  return const TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w700,
     color: Colors.white,
   );
 }
