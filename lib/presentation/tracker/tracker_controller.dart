@@ -350,7 +350,8 @@ class TrackerController extends GetxController {
   void fetchTracker([bool refresh = false]) async {
     _loadingStatus.value = refresh ? LoadingStatus.IDLE : LoadingStatus.LOADING;
 
-    final response = await getTracker.execute();
+    // TODO: odraditi dinamicki da se token prosledjuje
+    final response = await getTracker.execute('PSWAP');
 
     if (response != null) {
       if (response['blocks'] != null && response['blocks'] is List) {

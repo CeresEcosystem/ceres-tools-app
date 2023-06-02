@@ -5,7 +5,7 @@ class GetTracker {
 
   GetTracker({required this.repository});
 
-  Future execute() async {
-    return repository.getTracker();
+  Future execute(String token) async {
+    return repository.getTracker(token);
   }
 }

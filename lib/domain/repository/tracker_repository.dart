@@ -1,3 +1,3 @@
 abstract class TrackerRepository {
-  Future getTracker();
+  Future getTracker(String token);
 }

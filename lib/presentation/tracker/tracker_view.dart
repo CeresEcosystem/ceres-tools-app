@@ -421,29 +421,27 @@ class TrackerView extends GetView<TrackerController> {
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapGrossBurn,
+                            formatToCurrency(block.grossBurn, decimalDigits: 3),
+                            style: trackerBlockBlockStyle(sizingInformation),
+                          ),
+                        ),
+                        rowItem(
+                          Text(
+                            formatToCurrency(block.remintedLp,
                                 decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapRemintedLP,
+                            formatToCurrency(block.remintedParliament,
                                 decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
                         rowItem(
                           Text(
-                            formatToCurrency(block.pswapRemintedParliament,
-                                decimalDigits: 3),
-                            style: trackerBlockBlockStyle(sizingInformation),
-                          ),
-                        ),
-                        rowItem(
-                          Text(
-                            formatToCurrency(block.pswapNetBurn,
-                                decimalDigits: 3),
+                            formatToCurrency(block.netBurn, decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),

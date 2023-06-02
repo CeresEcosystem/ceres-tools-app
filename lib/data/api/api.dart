@@ -21,7 +21,7 @@ abstract class RestClient {
   Future getFarming();
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TRACKER_PERMALINK}')
-  Future getTracker();
+  Future getTracker(@Path("token") String token);
 
   @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.BANNERS_PERMALINK}')
   Future getBanners();

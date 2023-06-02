@@ -7,9 +7,9 @@ class TrackerRepositoryImpl implements TrackerRepository {
   TrackerRepositoryImpl({required this.datasource});
 
   @override
-  Future getTracker() async {
+  Future getTracker(String token) async {
     try {
-      return await datasource.getTracker();
+      return await datasource.getTracker(token);
     } on Exception catch (_) {}
   }
 }
