@@ -18,6 +18,7 @@ import 'package:ceres_locker_app/core/widgets/status_bar.dart';
 import 'package:ceres_locker_app/domain/models/block.dart';
 import 'package:ceres_locker_app/presentation/tracker/tracker_controller.dart';
 import 'package:ceres_locker_app/presentation/tracker/widgets/faqs_item.dart';
+import 'package:ceres_locker_app/presentation/tracker/widgets/token_tab.dart';
 import 'package:ceres_locker_app/presentation/tracker/widgets/tracker_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,14 +49,13 @@ class TrackerView extends GetView<TrackerController> {
 
   Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
-      if (controller.loadingStatus == LoadingStatus.LOADING) {
-        return const Expanded(child: CenterLoading());
-      }
-
       if (controller.loadingStatus == LoadingStatus.ERROR) {
         return Expanded(
-            child:
-                ErrorText(onButtonPress: () => controller.fetchTracker(true)));
+          child: ErrorText(
+            onButtonPress: () =>
+                controller.fetchTracker(controller.selectedToken),
+          ),
+        );
       }
 
       return Expanded(
@@ -78,13 +78,18 @@ class TrackerView extends GetView<TrackerController> {
                     padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
                     child: Column(
                       children: [
+                        TokenTab(
+                          tabs: controller.tabs,
+                          selectedToken: controller.selectedToken,
+                          changeToken: controller.changeToken,
+                        ),
                         Text(
-                          kTrackCeresToken,
+                          'Track ${controller.selectedToken}',
                           style: pageTitleStyle(sizingInformation),
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
                         Text(
-                          kTrackCeresTokenSubtitle,
+                          'Follow the progression of ${controller.selectedToken}.',
                           style: pageSubtitleStyle(sizingInformation),
                         ),
                         UIHelper.verticalSpaceMedium(),
@@ -93,88 +98,70 @@ class TrackerView extends GetView<TrackerController> {
                   ),
                 ]),
               ),
-              if (controller.burnData != null)
+              if (controller.loadingStatus == LoadingStatus.LOADING)
                 (SliverList(
                   delegate: SliverChildListDelegate([
-                    firstBlock(sizingInformation),
+                    const CenterLoading(),
                   ]),
-                )),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceSmall(),
-                ]),
-              ),
-              if (controller.xorSpent != null &&
-                  controller.xorSpent!.isNotEmpty)
+                ))
+              else
                 (SliverList(
                   delegate: SliverChildListDelegate([
-                    secondBlock(sizingInformation),
+                    if (controller.burnData != null)
+                      (firstBlock(sizingInformation)),
+                    if (controller.xorSpent != null &&
+                        controller.xorSpent!.isNotEmpty)
+                      (Column(
+                        children: [
+                          UIHelper.verticalSpaceSmall(),
+                          secondBlock(sizingInformation)
+                        ],
+                      )),
+                    if (controller.mainTableData != null &&
+                        controller.mainTableData!.isNotEmpty)
+                      (Column(
+                        children: [
+                          UIHelper.verticalSpaceSmall(),
+                          thirdBlock(sizingInformation)
+                        ],
+                      )),
+                    if (controller.pswapBurningGraphData != null &&
+                        controller.pswapBurningGraphData!.isNotEmpty)
+                      (Column(
+                        children: [
+                          UIHelper.verticalSpaceLarge(),
+                          fourthBlock(sizingInformation)
+                        ],
+                      )),
+                    if (controller.pswapSupplyGraphData != null &&
+                        controller.pswapSupplyGraphData!.isNotEmpty)
+                      (Column(
+                        children: [
+                          UIHelper.verticalSpaceLarge(),
+                          fifthBlock(sizingInformation)
+                        ],
+                      )),
+                    if (controller.selectedToken == 'PSWAP')
+                      (Column(
+                        children: [
+                          UIHelper.verticalSpaceLarge(),
+                          seventhBlock(sizingInformation),
+                        ],
+                      )),
+                    if (controller.selectedToken == 'PSWAP')
+                      (Column(
+                        children: [
+                          UIHelper.verticalSpaceLarge(),
+                          eightBlock(sizingInformation),
+                        ],
+                      )),
+                    UIHelper.verticalSpaceLarge(),
                   ]),
-                )),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceSmall(),
-                ]),
-              ),
-              if (controller.mainTableData != null &&
-                  controller.mainTableData!.isNotEmpty)
-                (SliverList(
-                  delegate: SliverChildListDelegate([
-                    thirdBlock(sizingInformation),
-                  ]),
-                )),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceLarge(),
-                ]),
-              ),
-              if (controller.pswapBurningGraphData != null &&
-                  controller.pswapBurningGraphData!.isNotEmpty)
-                (SliverList(
-                  delegate: SliverChildListDelegate([
-                    fourthBlock(sizingInformation),
-                  ]),
-                )),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceLarge(),
-                ]),
-              ),
-              if (controller.pswapSupplyGraphData != null &&
-                  controller.pswapSupplyGraphData!.isNotEmpty)
-                (SliverList(
-                  delegate: SliverChildListDelegate([
-                    fifthBlock(sizingInformation),
-                  ]),
-                )),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceLarge(),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  seventhBlock(sizingInformation),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceLarge(),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  eightBlock(sizingInformation),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  UIHelper.verticalSpaceLarge(),
-                ]),
-              ),
+                ))
             ],
           ),
-          onRefresh: () async => controller.fetchTracker(true),
+          onRefresh: () async =>
+              controller.fetchTracker(controller.selectedToken),
         ),
       );
     });
@@ -227,7 +214,7 @@ class TrackerView extends GetView<TrackerController> {
           ),
           UIHelper.verticalSpaceMediumLarge(),
           Text(
-            kPswapBurn,
+            '${controller.selectedToken} gross burn',
             style: trackerBlockLabelTitleStyle(sizingInformation),
           ),
           UIHelper.verticalSpaceExtraSmall(),
@@ -237,7 +224,7 @@ class TrackerView extends GetView<TrackerController> {
               style: trackerBlockPriceStyle(sizingInformation),
               children: <TextSpan>[
                 TextSpan(
-                  text: ' $kPswap',
+                  text: ' ${controller.selectedToken}',
                   style: trackerBlockPriceLabelStyle(sizingInformation),
                 ),
               ],
@@ -245,7 +232,7 @@ class TrackerView extends GetView<TrackerController> {
           ),
           UIHelper.verticalSpaceMediumLarge(),
           Text(
-            kPswapNetBurn,
+            '${controller.selectedToken} net burn',
             style: trackerBlockLabelTitleStyle(sizingInformation),
           ),
           UIHelper.verticalSpaceExtraSmall(),
@@ -257,7 +244,7 @@ class TrackerView extends GetView<TrackerController> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: ' $kPswap',
+                  text: ' ${controller.selectedToken}',
                   style:
                       trackerBlockPriceLabelStyle(sizingInformation).copyWith(
                     fontSize: subtitle1,
@@ -328,7 +315,7 @@ class TrackerView extends GetView<TrackerController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                kXORSpent,
+                controller.selectedToken == 'PSWAP' ? kXORSpent : 'XOR fees',
                 style: trackerBlockLabelTitleStyle(sizingInformation),
               ),
               buttons(
@@ -350,7 +337,7 @@ class TrackerView extends GetView<TrackerController> {
                   children: [
                     Expanded(
                       child: Text(
-                        '$kBlock #${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
+                        '${controller.selectedToken == 'VAL' && block.blockNumber == kValLatestBlock ? 'until' : 'block'} #${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
                         style: trackerBlockBlockStyle(sizingInformation),
                       ),
                     ),
@@ -415,23 +402,32 @@ class TrackerView extends GetView<TrackerController> {
                       children: [
                         rowItem(
                           Text(
-                            '#${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
+                            '${controller.selectedToken == 'VAL' && block.blockNumber == kValLatestBlock ? 'until' : 'block'} #${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
+                        if (controller.selectedToken == 'VAL')
+                          (rowItem(
+                            Text(
+                              formatToCurrency(block.xorDedicatedForBuyBack,
+                                  decimalDigits: 3),
+                              style: trackerBlockBlockStyle(sizingInformation),
+                            ),
+                          )),
                         rowItem(
                           Text(
                             formatToCurrency(block.grossBurn, decimalDigits: 3),
                             style: trackerBlockBlockStyle(sizingInformation),
                           ),
                         ),
-                        rowItem(
-                          Text(
-                            formatToCurrency(block.remintedLp,
-                                decimalDigits: 3),
-                            style: trackerBlockBlockStyle(sizingInformation),
-                          ),
-                        ),
+                        if (controller.selectedToken == 'PSWAP')
+                          (rowItem(
+                            Text(
+                              formatToCurrency(block.remintedLp,
+                                  decimalDigits: 3),
+                              style: trackerBlockBlockStyle(sizingInformation),
+                            ),
+                          )),
                         rowItem(
                           Text(
                             formatToCurrency(block.remintedParliament,
@@ -480,7 +476,7 @@ class TrackerView extends GetView<TrackerController> {
     return Column(
       children: [
         Text(
-          kTrackPSBurning,
+          'Track ${controller.selectedToken} burning',
           style: trackerTitleStyle(sizingInformation),
         ),
         UIHelper.verticalSpaceMedium(),
@@ -499,7 +495,7 @@ class TrackerView extends GetView<TrackerController> {
     return Column(
       children: [
         Text(
-          kTrackPSSupply,
+          'Track ${controller.selectedToken} supply',
           style: trackerTitleStyle(sizingInformation),
         ),
         UIHelper.verticalSpaceMedium(),

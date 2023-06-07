@@ -8,11 +8,14 @@ import 'package:ceres_locker_app/domain/usecase/get_tracker.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
+const _tabs = ['PSWAP', 'VAL'];
+
 class TrackerController extends GetxController {
   final getTracker = Injector.resolve!<GetTracker>();
 
   final _loadingStatus = LoadingStatus.READY.obs;
 
+  final _selectedToken = _tabs[0].obs;
   final List<String> _filterTimes = ['24h', '7d', '30d', 'all'];
   final _selectedFilterPSWAPBurn = '24h'.obs;
   final _selectedFilterXORSpent = '24h'.obs;
@@ -20,13 +23,6 @@ class TrackerController extends GetxController {
   BlockList? _blockList;
   final int _xorSpentItemsPerPage = 5;
   final _xorSpentPagination = 1.obs;
-  final List<String> _mainTableDataHeader = [
-    'Latest Blocks',
-    'Gross burn',
-    'Reminted for Liquidity',
-    'Reminted for parliament',
-    'PSWAP net burn'
-  ];
   final int _mainTableItemsPerPage = 5;
   final _mainTablePagination = 1.obs;
   int? _lastBlockAdded;
@@ -133,19 +129,26 @@ class TrackerController extends GetxController {
     Map<String, dynamic> item = List.from(pswapBurningGraphData!['data'])
         .firstWhere(
             (spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
-    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nPSWAP Gross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR Spent: ${formatToCurrency(item['spent'])}\nPSWAP Reminted LP: ${formatToCurrency(item['lp'])}\nPSWAP Reminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nPSWAP Net Burn: ${formatToCurrency(item['net'])}';
+
+    if (_selectedToken.value == _tabs[0]) {
+      return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR spent: ${formatToCurrency(item['spent'])}\nReminted LP: ${formatToCurrency(item['lp'])}\nReminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nNet Burn: ${formatToCurrency(item['net'])}';
+    }
+
+    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR fees: ${formatToCurrency(item['spent'])}\nXOR for buyback: ${formatToCurrency(item['back'])}\nReminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nNet Burn: ${formatToCurrency(item['net'])}';
   }
 
   String getSupplyTooltipData(LineBarSpot touchedSpot) {
     Map<String, dynamic> item = List.from(pswapSupplyGraphData!['data'])
         .firstWhere(
             (spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
-    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nPSWAP supply: ${formatToCurrency(touchedSpot.y, decimalDigits: 4)}';
+    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y, decimalDigits: 4)}';
   }
 
   // GRAPH DATA //
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
+  List<String> get tabs => _tabs;
+  String get selectedToken => _selectedToken.value;
   List<String> get filterTimes => _filterTimes;
   String get selectedFilterPSWAPBurn => _selectedFilterPSWAPBurn.value;
   String get selectedFilterXORSpent => _selectedFilterXORSpent.value;
@@ -160,6 +163,15 @@ class TrackerController extends GetxController {
     }
 
     return null;
+  }
+
+  void changeToken(String token) {
+    if (token != _selectedToken.value) {
+      _xorSpentPagination.value = 1;
+      _mainTablePagination.value = 1;
+      fetchTracker(token);
+      _selectedToken.value = token;
+    }
   }
 
   int get xorSpentTotalPages {
@@ -220,7 +232,26 @@ class TrackerController extends GetxController {
 
   int get xorSpentPagination => _xorSpentPagination.value;
 
-  List<String> get mainTableDataHeader => _mainTableDataHeader;
+  List<String> get mainTableDataHeader {
+    if (_selectedToken.value == _tabs[0]) {
+      return [
+        'Latest Blocks',
+        'Gross burn',
+        'Reminted for LP',
+        'Reminted for Parliament',
+        'Net burn'
+      ];
+    }
+
+    return [
+      'Latest Blocks',
+      'XOR for buyback',
+      'Gross burn',
+      'Reminted for Parliament',
+      'Net burn'
+    ];
+  }
+
   int get mainTablePagination => _mainTablePagination.value;
   int get mainTableTotalPages => _blockList != null &&
           _blockList!.blocks != null &&
@@ -271,6 +302,7 @@ class TrackerController extends GetxController {
 
   void setFilterXORSpent(String filter) {
     if (filter != _selectedFilterXORSpent.value) {
+      _xorSpentPagination.value = 1;
       _selectedFilterXORSpent.value = filter;
     }
   }
@@ -343,15 +375,14 @@ class TrackerController extends GetxController {
 
   @override
   void onInit() {
-    fetchTracker();
+    fetchTracker(_tabs[0]);
     super.onInit();
   }
 
-  void fetchTracker([bool refresh = false]) async {
-    _loadingStatus.value = refresh ? LoadingStatus.IDLE : LoadingStatus.LOADING;
+  void fetchTracker(String token) async {
+    _loadingStatus.value = LoadingStatus.LOADING;
 
-    // TODO: odraditi dinamicki da se token prosledjuje
-    final response = await getTracker.execute('PSWAP');
+    final response = await getTracker.execute(token);
 
     if (response != null) {
       if (response['blocks'] != null && response['blocks'] is List) {
