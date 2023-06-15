@@ -4,26 +4,33 @@ import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class SearchTextField extends StatelessWidget {
+class InputField extends HookWidget {
   final String hint;
   final Function onChanged;
   final bool showIcon;
   final bool smallerFont;
+  final String text;
 
-  const SearchTextField({
+  const InputField({
     Key? key,
     required this.hint,
     required this.onChanged,
     this.showIcon = true,
     this.smallerFont = false,
+    required this.text,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final walletAddressController =
+        useTextEditingController.fromValue(TextEditingValue(text: text));
+
     return Responsive(
       builder: (context, sizingInformation) {
         return TextField(
+          controller: walletAddressController,
           decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(

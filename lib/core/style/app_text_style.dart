@@ -60,6 +60,14 @@ TextStyle buttonTextStyle(SizingInformation sizingInformation) {
   );
 }
 
+TextStyle buttonLightTextStyle(SizingInformation sizingInformation) {
+  return const TextStyle(
+    fontSize: subtitle2,
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+  );
+}
+
 TextStyle tokensTitleStyle(SizingInformation sizingInformation) {
   return TextStyle(
     fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop
@@ -360,6 +368,22 @@ TextStyle tokenTabTextStyle() {
   return const TextStyle(
     fontSize: subtitle1,
     fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
+TextStyle dataTableTextStyle() {
+  return const TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
+TextStyle dataTableFooterTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w700,
     color: Colors.white,
   );
 }

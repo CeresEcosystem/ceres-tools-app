@@ -6,6 +6,8 @@ import 'package:ceres_locker_app/presentation/locker/locker_binding.dart';
 import 'package:ceres_locker_app/presentation/locker/locker_view.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_binding.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_view.dart';
+import 'package:ceres_locker_app/presentation/portfolio/portfolio_binding.dart';
+import 'package:ceres_locker_app/presentation/portfolio/portfolio_view.dart';
 import 'package:ceres_locker_app/presentation/tokens/tokens_binding.dart';
 import 'package:ceres_locker_app/presentation/tokens/tokens_view.dart';
 import 'package:ceres_locker_app/presentation/tracker/tracker_binding.dart';
@@ -45,6 +47,11 @@ class AppPages {
       name: Routes.LOCKER,
       page: () => const LockerView(),
       binding: LockerBinding(),
+    ),
+    GetPage(
+      name: Routes.PORTFOLIO,
+      page: () => PortfolioView(),
+      binding: PortfolioBinding(),
     ),
   ];
 }

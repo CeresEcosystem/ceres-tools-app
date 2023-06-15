@@ -15,6 +15,10 @@ String formatToCurrency(dynamic value,
         final formatCurrency =
             NumberFormat.currency(symbol: symbol, decimalDigits: 0);
         String firstPart = formatCurrency.format(int.tryParse(parts[0]));
+        if (parts[1] == '0') {
+          return firstPart;
+        }
+
         return '$firstPart.${parts[1]}';
       } else {
         final formatCurrency =

@@ -47,4 +47,7 @@ abstract class RestClient {
 
   @GET('${ApiConstants.DEMETER_URL}${ApiConstants.DEMETER_POOLS_PERMALINK}')
   Future getDemeterPools();
+
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PORTFOLIO_PERMALINK}')
+  Future getPortfolioItems(@Path("address") String address);
 }

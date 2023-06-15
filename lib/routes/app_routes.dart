@@ -7,4 +7,5 @@ abstract class Routes {
   static const TRACKER = '/tracker';
   static const CHART = '/chart';
   static const LOCKER = '/locker';
+  static const PORTFOLIO = '/portfolio';
 }
