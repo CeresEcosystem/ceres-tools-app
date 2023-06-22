@@ -47,6 +47,7 @@ const kAll = 'All';
 const kAddToFavorites = 'Add to favorites';
 const kRemoveFromFavorites = 'Remove';
 const kShowLocks = 'View locks';
+const kShowSupply = 'View supply';
 const kEmptyLockedTokensList = 'Token has no lockups';
 const kEmptyLockedPairsList = 'Pair has no liquidity lockups';
 const kHMXAddress =

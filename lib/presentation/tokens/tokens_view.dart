@@ -51,9 +51,15 @@ class TokensView extends GetView<TokensController> {
 
   Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
-      if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
+      if (controller.loadingStatus == LoadingStatus.LOADING) {
+        return const Expanded(child: CenterLoading());
+      }
 
-      if (controller.loadingStatus == LoadingStatus.ERROR) return Expanded(child: ErrorText(onButtonPress: () => controller.fetchTokens(true)));
+      if (controller.loadingStatus == LoadingStatus.ERROR) {
+        return Expanded(
+            child:
+                ErrorText(onButtonPress: () => controller.fetchTokens(true)));
+      }
 
       return Expanded(
         child: RefreshIndicator(
@@ -72,7 +78,8 @@ class TokensView extends GetView<TokensController> {
               SliverList(
                 delegate: SliverChildListDelegate([
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: UIHelper.pagePadding(sizingInformation)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -85,41 +92,48 @@ class TokensView extends GetView<TokensController> {
                           children: [
                             ActionChip(
                               labelPadding: EdgeInsets.zero,
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
                               padding: EdgeInsets.zero,
                               label: SizedBox(
                                 height: Dimensions.CHIP_SIZE,
                                 width: Dimensions.CHIP_SIZE * 1.2,
                                 child: Center(
                                   child: Opacity(
-                                    opacity: controller.showOnlyFavorites ? 0.3 : 1,
+                                    opacity:
+                                        controller.showOnlyFavorites ? 0.3 : 1,
                                     child: Text(
                                       kAll,
-                                      style: allButtonTextStyle(sizingInformation),
+                                      style:
+                                          allButtonTextStyle(sizingInformation),
                                     ),
                                   ),
                                 ),
                               ),
                               visualDensity: VisualDensity.compact,
-                              onPressed: () => controller.setShowOnlyFavorites(false),
+                              onPressed: () =>
+                                  controller.setShowOnlyFavorites(false),
                             ),
                             UIHelper.horizontalSpaceSmall(),
                             ActionChip(
                               labelPadding: EdgeInsets.zero,
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
                               padding: EdgeInsets.zero,
                               label: SizedBox(
                                 height: Dimensions.CHIP_SIZE,
                                 width: Dimensions.CHIP_SIZE * 1.2,
                                 child: Center(
                                   child: Opacity(
-                                    opacity: !controller.showOnlyFavorites ? 0.3 : 1,
+                                    opacity:
+                                        !controller.showOnlyFavorites ? 0.3 : 1,
                                     child: const Icon(Icons.star),
                                   ),
                                 ),
                               ),
                               visualDensity: VisualDensity.compact,
-                              onPressed: () => controller.setShowOnlyFavorites(true),
+                              onPressed: () =>
+                                  controller.setShowOnlyFavorites(true),
                             )
                           ],
                         ),
@@ -137,7 +151,8 @@ class TokensView extends GetView<TokensController> {
                     return ItemContainer(
                       sizingInformation: sizingInformation,
                       child: tokenItem(token, sizingInformation),
-                      onPress: () => controller.openChartForToken(token.shortName),
+                      onPress: () =>
+                          controller.openChartForToken(token.shortName),
                     );
                   }, childCount: controller.tokens.length),
                 )),
@@ -156,40 +171,60 @@ class TokensView extends GetView<TokensController> {
       children: [
         Row(
           children: [
-            RoundImage(
-              image: '$kImageStorage${token.shortName}$imgExtension',
-              extension: imgExtension,
-            ),
-            UIHelper.horizontalSpaceSmall(),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    checkEmptyString(token.fullName),
-                    style: tokensTitleStyle(sizingInformation),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  RoundImage(
+                    image: '$kImageStorage${token.shortName}$imgExtension',
+                    extension: imgExtension,
                   ),
-                  UIHelper.verticalSpaceExtraSmall(),
-                  GestureDetector(
-                    onTap: () => controller.copyAsset(token.assetId!),
-                    child: Text(
-                      'AssetID: ${formatAddress(token.assetId)}',
-                      style: tokensAssetIdStyle(sizingInformation),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  UIHelper.horizontalSpaceSmall(),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          checkEmptyString(token.fullName),
+                          style: tokensTitleStyle(sizingInformation),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        UIHelper.verticalSpaceExtraSmall(),
+                        GestureDetector(
+                          onTap: () => controller.copyAsset(token.assetId!),
+                          child: Text(
+                            'AssetID: ${formatAddress(token.assetId)}',
+                            style: tokensAssetIdStyle(sizingInformation),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        UIHelper.verticalSpaceExtraSmall(),
+                        Text(
+                          formatToCurrency(token.price,
+                              showSymbol: true, formatOnlyFirstPart: true),
+                          style: tokensPriceStyle(sizingInformation),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
-                  UIHelper.verticalSpaceExtraSmall(),
-                  Text(
-                    formatToCurrency(token.price, showSymbol: true, formatOnlyFirstPart: true),
-                    style: tokensPriceStyle(sizingInformation),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
                 ],
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                if (token.isFavorite) {
+                  controller.removeTokenFromFavorites(token);
+                } else {
+                  controller.addTokenToFavorites(token);
+                }
+              },
+              icon: Icon(
+                token.isFavorite ? Icons.star : Icons.star_border,
+                color: backgroundOrange,
               ),
             ),
           ],
@@ -197,22 +232,18 @@ class TokensView extends GetView<TokensController> {
         UIHelper.verticalSpaceMedium(),
         Row(
           children: [
-            actionButton(() {
-              if (token.isFavorite) {
-                controller.removeTokenFromFavorites(token);
-              } else {
-                controller.addTokenToFavorites(token);
-              }
-            },
+            actionButton(
+                () => Get.toNamed(Routes.SUPPLY, arguments: {'token': token}),
                 Icon(
-                  token.isFavorite ? Icons.star : Icons.star_border,
-                  color: backgroundOrange,
+                  Icons.bar_chart_outlined,
+                  color: Colors.white.withOpacity(0.5),
                 ),
-                token.isFavorite ? kRemoveFromFavorites : kAddToFavorites,
+                kShowSupply,
                 sizingInformation),
             UIHelper.horizontalSpaceMedium(),
             actionButton(
-                () => Get.toNamed(Routes.LOCKER, arguments: {'isPair': false, 'lockerItem': token}),
+                () => Get.toNamed(Routes.LOCKER,
+                    arguments: {'isPair': false, 'lockerItem': token}),
                 Icon(
                   Icons.lock_outline_sharp,
                   color: Colors.white.withOpacity(0.5),
@@ -225,7 +256,8 @@ class TokensView extends GetView<TokensController> {
     );
   }
 
-  Widget actionButton(Function onTap, Widget icon, String text, SizingInformation sizingInformation) {
+  Widget actionButton(Function onTap, Widget icon, String text,
+      SizingInformation sizingInformation) {
     return Expanded(
       child: GestureDetector(
         onTap: () => onTap(),
@@ -233,7 +265,8 @@ class TokensView extends GetView<TokensController> {
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
+            borderRadius:
+                BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

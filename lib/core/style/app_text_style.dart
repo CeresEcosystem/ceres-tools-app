@@ -77,6 +77,14 @@ TextStyle tokensTitleStyle(SizingInformation sizingInformation) {
   );
 }
 
+TextStyle currentSupplyTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
 TextStyle tokensAssetIdStyle(SizingInformation sizingInformation) {
   return TextStyle(
     fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Desktop

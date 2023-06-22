@@ -8,4 +8,5 @@ abstract class Routes {
   static const CHART = '/chart';
   static const LOCKER = '/locker';
   static const PORTFOLIO = '/portfolio';
+  static const SUPPLY = '/supply';
 }
