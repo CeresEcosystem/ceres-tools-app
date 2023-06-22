@@ -54,7 +54,7 @@ class _RestClient implements RestClient {
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(
-            _dio.options, 'https://farming-api.cerestoken.io/get-tokens-infos',
+            _dio.options, 'https://api.deotoken.com/api/demeter/tokens-infos',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -148,7 +148,7 @@ class _RestClient implements RestClient {
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(
-            _dio.options, 'https://farming-api.cerestoken.io/get-supply-data',
+            _dio.options, 'https://api.deotoken.com/api/demeter/supply-data',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -194,8 +194,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(
-                _dio.options, 'https://farming-api.cerestoken.io/get-farms',
+            .compose(_dio.options, 'https://api.deotoken.com/api/demeter/farms',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
@@ -211,7 +210,7 @@ class _RestClient implements RestClient {
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(
-                _dio.options, 'https://farming-api.cerestoken.io/get-pools',
+                _dio.options, 'https://api.deotoken.com/api/demeter/stakings',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
