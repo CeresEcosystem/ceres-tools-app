@@ -12,6 +12,7 @@ import 'package:ceres_locker_app/core/widgets/input_field.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
 import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
+import 'package:ceres_locker_app/presentation/portfolio/widgets/portfolio_tab.dart';
 import 'package:ceres_locker_app/presentation/portfolio/widgets/portfolio_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,38 +57,48 @@ class PortfolioView extends GetView<PortfolioController> {
                             padding: EdgeInsets.symmetric(
                                 horizontal:
                                     UIHelper.pagePadding(sizingInformation)),
-                            child: Row(
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: InputField(
-                                    onChanged: (t) => controller.onTyping(t),
-                                    hint: kWalletAddressTextFieldHint,
-                                    showIcon: false,
-                                    smallerFont: true,
-                                    text: controller.searchQuery,
-                                  ),
+                                PortfolioTab(
+                                  tabs: controller.tabs,
+                                  selectedTab: controller.selectedTab,
+                                  changeTab: controller.changeSelectedTab,
                                 ),
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    left: Dimensions.DEFAULT_MARGIN_SMALL,
-                                  ),
-                                  width: 100.0,
-                                  child: ElevatedButton(
-                                    onPressed: controller.loadingStatus ==
-                                            LoadingStatus.LOADING
-                                        ? null
-                                        : () =>
-                                            controller.fetchPortfolioItems(),
-                                    child: Text(
-                                      controller.loadingStatus ==
-                                              LoadingStatus.LOADING
-                                          ? 'Loading'
-                                          : 'Fetch',
-                                      style: buttonLightTextStyle(
-                                          sizingInformation),
-                                      textAlign: TextAlign.center,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: InputField(
+                                        onChanged: (t) =>
+                                            controller.onTyping(t),
+                                        hint: kWalletAddressTextFieldHint,
+                                        showIcon: false,
+                                        smallerFont: true,
+                                        text: controller.searchQuery,
+                                      ),
                                     ),
-                                  ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        left: Dimensions.DEFAULT_MARGIN_SMALL,
+                                      ),
+                                      width: 100.0,
+                                      child: ElevatedButton(
+                                        onPressed: controller.loadingStatus ==
+                                                LoadingStatus.LOADING
+                                            ? null
+                                            : () => controller
+                                                .fetchPortfolioItems(),
+                                        child: Text(
+                                          controller.loadingStatus ==
+                                                  LoadingStatus.LOADING
+                                              ? 'Loading'
+                                              : 'Fetch',
+                                          style: buttonLightTextStyle(
+                                              sizingInformation),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -116,7 +127,7 @@ class PortfolioView extends GetView<PortfolioController> {
                                   horizontal:
                                       UIHelper.pagePadding(sizingInformation)),
                               child: Text(
-                                'No tokens in portfolio',
+                                'No items in ${controller.selectedTab}.',
                                 style: emptyListTextStyle(sizingInformation),
                               ),
                             ),
@@ -127,6 +138,7 @@ class PortfolioView extends GetView<PortfolioController> {
                           child: PortfolioTable(
                             portfolioItems: controller.portfolioItems,
                             totalValue: controller.totalValue,
+                            selectedTab: controller.selectedTab,
                           ),
                         ))
                     ],

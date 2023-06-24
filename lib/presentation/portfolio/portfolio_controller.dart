@@ -6,6 +6,8 @@ import 'package:ceres_locker_app/domain/usecase/get_portfolio_items.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const _tabs = ['Portfolio', 'Staking', 'Rewards', 'Liquidity'];
+
 class PortfolioController extends GetxController {
   final getPortfolioItems = Injector.resolve!<GetPortfolioItems>();
 
@@ -16,12 +18,15 @@ class PortfolioController extends GetxController {
   String _searchQueary = '';
   final _pageLoading = LoadingStatus.LOADING.obs;
   final _loadingStatus = LoadingStatus.READY.obs;
+  final _selectedTab = _tabs[0].obs;
 
   LoadingStatus get pageLoading => _pageLoading.value;
   LoadingStatus get loadingStatus => _loadingStatus.value;
   String get searchQuery => _searchQueary;
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   double get totalValue => _totalValue;
+  List<String> get tabs => _tabs;
+  String get selectedTab => _selectedTab.value;
 
   void onTyping(String text) {
     _searchQueary = text;
@@ -31,6 +36,13 @@ class PortfolioController extends GetxController {
   void onInit() {
     getAddressFromDatabase();
     super.onInit();
+  }
+
+  changeSelectedTab(String tab) {
+    if (tab != _selectedTab.value) {
+      _selectedTab.value = tab;
+      fetchPortfolioItems();
+    }
   }
 
   Future getAddressFromDatabase() async {
@@ -56,22 +68,45 @@ class PortfolioController extends GetxController {
     }
   }
 
+  String getPortfolioItemsURL() {
+    switch (_selectedTab.value) {
+      case 'Portfolio':
+        return _searchQueary;
+      case 'Staking':
+        return 'staking/$_searchQueary';
+      case 'Rewards':
+        return 'rewards/$_searchQueary';
+      case 'Liquidity':
+        return 'liquidity/$_searchQueary';
+      default:
+        return _searchQueary;
+    }
+  }
+
   Future fetchPortfolioItems() async {
     if (_searchQueary.isNotEmpty) {
       _loadingStatus.value = LoadingStatus.LOADING;
 
       saveAddressToDatabase();
 
-      final response = await getPortfolioItems.execute(_searchQueary);
+      final url = getPortfolioItemsURL();
+
+      final response = await getPortfolioItems.execute(url);
 
       if (response != null) {
         PortfolioList portfolioList = PortfolioList.fromJson(response);
 
         if (portfolioList.portfolioItems != null &&
             portfolioList.portfolioItems!.isNotEmpty) {
-          List<PortfolioItem> itemsFiltered = portfolioList.portfolioItems!
-              .where((pi) => pi.balance! >= 0.0001)
-              .toList();
+          List<PortfolioItem> itemsFiltered =
+              portfolioList.portfolioItems!.where((pi) {
+            if (_selectedTab.value == 'Liquidity') {
+              return pi.value! >= 0.0001;
+            }
+
+            return pi.value! >= 0.0001 && pi.balance! >= 0.0001;
+          }).toList();
+
           itemsFiltered.sort((portfolioItem1, portfolioItem2) =>
               portfolioItem2.value!.compareTo(portfolioItem1.value!));
 

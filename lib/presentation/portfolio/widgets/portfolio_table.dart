@@ -23,12 +23,240 @@ final columns = [
 class PortfolioTable extends StatelessWidget {
   final List<PortfolioItem> portfolioItems;
   final double totalValue;
+  final String selectedTab;
 
   const PortfolioTable({
     Key? key,
     required this.portfolioItems,
     required this.totalValue,
+    required this.selectedTab,
   }) : super(key: key);
+
+  List<String> getColumns() {
+    switch (selectedTab) {
+      case 'Portfolio':
+        return [
+          'Coin',
+          'Price',
+          '1h',
+          '24h',
+          '7d',
+          '30d',
+          'Balance',
+          'Value',
+        ];
+      case 'Staking':
+        return [
+          'Coin',
+          'Price',
+          'Balance',
+          'Value',
+        ];
+      case 'Rewards':
+        return [
+          'Coin',
+          'Price',
+          'Balance',
+          'Value',
+        ];
+      case 'Liquidity':
+        return [
+          'Liquidity pair',
+          'Value',
+        ];
+      default:
+        return [];
+    }
+  }
+
+  DataRow getDataRow(PortfolioItem portfolioItem) {
+    final String imgExtension = imageExtension(portfolioItem.token);
+
+    switch (selectedTab) {
+      case 'Portfolio':
+        return DataRow(
+          cells: [
+            DataCell(
+              Row(
+                children: [
+                  RoundImage(
+                    size: Dimensions.ICON_SIZE,
+                    image: '$kImageStorage${portfolioItem.token}$imgExtension',
+                    extension: imgExtension,
+                  ),
+                  UIHelper.horizontalSpaceSmall(),
+                  Text(
+                    portfolioItem.fullName!,
+                    style: dataTableTextStyle(),
+                  ),
+                ],
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.price,
+                      showSymbol: true, formatOnlyFirstPart: true),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  '${portfolioItem.oneHour}%',
+                  style: portfolioItem.oneHour! >= 0
+                      ? dataTableTextStyle().copyWith(color: Colors.greenAccent)
+                      : dataTableTextStyle().copyWith(color: Colors.redAccent),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  '${portfolioItem.oneDay}%',
+                  style: portfolioItem.oneDay! >= 0
+                      ? dataTableTextStyle().copyWith(color: Colors.greenAccent)
+                      : dataTableTextStyle().copyWith(color: Colors.redAccent),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  '${portfolioItem.oneWeek}%',
+                  style: portfolioItem.oneWeek! >= 0
+                      ? dataTableTextStyle().copyWith(color: Colors.greenAccent)
+                      : dataTableTextStyle().copyWith(color: Colors.redAccent),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  '${portfolioItem.oneMonth}%',
+                  style: portfolioItem.oneMonth! >= 0
+                      ? dataTableTextStyle().copyWith(color: Colors.greenAccent)
+                      : dataTableTextStyle().copyWith(color: Colors.redAccent),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.balance,
+                      showSymbol: true, decimalDigits: 3),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.value,
+                      showSymbol: true, decimalDigits: 3),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+          ],
+        );
+      case 'Liquidity':
+        return DataRow(
+          cells: [
+            DataCell(
+              Row(
+                children: [
+                  SizedBox(
+                    width: Dimensions.ICON_SIZE * 2,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: Dimensions.ICON_SIZE / 2,
+                          child: RoundImage(
+                            image:
+                                '$kImageStorage${portfolioItem.token}$imgExtension',
+                            size: Dimensions.ICON_SIZE,
+                            extension: imgExtension,
+                          ),
+                        ),
+                        RoundImage(
+                          image:
+                              '$kImageStorage${portfolioItem.baseAsset}$kImageExtension',
+                          size: Dimensions.ICON_SIZE,
+                        ),
+                      ],
+                    ),
+                  ),
+                  UIHelper.horizontalSpaceExtraSmall(),
+                  Text(
+                    '${portfolioItem.baseAsset} / ${portfolioItem.token}',
+                    style: dataTableTextStyle(),
+                  ),
+                ],
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.value,
+                      showSymbol: true, decimalDigits: 3),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+          ],
+        );
+      default:
+        return DataRow(
+          cells: [
+            DataCell(
+              Row(
+                children: [
+                  RoundImage(
+                    size: Dimensions.ICON_SIZE,
+                    image: '$kImageStorage${portfolioItem.token}$imgExtension',
+                    extension: imgExtension,
+                  ),
+                  UIHelper.horizontalSpaceSmall(),
+                  Text(
+                    portfolioItem.fullName!,
+                    style: dataTableTextStyle(),
+                  ),
+                ],
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.price,
+                      showSymbol: true, formatOnlyFirstPart: true),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.balance,
+                      showSymbol: true, decimalDigits: 3),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+            DataCell(
+              Center(
+                child: Text(
+                  formatToCurrency(portfolioItem.value,
+                      showSymbol: true, decimalDigits: 3),
+                  style: dataTableTextStyle(),
+                ),
+              ),
+            ),
+          ],
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +266,9 @@ class PortfolioTable extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Container(
             clipBehavior: Clip.antiAlias,
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width,
+            ),
             decoration: BoxDecoration(
               color: backgroundColorDark,
               borderRadius:
@@ -47,11 +278,11 @@ class PortfolioTable extends StatelessWidget {
               columnSpacing: Dimensions.DEFAULT_MARGIN_LARGE,
               headingRowColor: MaterialStateColor.resolveWith(
                   (states) => Colors.white.withOpacity(0.05)),
-              columns: columns.map((column) {
+              columns: getColumns().map((column) {
                 return DataColumn(
                   label: Expanded(
                     child: Container(
-                      alignment: column == 'Coin'
+                      alignment: column == 'Coin' || column == 'Liquidity pair'
                           ? Alignment.centerLeft
                           : Alignment.center,
                       child: Text(
@@ -63,104 +294,7 @@ class PortfolioTable extends StatelessWidget {
                 );
               }).toList(),
               rows: portfolioItems.map((portfolioItem) {
-                final String imgExtension = imageExtension(portfolioItem.token);
-
-                return DataRow(
-                  cells: [
-                    DataCell(
-                      Row(
-                        children: [
-                          RoundImage(
-                            size: Dimensions.ICON_SIZE,
-                            image:
-                                '$kImageStorage${portfolioItem.token}$imgExtension',
-                            extension: imgExtension,
-                          ),
-                          UIHelper.horizontalSpaceSmall(),
-                          Text(
-                            portfolioItem.fullName!,
-                            style: dataTableTextStyle(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          formatToCurrency(portfolioItem.price,
-                              showSymbol: true, formatOnlyFirstPart: true),
-                          style: dataTableTextStyle(),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          '${portfolioItem.oneHour}%',
-                          style: portfolioItem.oneHour! >= 0
-                              ? dataTableTextStyle()
-                                  .copyWith(color: Colors.greenAccent)
-                              : dataTableTextStyle()
-                                  .copyWith(color: Colors.redAccent),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          '${portfolioItem.oneDay}%',
-                          style: portfolioItem.oneDay! >= 0
-                              ? dataTableTextStyle()
-                                  .copyWith(color: Colors.greenAccent)
-                              : dataTableTextStyle()
-                                  .copyWith(color: Colors.redAccent),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          '${portfolioItem.oneWeek}%',
-                          style: portfolioItem.oneWeek! >= 0
-                              ? dataTableTextStyle()
-                                  .copyWith(color: Colors.greenAccent)
-                              : dataTableTextStyle()
-                                  .copyWith(color: Colors.redAccent),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          '${portfolioItem.oneMonth}%',
-                          style: portfolioItem.oneMonth! >= 0
-                              ? dataTableTextStyle()
-                                  .copyWith(color: Colors.greenAccent)
-                              : dataTableTextStyle()
-                                  .copyWith(color: Colors.redAccent),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          formatToCurrency(portfolioItem.balance,
-                              showSymbol: true),
-                          style: dataTableTextStyle(),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(
-                          formatToCurrency(portfolioItem.value,
-                              showSymbol: true),
-                          style: dataTableTextStyle(),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
+                return getDataRow(portfolioItem);
               }).toList(),
             ),
           ),
@@ -180,7 +314,8 @@ class PortfolioTable extends StatelessWidget {
                 style: dataTableFooterTextStyle(),
               ),
               Text(
-                formatToCurrency(totalValue, showSymbol: true),
+                formatToCurrency(totalValue,
+                    showSymbol: true, decimalDigits: 3),
                 style:
                     dataTableFooterTextStyle().copyWith(color: backgroundPink),
               )

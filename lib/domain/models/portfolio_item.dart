@@ -3,6 +3,7 @@ import 'package:ceres_locker_app/core/utils/default_value.dart';
 class PortfolioItem {
   final String? fullName;
   final String? token;
+  final String? baseAsset;
   final double? price;
   final double? balance;
   final double? value;
@@ -14,6 +15,7 @@ class PortfolioItem {
   PortfolioItem({
     this.fullName,
     this.token,
+    this.baseAsset,
     this.price,
     this.balance,
     this.value,
@@ -26,6 +28,7 @@ class PortfolioItem {
   factory PortfolioItem.fromJson(Map<String, dynamic> json) => PortfolioItem(
         fullName: getDefaultStringValue(json['fullName']),
         token: getDefaultStringValue(json['token']),
+        baseAsset: getDefaultStringValue(json['baseAsset']),
         price: getDefaultDoubleValue(json['price']),
         balance: getDefaultDoubleValue(json['balance']),
         value: getDefaultDoubleValue(json['value']),

@@ -380,6 +380,14 @@ TextStyle tokenTabTextStyle() {
   );
 }
 
+TextStyle portfolioTabTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
 TextStyle dataTableTextStyle() {
   return const TextStyle(
     fontSize: caption,
