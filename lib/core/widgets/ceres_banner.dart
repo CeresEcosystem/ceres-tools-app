@@ -23,7 +23,10 @@ class CeresBanner extends StatelessWidget {
     if (Banners.instance.banners.isNotEmpty) {
       return Responsive(
         builder: (context, sizingInformation) {
-          final height = sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? sizingInformation.screenSize.width / 5 : sizingInformation.screenSize.width / 8.88;
+          final height =
+              sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                  ? sizingInformation.screenSize.width / 5
+                  : sizingInformation.screenSize.width / 6;
 
           return CarouselSlider(
             items: Banners.instance.banners
@@ -32,7 +35,10 @@ class CeresBanner extends StatelessWidget {
                     onTap: () => _launchURL(item['link']),
                     child: Center(
                       child: CachedNetworkImage(
-                        imageUrl: sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? item['sm'] : item['md'],
+                        imageUrl: sizingInformation.deviceScreenType ==
+                                DeviceScreenType.Mobile
+                            ? item['sm']
+                            : item['lg'],
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -46,7 +52,13 @@ class CeresBanner extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            options: CarouselOptions(height: height, aspectRatio: 1, viewportFraction: 1, autoPlay: true, autoPlayInterval: const Duration(seconds: 7), enableInfiniteScroll: Banners.instance.banners.length > 1),
+            options: CarouselOptions(
+                height: height,
+                aspectRatio: 1,
+                viewportFraction: 1,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 7),
+                enableInfiniteScroll: Banners.instance.banners.length > 1),
           );
         },
       );

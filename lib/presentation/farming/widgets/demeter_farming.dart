@@ -140,7 +140,10 @@ class DemeterFarming extends StatelessWidget {
                   : 3,
           mainAxisSpacing: 10.0,
           crossAxisSpacing: 10.0,
-          childAspectRatio: 0.9,
+          childAspectRatio:
+              sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                  ? 0.85
+                  : 1.05,
         ),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),

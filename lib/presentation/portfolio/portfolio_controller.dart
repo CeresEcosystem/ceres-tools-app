@@ -15,21 +15,21 @@ class PortfolioController extends GetxController {
   double _totalValue = 0;
   String _addressDB = '';
 
-  String _searchQueary = '';
+  String _walletAddress = '';
   final _pageLoading = LoadingStatus.LOADING.obs;
   final _loadingStatus = LoadingStatus.READY.obs;
   final _selectedTab = _tabs[0].obs;
 
   LoadingStatus get pageLoading => _pageLoading.value;
   LoadingStatus get loadingStatus => _loadingStatus.value;
-  String get searchQuery => _searchQueary;
+  String get walletAddress => _walletAddress;
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   double get totalValue => _totalValue;
   List<String> get tabs => _tabs;
   String get selectedTab => _selectedTab.value;
 
   void onTyping(String text) {
-    _searchQueary = text;
+    _walletAddress = text;
   }
 
   @override
@@ -51,19 +51,20 @@ class PortfolioController extends GetxController {
 
     if (address != null && address.isNotEmpty) {
       _addressDB = address;
-      _searchQueary = address;
-      _pageLoading.value = LoadingStatus.READY;
+      _walletAddress = address;
       fetchPortfolioItems();
     }
+
+    _pageLoading.value = LoadingStatus.READY;
   }
 
   Future saveAddressToDatabase() async {
-    if (_searchQueary != _addressDB) {
+    if (_walletAddress != _addressDB) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool result = await prefs.setString('address', _searchQueary);
+      bool result = await prefs.setString('address', _walletAddress);
 
       if (result) {
-        _addressDB = _searchQueary;
+        _addressDB = _walletAddress;
       }
     }
   }
@@ -71,20 +72,20 @@ class PortfolioController extends GetxController {
   String getPortfolioItemsURL() {
     switch (_selectedTab.value) {
       case 'Portfolio':
-        return _searchQueary;
+        return _walletAddress;
       case 'Staking':
-        return 'staking/$_searchQueary';
+        return 'staking/$_walletAddress';
       case 'Rewards':
-        return 'rewards/$_searchQueary';
+        return 'rewards/$_walletAddress';
       case 'Liquidity':
-        return 'liquidity/$_searchQueary';
+        return 'liquidity/$_walletAddress';
       default:
-        return _searchQueary;
+        return _walletAddress;
     }
   }
 
   Future fetchPortfolioItems() async {
-    if (_searchQueary.isNotEmpty) {
+    if (_walletAddress.isNotEmpty) {
       _loadingStatus.value = LoadingStatus.LOADING;
 
       saveAddressToDatabase();
@@ -118,6 +119,9 @@ class PortfolioController extends GetxController {
 
           _totalValue = tv;
           _portfolioItems = itemsFiltered;
+        } else {
+          _portfolioItems = [];
+          _totalValue = 0;
         }
 
         _loadingStatus.value = LoadingStatus.READY;

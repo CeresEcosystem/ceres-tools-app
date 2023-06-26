@@ -73,7 +73,7 @@ class PortfolioView extends GetView<PortfolioController> {
                                         hint: kWalletAddressTextFieldHint,
                                         showIcon: false,
                                         smallerFont: true,
-                                        text: controller.searchQuery,
+                                        text: controller.walletAddress,
                                       ),
                                     ),
                                     Container(
@@ -106,7 +106,7 @@ class PortfolioView extends GetView<PortfolioController> {
                           UIHelper.verticalSpaceMedium(),
                         ]),
                       ),
-                      if (controller.searchQuery.isEmpty)
+                      if (controller.walletAddress.isEmpty)
                         (SliverList(
                           delegate: SliverChildListDelegate([
                             const EmptyWidget(),
