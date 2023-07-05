@@ -17,54 +17,45 @@ class PortfolioTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: Dimensions.DEFAULT_MARGIN_LARGE),
-        padding: const EdgeInsets.symmetric(
-          vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-          horizontal: Dimensions.DEFAULT_MARGIN,
-        ),
-        constraints: const BoxConstraints(
-          maxWidth: 384,
-        ),
-        decoration: BoxDecoration(
-          color: backgroundColorDark,
-          borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
-        ),
-        child: Row(
-          children: tabs.map((tab) {
-            final selected = selectedTab == tab;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+        horizontal: Dimensions.DEFAULT_MARGIN,
+      ),
+      color: backgroundColorDark,
+      child: Row(
+        children: tabs.map((tab) {
+          final selected = selectedTab == tab;
 
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => changeTab(tab),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                  ),
-                  decoration: BoxDecoration(
-                    color: selected
-                        ? Colors.white.withOpacity(.1)
-                        : Colors.transparent,
-                    borderRadius:
-                        BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
-                  ),
-                  child: Center(
-                    child: Text(
-                      tab,
-                      style: selected
-                          ? portfolioTabTextStyle()
-                          : portfolioTabTextStyle().copyWith(
-                              color: Colors.white.withOpacity(.5),
-                            ),
-                    ),
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => changeTab(tab),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                ),
+                decoration: BoxDecoration(
+                  color: selected
+                      ? Colors.white.withOpacity(.1)
+                      : Colors.transparent,
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
+                ),
+                child: Center(
+                  child: Text(
+                    tab,
+                    style: selected
+                        ? portfolioTabTextStyle()
+                        : portfolioTabTextStyle().copyWith(
+                            color: Colors.white.withOpacity(.5),
+                          ),
                   ),
                 ),
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

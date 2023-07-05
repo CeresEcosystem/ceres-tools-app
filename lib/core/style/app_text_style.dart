@@ -388,18 +388,36 @@ TextStyle portfolioTabTextStyle() {
   );
 }
 
-TextStyle dataTableTextStyle() {
-  return const TextStyle(
-    fontSize: caption,
+TextStyle dataTableTextStyle(SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : subtitle2,
     fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 }
 
+TextStyle dataTableLabelTextStyle() {
+  return TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w500,
+    color: Colors.white.withOpacity(.5),
+  );
+}
+
 TextStyle dataTableFooterTextStyle() {
   return const TextStyle(
-    fontSize: subtitle2,
+    fontSize: subtitle1,
     fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+}
+
+TextStyle timeFrameChipTextStyle() {
+  return const TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w500,
     color: Colors.white,
   );
 }

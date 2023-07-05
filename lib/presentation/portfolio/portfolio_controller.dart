@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _tabs = ['Portfolio', 'Staking', 'Rewards', 'Liquidity'];
+const _timeFrames = ['1h', '24h', '7d', '30d'];
 
 class PortfolioController extends GetxController {
   final getPortfolioItems = Injector.resolve!<GetPortfolioItems>();
@@ -19,6 +20,7 @@ class PortfolioController extends GetxController {
   final _pageLoading = LoadingStatus.LOADING.obs;
   final _loadingStatus = LoadingStatus.READY.obs;
   final _selectedTab = _tabs[0].obs;
+  final _selectedTimeFrame = _timeFrames[0].obs;
 
   LoadingStatus get pageLoading => _pageLoading.value;
   LoadingStatus get loadingStatus => _loadingStatus.value;
@@ -26,7 +28,9 @@ class PortfolioController extends GetxController {
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   double get totalValue => _totalValue;
   List<String> get tabs => _tabs;
+  List<String> get timeFrames => _timeFrames;
   String get selectedTab => _selectedTab.value;
+  String get selectedTimeFrame => _selectedTimeFrame.value;
 
   void onTyping(String text) {
     _walletAddress = text;
@@ -42,6 +46,12 @@ class PortfolioController extends GetxController {
     if (tab != _selectedTab.value) {
       _selectedTab.value = tab;
       fetchPortfolioItems();
+    }
+  }
+
+  changeSelectedTimeFrame(String timeFrame) {
+    if (timeFrame != _selectedTimeFrame.value) {
+      _selectedTimeFrame.value = timeFrame;
     }
   }
 

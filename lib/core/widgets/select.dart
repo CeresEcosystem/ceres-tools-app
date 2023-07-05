@@ -1,3 +1,4 @@
+import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:flutter/material.dart';
 
 import '../style/app_text_style.dart';
@@ -22,14 +23,18 @@ class Select<T> extends StatelessWidget {
         DropdownButtonFormField(
           value: selectedValue,
           onChanged: (value) => onValueChange(value),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 0.0),
+              borderSide: const BorderSide(width: 0.0),
+              borderRadius:
+                  BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 0.0),
+              borderSide: const BorderSide(width: 0.0),
+              borderRadius:
+                  BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
             ),
-            contentPadding: EdgeInsets.symmetric(
+            contentPadding: const EdgeInsets.symmetric(
               vertical: 5.0,
               horizontal: 10.0,
             ),

@@ -1,10 +1,10 @@
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
+import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
-import 'package:ceres_locker_app/core/widgets/ceres_banner.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
 import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
@@ -33,114 +33,123 @@ class PortfolioView extends GetView<PortfolioController> {
           body: Column(
             children: [
               const StatusBar(),
+              CeresHeader(
+                scaffoldKey: _scaffoldKey,
+                backgroundColor: backgroundColorDark,
+                verticalSpace: true,
+              ),
               Obx(() {
                 if (controller.pageLoading == LoadingStatus.LOADING) {
                   return const Expanded(child: CenterLoading());
                 }
 
                 return Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          const CeresBanner(),
-                          UIHelper.verticalSpaceMediumLarge(),
-                          CeresHeader(
-                            scaffoldKey: _scaffoldKey,
-                          ),
-                          UIHelper.verticalSpaceMediumLarge(),
-                        ]),
+                  child: Column(
+                    children: [
+                      PortfolioTab(
+                        tabs: controller.tabs,
+                        selectedTab: controller.selectedTab,
+                        changeTab: controller.changeSelectedTab,
                       ),
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    UIHelper.pagePadding(sizingInformation)),
-                            child: Column(
-                              children: [
-                                PortfolioTab(
-                                  tabs: controller.tabs,
-                                  selectedTab: controller.selectedTab,
-                                  changeTab: controller.changeSelectedTab,
-                                ),
-                                Row(
+                      Expanded(
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverList(
+                              delegate: SliverChildListDelegate([
+                                Column(
                                   children: [
-                                    Expanded(
-                                      child: InputField(
-                                        onChanged: (t) =>
-                                            controller.onTyping(t),
-                                        hint: kWalletAddressTextFieldHint,
-                                        showIcon: false,
-                                        smallerFont: true,
-                                        text: controller.walletAddress,
+                                    UIHelper.verticalSpaceMedium(),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: UIHelper.pagePadding(
+                                            sizingInformation),
                                       ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                        left: Dimensions.DEFAULT_MARGIN_SMALL,
-                                      ),
-                                      width: 100.0,
-                                      child: ElevatedButton(
-                                        onPressed: controller.loadingStatus ==
-                                                LoadingStatus.LOADING
-                                            ? null
-                                            : () => controller
-                                                .fetchPortfolioItems(),
-                                        child: Text(
-                                          controller.loadingStatus ==
-                                                  LoadingStatus.LOADING
-                                              ? 'Loading'
-                                              : 'Fetch',
-                                          style: buttonLightTextStyle(
-                                              sizingInformation),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: InputField(
+                                              onChanged: (t) =>
+                                                  controller.onTyping(t),
+                                              hint: kWalletAddressTextFieldHint,
+                                              showIcon: false,
+                                              smallerFont: true,
+                                              text: controller.walletAddress,
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                              left: Dimensions
+                                                  .DEFAULT_MARGIN_SMALL,
+                                            ),
+                                            width: 100.0,
+                                            child: ElevatedButton(
+                                              onPressed: controller
+                                                          .loadingStatus ==
+                                                      LoadingStatus.LOADING
+                                                  ? null
+                                                  : () => controller
+                                                      .fetchPortfolioItems(),
+                                              child: Text(
+                                                controller.loadingStatus ==
+                                                        LoadingStatus.LOADING
+                                                    ? 'Loading'
+                                                    : 'Fetch',
+                                                style: buttonLightTextStyle(
+                                                    sizingInformation),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ],
+                                UIHelper.verticalSpaceMedium(),
+                              ]),
                             ),
-                          ),
-                          UIHelper.verticalSpaceMedium(),
-                        ]),
+                            if (controller.walletAddress.isEmpty)
+                              (SliverList(
+                                delegate: SliverChildListDelegate([
+                                  const EmptyWidget(),
+                                ]),
+                              ))
+                            else if (controller.loadingStatus ==
+                                LoadingStatus.LOADING)
+                              (SliverList(
+                                delegate: SliverChildListDelegate([
+                                  const CenterLoading(),
+                                ]),
+                              ))
+                            else if (controller.portfolioItems.isEmpty)
+                              (SliverList(
+                                delegate: SliverChildListDelegate([
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: UIHelper.pagePadding(
+                                            sizingInformation)),
+                                    child: Text(
+                                      'No items in ${controller.selectedTab}.',
+                                      style:
+                                          emptyListTextStyle(sizingInformation),
+                                    ),
+                                  ),
+                                ]),
+                              ))
+                            else
+                              (PortfolioTable(
+                                portfolioItems: controller.portfolioItems,
+                                selectedTab: controller.selectedTab,
+                                totalValue: controller.totalValue,
+                                sizingInformation: sizingInformation,
+                                timeFrames: controller.timeFrames,
+                                selectedTimeFrame: controller.selectedTimeFrame,
+                                onChangeSelectedTimeFrame:
+                                    controller.changeSelectedTimeFrame,
+                              ))
+                          ],
+                        ),
                       ),
-                      if (controller.walletAddress.isEmpty)
-                        (SliverList(
-                          delegate: SliverChildListDelegate([
-                            const EmptyWidget(),
-                          ]),
-                        ))
-                      else if (controller.loadingStatus ==
-                          LoadingStatus.LOADING)
-                        (SliverList(
-                          delegate: SliverChildListDelegate([
-                            const CenterLoading(),
-                          ]),
-                        ))
-                      else if (controller.portfolioItems.isEmpty)
-                        (SliverList(
-                          delegate: SliverChildListDelegate([
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      UIHelper.pagePadding(sizingInformation)),
-                              child: Text(
-                                'No items in ${controller.selectedTab}.',
-                                style: emptyListTextStyle(sizingInformation),
-                              ),
-                            ),
-                          ]),
-                        ))
-                      else
-                        (SliverToBoxAdapter(
-                          child: PortfolioTable(
-                            portfolioItems: controller.portfolioItems,
-                            totalValue: controller.totalValue,
-                            selectedTab: controller.selectedTab,
-                          ),
-                        ))
                     ],
                   ),
                 );
