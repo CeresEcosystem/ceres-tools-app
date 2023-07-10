@@ -38,7 +38,7 @@ end
 
 target 'OneSignalNotificationServiceExtension' do
   use_frameworks!
-  pod 'OneSignalXCFramework', '>= 3.11.2', '< 4.0'
+  pod 'OneSignalXCFramework', '>= 3.12.4', '< 4.0'
 end
 
 post_install do |installer|

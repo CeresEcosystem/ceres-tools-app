@@ -398,6 +398,16 @@ TextStyle dataTableTextStyle(SizingInformation sizingInformation) {
   );
 }
 
+TextStyle dataTableValueChangeTextStyle(SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? overline
+        : caption,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
 TextStyle dataTableLabelTextStyle() {
   return TextStyle(
     fontSize: caption,

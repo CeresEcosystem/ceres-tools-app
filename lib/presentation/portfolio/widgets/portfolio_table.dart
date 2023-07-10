@@ -76,36 +76,37 @@ class PortfolioItemWidget extends StatelessWidget {
     }
   }
 
-  Widget getTextForSelectedTimeFrame() {
-    double? valueForTimeFrame = 0;
+  List<double> getTextForSelectedTimeFrame() {
+    double valueForTimeFrame = 0;
+    double valueChangeForTimeFrame = 0;
 
     switch (selectedTimeFrame) {
       case '1h':
-        valueForTimeFrame = portfolioItem.oneHour;
+        valueForTimeFrame = portfolioItem.oneHour ?? 0;
+        valueChangeForTimeFrame = portfolioItem.oneHourValueDifference ?? 0;
         break;
       case '24h':
-        valueForTimeFrame = portfolioItem.oneDay;
+        valueForTimeFrame = portfolioItem.oneDay ?? 0;
+        valueChangeForTimeFrame = portfolioItem.oneDayValueDifference ?? 0;
         break;
       case '7d':
-        valueForTimeFrame = portfolioItem.oneWeek;
+        valueForTimeFrame = portfolioItem.oneWeek ?? 0;
+        valueChangeForTimeFrame = portfolioItem.oneWeekValueDifference ?? 0;
         break;
       case '30d':
-        valueForTimeFrame = portfolioItem.oneMonth;
+        valueForTimeFrame = portfolioItem.oneMonth ?? 0;
+        valueChangeForTimeFrame = portfolioItem.oneMonthValueDifference ?? 0;
         break;
     }
 
-    return Text(
-      '$valueForTimeFrame%',
-      style: valueForTimeFrame != null && valueForTimeFrame >= 0
-          ? dataTableTextStyle(sizingInformation)
-              .copyWith(color: Colors.greenAccent)
-          : dataTableTextStyle(sizingInformation)
-              .copyWith(color: Colors.redAccent),
-    );
+    return [valueForTimeFrame, valueChangeForTimeFrame];
   }
 
   @override
   Widget build(BuildContext context) {
+    double valueForTimeFrame = getTextForSelectedTimeFrame()[0];
+    double valueChangeForTimeFrame = getTextForSelectedTimeFrame()[1];
+
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: UIHelper.pagePadding(sizingInformation),
@@ -128,10 +129,34 @@ class PortfolioItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 getHeader(portfolioItem),
-                Text(
-                  formatToCurrency(portfolioItem.value,
-                      showSymbol: true, decimalDigits: 3),
-                  style: dataTableTextStyle(sizingInformation),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      formatToCurrency(portfolioItem.value,
+                          showSymbol: true, decimalDigits: 3),
+                      style: dataTableTextStyle(sizingInformation),
+                    ),
+                    if (selectedTab == 'Portfolio')
+                      (Text(
+                        valueChangeForTimeFrame == 0
+                            ? '\$0'
+                            : valueChangeForTimeFrame > 0
+                                ? '+${formatToCurrency(valueChangeForTimeFrame, showSymbol: true, decimalDigits: 2)}'
+                                : formatToCurrency(valueChangeForTimeFrame,
+                                    showSymbol: true, decimalDigits: 2),
+                        style: valueChangeForTimeFrame == 0
+                            ? dataTableValueChangeTextStyle(sizingInformation)
+                                .copyWith(color: Colors.white.withOpacity(.5))
+                            : valueChangeForTimeFrame >= 0
+                                ? dataTableValueChangeTextStyle(
+                                        sizingInformation)
+                                    .copyWith(color: Colors.greenAccent)
+                                : dataTableValueChangeTextStyle(
+                                        sizingInformation)
+                                    .copyWith(color: Colors.redAccent),
+                      )),
+                  ],
                 ),
               ],
             ),
@@ -140,7 +165,7 @@ class PortfolioItemWidget extends StatelessWidget {
             if (selectedTab != 'Liquidity')
               (Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Row(
                     children: [
@@ -183,7 +208,19 @@ class PortfolioItemWidget extends StatelessWidget {
                     ],
                   ),
                   if (selectedTab == 'Portfolio')
-                    (getTextForSelectedTimeFrame())
+                    (Text(
+                      valueForTimeFrame == 0
+                          ? '0%'
+                          : '${formatToCurrency(valueForTimeFrame, showSymbol: false, decimalDigits: 2)}%',
+                      style: valueForTimeFrame == 0
+                          ? dataTableTextStyle(sizingInformation)
+                              .copyWith(color: Colors.white.withOpacity(.5))
+                          : valueForTimeFrame >= 0
+                              ? dataTableTextStyle(sizingInformation)
+                                  .copyWith(color: Colors.greenAccent)
+                              : dataTableTextStyle(sizingInformation)
+                                  .copyWith(color: Colors.redAccent),
+                    ))
                 ],
               ))
           ],
@@ -196,6 +233,7 @@ class PortfolioItemWidget extends StatelessWidget {
 class PortfolioTable extends StatelessWidget {
   final List<PortfolioItem> portfolioItems;
   final double totalValue;
+  final double totalValueChangeForTimeFrame;
   final String selectedTab;
   final SizingInformation sizingInformation;
   final List<String> timeFrames;
@@ -206,6 +244,7 @@ class PortfolioTable extends StatelessWidget {
     Key? key,
     required this.portfolioItems,
     required this.totalValue,
+    required this.totalValueChangeForTimeFrame,
     required this.selectedTab,
     required this.sizingInformation,
     required this.timeFrames,
@@ -244,12 +283,36 @@ class PortfolioTable extends StatelessWidget {
                     'Total Value',
                     style: dataTableFooterTextStyle(),
                   ),
-                  Text(
-                    formatToCurrency(totalValue,
-                        showSymbol: true, decimalDigits: 3),
-                    style: dataTableFooterTextStyle()
-                        .copyWith(color: backgroundPink),
-                  )
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        formatToCurrency(totalValue,
+                            showSymbol: true, decimalDigits: 2),
+                        style: dataTableFooterTextStyle()
+                            .copyWith(fontSize: title),
+                      ),
+                      if (selectedTab == 'Portfolio')
+                        (Text(
+                          totalValueChangeForTimeFrame == 0
+                              ? '\$0'
+                              : totalValueChangeForTimeFrame > 0
+                                  ? '+${formatToCurrency(totalValueChangeForTimeFrame, showSymbol: true, decimalDigits: 2)}'
+                                  : formatToCurrency(
+                                      totalValueChangeForTimeFrame,
+                                      showSymbol: true,
+                                      decimalDigits: 2),
+                          style: totalValueChangeForTimeFrame == 0
+                              ? dataTableTextStyle(sizingInformation)
+                                  .copyWith(color: Colors.white.withOpacity(.5))
+                              : totalValueChangeForTimeFrame >= 0
+                                  ? dataTableTextStyle(sizingInformation)
+                                      .copyWith(color: Colors.greenAccent)
+                                  : dataTableTextStyle(sizingInformation)
+                                      .copyWith(color: Colors.redAccent),
+                        )),
+                    ],
+                  ),
                 ],
               ),
             ),

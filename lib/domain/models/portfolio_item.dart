@@ -8,9 +8,13 @@ class PortfolioItem {
   final double? balance;
   final double? value;
   final double? oneHour;
+  final double? oneHourValueDifference;
   final double? oneDay;
+  final double? oneDayValueDifference;
   final double? oneWeek;
+  final double? oneWeekValueDifference;
   final double? oneMonth;
+  final double? oneMonthValueDifference;
 
   PortfolioItem({
     this.fullName,
@@ -20,9 +24,13 @@ class PortfolioItem {
     this.balance,
     this.value,
     this.oneHour,
+    this.oneHourValueDifference,
     this.oneDay,
+    this.oneDayValueDifference,
     this.oneWeek,
+    this.oneWeekValueDifference,
     this.oneMonth,
+    this.oneMonthValueDifference,
   });
 
   factory PortfolioItem.fromJson(Map<String, dynamic> json) => PortfolioItem(
@@ -33,8 +41,16 @@ class PortfolioItem {
         balance: getDefaultDoubleValue(json['balance']),
         value: getDefaultDoubleValue(json['value']),
         oneHour: getDefaultDoubleValue(json['oneHour']),
+        oneHourValueDifference:
+            getDefaultDoubleValue(json['oneHourValueDifference']),
         oneDay: getDefaultDoubleValue(json['oneDay']),
+        oneDayValueDifference:
+            getDefaultDoubleValue(json['oneDayValueDifference']),
         oneWeek: getDefaultDoubleValue(json['oneWeek']),
+        oneWeekValueDifference:
+            getDefaultDoubleValue(json['oneWeekValueDifference']),
         oneMonth: getDefaultDoubleValue(json['oneMonth']),
+        oneMonthValueDifference:
+            getDefaultDoubleValue(json['oneMonthValueDifference']),
       );
 }

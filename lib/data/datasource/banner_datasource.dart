@@ -9,6 +9,6 @@ class BannerDatasource {
   Future getBanners() async {
     try {
       return await client.getBanners();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 }

@@ -20,7 +20,8 @@ class ChartView extends StatelessWidget {
           appBar: AppBar(
             elevation: 0,
             centerTitle: true,
-            title: Image.asset('lib/core/assets/images/ceres_tools_logo.png', height: Dimensions.HEADER_LOGO),
+            title: Image.asset('lib/core/assets/images/ceres_tools_logo.png',
+                height: Dimensions.HEADER_LOGO),
           ),
           endDrawer: token == null ? SideMenu() : null,
           resizeToAvoidBottomInset: false,
@@ -30,10 +31,11 @@ class ChartView extends StatelessWidget {
           ),
           body: SafeArea(
             top: false,
-            child: WebView(
-              initialUrl: '$kChartURL${token ?? kTokenName}',
-              javascriptMode: JavascriptMode.unrestricted,
-              backgroundColor: backgroundColor,
+            child: WebViewWidget(
+              controller: WebViewController()
+                ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                ..setBackgroundColor(backgroundColor)
+                ..loadRequest(Uri.parse('$kChartURL${token ?? kTokenName}')),
             ),
           ),
         );

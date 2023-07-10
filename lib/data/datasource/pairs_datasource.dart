@@ -9,6 +9,6 @@ class PairsDatasource {
   Future getPairs() async {
     try {
       return await client.getPairs();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 }

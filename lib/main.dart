@@ -6,15 +6,12 @@ import 'package:ceres_locker_app/core/theme/theme.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/routes/app_pages.dart';
 import 'package:ceres_locker_app/routes/app_routes.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'core/constants/constants.dart';
-
-const kReleaseMode = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,21 +31,20 @@ void main() async {
   OneSignal.shared.promptUserForPushNotificationPermission();
 
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: kAppName,
-        builder: DevicePreview.appBuilder,
-        enableLog: false,
-        getPages: AppPages.routes,
-        initialRoute: Routes.TOKENS,
-        themeMode: ThemeMode.dark,
-        theme: lightThemeData(),
-        darkTheme: darkThemeData(),
-        defaultTransition: Platform.isAndroid ? Transition.noTransition : Transition.native,
-        transitionDuration: Platform.isAndroid ? Duration.zero : const Duration(milliseconds: 300),
-      ),
+    GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: kAppName,
+      enableLog: false,
+      getPages: AppPages.routes,
+      initialRoute: Routes.TOKENS,
+      themeMode: ThemeMode.dark,
+      theme: lightThemeData(),
+      darkTheme: darkThemeData(),
+      defaultTransition:
+          Platform.isAndroid ? Transition.noTransition : Transition.native,
+      transitionDuration: Platform.isAndroid
+          ? Duration.zero
+          : const Duration(milliseconds: 300),
     ),
   );
 }

@@ -9,12 +9,12 @@ class LockerDatasource {
   Future getLockedTokens(String token) async {
     try {
       return await client.getLockedTokens(token);
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 
   Future getLockedPairs(String baseToken, String token) async {
     try {
       return await client.getLockedPairs(baseToken, token);
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 }

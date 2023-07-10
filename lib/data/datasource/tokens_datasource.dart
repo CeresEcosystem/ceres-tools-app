@@ -9,6 +9,6 @@ class TokensDatasource {
   Future getTokens() async {
     try {
       return await client.getTokens();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 }

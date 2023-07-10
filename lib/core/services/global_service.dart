@@ -14,7 +14,7 @@ class GlobalService extends GetxService {
       if (response != null) {
         Banners.instance.setBanners(response);
       }
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
 
     return Future.value(true);
   }

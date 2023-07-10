@@ -9,7 +9,7 @@ class FarmingDatasource {
   Future getFarming() async {
     try {
       return await client.getFarming();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 
   Future getFarmingTVL(String farming) async {
@@ -22,24 +22,24 @@ class FarmingDatasource {
         case 'PSWAP':
           return await client.getPSWAPFarmingTVL();
       }
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 
   Future getTokenInfos() async {
     try {
       return await client.getTokenInfos();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 
   Future getDemeterFarms() async {
     try {
       return await client.getDemeterFarms();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 
   Future getDemeterPools() async {
     try {
       return await client.getDemeterPools();
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 }

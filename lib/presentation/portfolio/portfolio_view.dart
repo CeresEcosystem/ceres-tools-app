@@ -141,6 +141,8 @@ class PortfolioView extends GetView<PortfolioController> {
                                 portfolioItems: controller.portfolioItems,
                                 selectedTab: controller.selectedTab,
                                 totalValue: controller.totalValue,
+                                totalValueChangeForTimeFrame:
+                                    controller.totalValueChangeForTimeFrame,
                                 sizingInformation: sizingInformation,
                                 timeFrames: controller.timeFrames,
                                 selectedTimeFrame: controller.selectedTimeFrame,

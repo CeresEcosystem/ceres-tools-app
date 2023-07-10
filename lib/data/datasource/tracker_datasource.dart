@@ -9,6 +9,6 @@ class TrackerDatasource {
   Future getTracker(String token) async {
     try {
       return await client.getTracker(token);
-    } on DioError catch (_) {}
+    } on DioException catch (_) {}
   }
 }

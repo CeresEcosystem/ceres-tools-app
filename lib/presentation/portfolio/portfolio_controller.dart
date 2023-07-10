@@ -14,6 +14,7 @@ class PortfolioController extends GetxController {
 
   List<PortfolioItem> _portfolioItems = [];
   double _totalValue = 0;
+  double _totalValueChangeForTimeFrame = 0;
   String _addressDB = '';
 
   String _walletAddress = '';
@@ -27,6 +28,7 @@ class PortfolioController extends GetxController {
   String get walletAddress => _walletAddress;
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   double get totalValue => _totalValue;
+  double get totalValueChangeForTimeFrame => _totalValueChangeForTimeFrame;
   List<String> get tabs => _tabs;
   List<String> get timeFrames => _timeFrames;
   String get selectedTab => _selectedTab.value;
@@ -49,8 +51,30 @@ class PortfolioController extends GetxController {
     }
   }
 
+  calculateTotalValueChangeForTimeFrame([String? timeFrame]) {
+    switch (timeFrame ?? _selectedTimeFrame.value) {
+      case '1h':
+        _totalValueChangeForTimeFrame = _portfolioItems.fold(
+            0, (double value, pi) => value + pi.oneHourValueDifference!);
+        break;
+      case '24h':
+        _totalValueChangeForTimeFrame = _portfolioItems.fold(
+            0, (double value, pi) => value + pi.oneDayValueDifference!);
+        break;
+      case '7d':
+        _totalValueChangeForTimeFrame = _portfolioItems.fold(
+            0, (double value, pi) => value + pi.oneWeekValueDifference!);
+        break;
+      case '30d':
+        _totalValueChangeForTimeFrame = _portfolioItems.fold(
+            0, (double value, pi) => value + pi.oneMonthValueDifference!);
+        break;
+    }
+  }
+
   changeSelectedTimeFrame(String timeFrame) {
     if (timeFrame != _selectedTimeFrame.value) {
+      calculateTotalValueChangeForTimeFrame(timeFrame);
       _selectedTimeFrame.value = timeFrame;
     }
   }
@@ -129,9 +153,11 @@ class PortfolioController extends GetxController {
 
           _totalValue = tv;
           _portfolioItems = itemsFiltered;
+          calculateTotalValueChangeForTimeFrame();
         } else {
           _portfolioItems = [];
           _totalValue = 0;
+          calculateTotalValueChangeForTimeFrame();
         }
 
         _loadingStatus.value = LoadingStatus.READY;
