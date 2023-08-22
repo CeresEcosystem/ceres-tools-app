@@ -23,7 +23,7 @@ abstract class RestClient {
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TRACKER_PERMALINK}')
   Future getTracker(@Path("token") String token);
 
-  @GET('${ApiConstants.OLD_BASE_URL}${ApiConstants.BANNERS_PERMALINK}')
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.BANNERS_PERMALINK}')
   Future getBanners();
 
   @GET('${ApiConstants.LOCK_URL}${ApiConstants.LOCK_TOKEN_PERMALINK}')

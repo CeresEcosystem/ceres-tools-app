@@ -1,7 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
 class ApiConstants {
-  static const OLD_BASE_URL = 'https://cerestoken.io/api';
   static const NEW_BASE_URL = 'https://data.cerestoken.io/api';
   static const LOCK_URL = 'https://api.cerestoken.io/api';
   static const DEMETER_URL = 'https://api.deotoken.com/api/demeter';
