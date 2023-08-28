@@ -1,4 +1,3 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
@@ -8,10 +7,12 @@ import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
 import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
-import 'package:ceres_locker_app/core/widgets/input_field.dart';
+import 'package:ceres_locker_app/core/widgets/select.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_locker_app/core/widgets/status_bar.dart';
+import 'package:ceres_locker_app/domain/models/wallet.dart';
 import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
+import 'package:ceres_locker_app/presentation/portfolio/widgets/portfolio_modal.dart';
 import 'package:ceres_locker_app/presentation/portfolio/widgets/portfolio_tab.dart';
 import 'package:ceres_locker_app/presentation/portfolio/widgets/portfolio_table.dart';
 import 'package:flutter/material.dart';
@@ -67,36 +68,111 @@ class PortfolioView extends GetView<PortfolioController> {
                                       child: Row(
                                         children: [
                                           Expanded(
-                                            child: InputField(
-                                              onChanged: (t) =>
-                                                  controller.onTyping(t),
-                                              hint: kWalletAddressTextFieldHint,
-                                              showIcon: false,
-                                              smallerFont: true,
-                                              text: controller.walletAddress,
-                                            ),
+                                            child: controller.wallets.isNotEmpty
+                                                ? Select<Wallet>(
+                                                    values: controller.wallets,
+                                                    selectedValue: controller
+                                                        .selectedWallet,
+                                                    onValueChange: (Wallet w) {
+                                                      controller
+                                                          .handleWalletChange(
+                                                              w);
+                                                    },
+                                                  )
+                                                : Text(
+                                                    'No added wallets. Please, add one.',
+                                                    style: emptyListTextStyle(
+                                                      sizingInformation,
+                                                    ),
+                                                  ),
                                           ),
+                                          if (controller.wallets.isNotEmpty)
+                                            (Container(
+                                              margin: const EdgeInsets.only(
+                                                left: Dimensions
+                                                    .DEFAULT_MARGIN_SMALL,
+                                              ),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .all(
+                                                Dimensions
+                                                    .DEFAULT_MARGIN_EXTRA_SMALL,
+                                              ),
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(Dimensions
+                                                      .DEFAULT_MARGIN_SMALL),
+                                                ),
+                                                color: backgroundPink,
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: controller
+                                                            .loadingStatus ==
+                                                        LoadingStatus.LOADING
+                                                    ? null
+                                                    : () => showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return PortfolioModal(
+                                                              wallet: controller
+                                                                  .selectedWallet,
+                                                              addEditWallet:
+                                                                  controller
+                                                                      .addEditWallet,
+                                                              removeWallet:
+                                                                  controller
+                                                                      .removeWallet,
+                                                            );
+                                                          },
+                                                        ),
+                                                child: const Icon(
+                                                  Icons.edit_outlined,
+                                                ),
+                                              ),
+                                            )),
                                           Container(
-                                            margin: const EdgeInsets.only(
-                                              left: Dimensions
-                                                  .DEFAULT_MARGIN_SMALL,
+                                            margin: EdgeInsets.only(
+                                              left: controller.wallets.isEmpty
+                                                  ? Dimensions
+                                                      .DEFAULT_MARGIN_SMALL
+                                                  : Dimensions
+                                                      .DEFAULT_MARGIN_EXTRA_SMALL,
                                             ),
-                                            width: 100.0,
-                                            child: ElevatedButton(
-                                              onPressed: controller
-                                                          .loadingStatus ==
+                                            padding:
+                                                const EdgeInsetsDirectional.all(
+                                              Dimensions
+                                                  .DEFAULT_MARGIN_EXTRA_SMALL,
+                                            ),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(Dimensions
+                                                    .DEFAULT_MARGIN_SMALL),
+                                              ),
+                                              color: backgroundPink,
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: controller.loadingStatus ==
                                                       LoadingStatus.LOADING
                                                   ? null
-                                                  : () => controller
-                                                      .fetchPortfolioItems(),
-                                              child: Text(
-                                                controller.loadingStatus ==
-                                                        LoadingStatus.LOADING
-                                                    ? 'Loading'
-                                                    : 'Fetch',
-                                                style: buttonLightTextStyle(
-                                                    sizingInformation),
-                                                textAlign: TextAlign.center,
+                                                  : () => showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return PortfolioModal(
+                                                            wallet:
+                                                                Wallet('', ''),
+                                                            addEditWallet:
+                                                                controller
+                                                                    .addEditWallet,
+                                                            removeWallet:
+                                                                controller
+                                                                    .removeWallet,
+                                                          );
+                                                        },
+                                                      ),
+                                              child: const Icon(
+                                                Icons.person_add_alt,
                                               ),
                                             ),
                                           ),
@@ -108,7 +184,7 @@ class PortfolioView extends GetView<PortfolioController> {
                                 UIHelper.verticalSpaceMedium(),
                               ]),
                             ),
-                            if (controller.walletAddress.isEmpty)
+                            if (controller.wallets.isEmpty)
                               (SliverList(
                                 delegate: SliverChildListDelegate([
                                   const EmptyWidget(),

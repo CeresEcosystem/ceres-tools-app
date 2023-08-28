@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../style/app_text_style.dart';
 
 class Select<T> extends StatelessWidget {
-  final List<String> values;
-  final String selectedValue;
+  final List<T> values;
+  final T selectedValue;
   final Function onValueChange;
 
   const Select({
@@ -20,9 +20,21 @@ class Select<T> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        DropdownButtonFormField(
+        DropdownButtonFormField<T>(
           value: selectedValue,
-          onChanged: (value) => onValueChange(value),
+          onChanged: (T? value) => onValueChange(value),
+          selectedItemBuilder: (BuildContext context) {
+            return values.map<Widget>((T value) {
+              return Container(
+                constraints: const BoxConstraints(maxWidth: 200.0),
+                child: Text(
+                  value.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              );
+            }).toList();
+          },
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(width: 0.0),
@@ -45,10 +57,12 @@ class Select<T> extends StatelessWidget {
             color: Colors.white,
           ),
           style: selectTextStyle(),
-          items: values.map((String value) {
-            return DropdownMenuItem(
+          items: values.map<DropdownMenuItem<T>>((T value) {
+            return DropdownMenuItem<T>(
               value: value,
-              child: Text(value),
+              child: Text(
+                value.toString(),
+              ),
             );
           }).toList(),
         )

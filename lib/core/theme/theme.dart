@@ -14,14 +14,19 @@ ThemeData darkThemeData() {
         ),
     canvasColor: backgroundColorDark,
     colorScheme: const ColorScheme.dark(
-      primary: backgroundPink,
-      secondary: backgroundColorLight
-    ),
+        primary: backgroundPink, secondary: backgroundColorLight),
     appBarTheme: const AppBarTheme(
       backgroundColor: backgroundColorDark,
       iconTheme: IconThemeData(
         size: Dimensions.ICON_SIZE,
       ),
+    ),
+    dialogTheme: DialogTheme(
+      backgroundColor: backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
+      ),
+      contentTextStyle: const TextStyle(color: Colors.white),
     ),
   );
 }
