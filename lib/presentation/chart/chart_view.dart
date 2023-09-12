@@ -4,8 +4,8 @@ import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class ChartView extends StatelessWidget {
   const ChartView({Key? key}) : super(key: key);
@@ -31,11 +31,15 @@ class ChartView extends StatelessWidget {
           ),
           body: SafeArea(
             top: false,
-            child: WebViewWidget(
-              controller: WebViewController()
-                ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..setBackgroundColor(backgroundColor)
-                ..loadRequest(Uri.parse('$kChartURL${token ?? kTokenName}')),
+            child: InAppWebView(
+              initialUrlRequest: URLRequest(
+                url: Uri.parse('$kChartURL${token ?? kTokenName}'),
+              ),
+              initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+                  transparentBackground: true,
+                ),
+              ),
             ),
           ),
         );
