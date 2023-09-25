@@ -26,9 +26,13 @@ void main() async {
     systemNavigationBarColor: backgroundColorDark,
   ));
 
-  OneSignal.shared.setAppId(kPushNotificationID);
+  OneSignal.initialize(kPushNotificationID);
 
-  OneSignal.shared.promptUserForPushNotificationPermission();
+  OneSignal.Notifications.canRequest().then((canRequest) {
+    if (canRequest) {
+      OneSignal.Notifications.requestPermission(true);
+    }
+  });
 
   runApp(
     GetMaterialApp(

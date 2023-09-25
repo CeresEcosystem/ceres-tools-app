@@ -4,7 +4,6 @@ import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
@@ -50,8 +49,6 @@ class DemeterFarming extends StatelessWidget {
   }
 
   Widget renderImages(Map<String, dynamic> item, {bool isFarm = true}) {
-    final String imgExtension = imageExtension(item['token']);
-
     if (isFarm) {
       return SizedBox(
         width: Dimensions.GRID_LODO * 2,
@@ -60,9 +57,10 @@ class DemeterFarming extends StatelessWidget {
             Positioned(
               left: Dimensions.GRID_LODO - (Dimensions.GRID_LODO / 4),
               child: RoundImage(
-                image: '$kImageStorage${item["token"]}$imgExtension',
+                image:
+                    '$kImageStorage${item["token"]}${item['imageExtension']}',
                 size: Dimensions.GRID_LODO,
-                extension: imgExtension,
+                extension: item['imageExtension'],
               ),
             ),
             RoundImage(
@@ -75,9 +73,9 @@ class DemeterFarming extends StatelessWidget {
     }
 
     return RoundImage(
-      image: '$kImageStorage${item["token"]}$imgExtension',
+      image: '$kImageStorage${item["token"]}${item['imageExtension']}',
       size: Dimensions.GRID_LODO,
-      extension: imgExtension,
+      extension: item['imageExtension'],
     );
   }
 

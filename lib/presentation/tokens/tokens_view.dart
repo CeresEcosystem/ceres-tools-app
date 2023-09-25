@@ -6,7 +6,6 @@ import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
@@ -165,8 +164,6 @@ class TokensView extends GetView<TokensController> {
   }
 
   Widget tokenItem(Token token, SizingInformation sizingInformation) {
-    final String imgExtension = imageExtension(token.shortName);
-
     return Column(
       children: [
         Row(
@@ -175,8 +172,9 @@ class TokensView extends GetView<TokensController> {
               child: Row(
                 children: [
                   RoundImage(
-                    image: '$kImageStorage${token.shortName}$imgExtension',
-                    extension: imgExtension,
+                    image:
+                        '$kImageStorage${token.shortName}${token.imageExtension}',
+                    extension: token.imageExtension,
                   ),
                   UIHelper.horizontalSpaceSmall(),
                   Expanded(

@@ -1,6 +1,8 @@
+import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/db/database_helper.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
+import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/favorite_token.dart';
 import 'package:ceres_locker_app/domain/models/token.dart';
@@ -106,6 +108,11 @@ class TokensController extends GetxController {
       TokenList tokenList = TokenList.fromJson(response);
 
       if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
+        for (Token t in tokenList.tokens!) {
+          if (pngIcons.contains(t.shortName)) {
+            t.imageExtension = kImagePNGExtension;
+          }
+        }
         _tokens = tokenList.tokens;
       }
 

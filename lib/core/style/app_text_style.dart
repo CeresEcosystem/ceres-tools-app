@@ -431,3 +431,27 @@ TextStyle timeFrameChipTextStyle() {
     color: Colors.white,
   );
 }
+
+TextStyle chartCurrentTokenTitleTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle1,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+}
+
+TextStyle chartCurrentTokenSubtitleTextStyle() {
+  return TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w600,
+    color: Colors.white.withOpacity(.5),
+  );
+}
+
+TextStyle chartFavoriteTokensNoteTextStyle() {
+  return TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w500,
+    color: Colors.white.withOpacity(.5),
+  );
+}

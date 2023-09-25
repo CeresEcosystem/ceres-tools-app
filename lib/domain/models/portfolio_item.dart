@@ -1,3 +1,4 @@
+import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 
 class PortfolioItem {
@@ -15,6 +16,7 @@ class PortfolioItem {
   final double? oneWeekValueDifference;
   final double? oneMonth;
   final double? oneMonthValueDifference;
+  String imageExtension = kImageExtension;
 
   PortfolioItem({
     this.fullName,

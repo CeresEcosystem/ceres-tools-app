@@ -5,7 +5,6 @@ import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
@@ -33,12 +32,15 @@ class LockerView extends GetView<LockerController> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Image.asset('lib/core/assets/images/ceres_tools_logo.png', height: Dimensions.HEADER_LOGO),
+        title: Image.asset('lib/core/assets/images/ceres_tools_logo.png',
+            height: Dimensions.HEADER_LOGO),
       ),
       body: Responsive(
         builder: (context, sizingInformation) {
           return Obx(() {
-            if (controller.loadingStatus == LoadingStatus.LOADING) return const CenterLoading();
+            if (controller.loadingStatus == LoadingStatus.LOADING) {
+              return const CenterLoading();
+            }
 
             return CustomScrollView(
               slivers: [
@@ -81,7 +83,8 @@ class LockerView extends GetView<LockerController> {
     return SliverList(
       delegate: SliverChildListDelegate([
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation)),
+          padding: EdgeInsets.symmetric(
+              horizontal: UIHelper.pagePadding(sizingInformation)),
           child: Text(
             isPair ? kEmptyLockedPairsList : kEmptyLockedTokensList,
             style: emptyListTextStyle(sizingInformation),
@@ -92,16 +95,15 @@ class LockerView extends GetView<LockerController> {
   }
 
   Widget tokenHeaderTitle(Token token, SizingInformation sizingInformation) {
-    final String imgExtension = imageExtension(token.shortName);
-
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation)),
+      padding: EdgeInsets.symmetric(
+          horizontal: UIHelper.pagePadding(sizingInformation)),
       child: Row(
         children: [
           RoundImage(
-            image: '$kImageStorage${token.shortName}$imgExtension',
+            image: '$kImageStorage${token.shortName}${token.imageExtension}',
             size: Dimensions.PAIRS_IMAGE_SIZE,
-            extension: imgExtension,
+            extension: token.imageExtension,
           ),
           UIHelper.horizontalSpaceSmall(),
           Text(
@@ -117,7 +119,8 @@ class LockerView extends GetView<LockerController> {
 
   Widget pairHeaderTitle(Pair pair, SizingInformation sizingInformation) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation)),
+      padding: EdgeInsets.symmetric(
+          horizontal: UIHelper.pagePadding(sizingInformation)),
       child: Row(
         children: [
           pairImage(pair),
@@ -134,18 +137,17 @@ class LockerView extends GetView<LockerController> {
   }
 
   Widget pairImage(Pair pair) {
-    final String imgExtension = imageExtension(pair.shortName);
-
     return SizedBox(
       width: Dimensions.PAIRS_IMAGE_SIZE * 2,
       child: Stack(
         children: [
           Positioned(
-            left: Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
+            left:
+                Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}$imgExtension',
+              image: '$kImageStorage${pair.shortName}${pair.imageExtension}',
               size: Dimensions.PAIRS_IMAGE_SIZE,
-              extension: imgExtension,
+              extension: pair.imageExtension,
             ),
           ),
           RoundImage(
@@ -157,7 +159,8 @@ class LockerView extends GetView<LockerController> {
     );
   }
 
-  Widget lockerItem(LockedItem lockedItem, SizingInformation sizingInformation, bool isPair) {
+  Widget lockerItem(
+      LockedItem lockedItem, SizingInformation sizingInformation, bool isPair) {
     return Row(
       children: [
         Expanded(

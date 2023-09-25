@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
+import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/portfolio_item.dart';
 import 'package:ceres_locker_app/domain/models/portfolio_list.dart';
@@ -192,6 +194,11 @@ class PortfolioController extends GetxController {
 
         if (portfolioList.portfolioItems != null &&
             portfolioList.portfolioItems!.isNotEmpty) {
+          for (PortfolioItem pi in portfolioList.portfolioItems!) {
+            if (pngIcons.contains(pi.token)) {
+              pi.imageExtension = kImagePNGExtension;
+            }
+          }
           List<PortfolioItem> itemsFiltered =
               portfolioList.portfolioItems!.where((pi) {
             if (_selectedTab.value == 'Liquidity') {

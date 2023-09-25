@@ -4,6 +4,7 @@ import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
+import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/demeter_farm.dart';
 import 'package:ceres_locker_app/domain/models/demeter_farm_list.dart';
@@ -123,6 +124,9 @@ class FarmingController extends GetxController {
               'earn': rewardToken.shortName,
               'totalLiquidity': totalLiquidity,
               'apr': apr,
+              'imageExtension': pngIcons.contains(pair.shortName)
+                  ? kImagePNGExtension
+                  : kImageExtension,
               ...farm.toJson(),
             };
 
@@ -187,6 +191,9 @@ class FarmingController extends GetxController {
               'earn': rewardToken.shortName,
               'stakedTotal': stakedTotal,
               'apr': apr,
+              'imageExtension': pngIcons.contains(token.shortName)
+                  ? kImagePNGExtension
+                  : kImageExtension,
               ...pool.toJson(),
             };
 

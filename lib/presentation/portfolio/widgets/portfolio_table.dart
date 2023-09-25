@@ -3,7 +3,6 @@ import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
@@ -25,8 +24,6 @@ class PortfolioItemWidget extends StatelessWidget {
   }) : super(key: key);
 
   Widget getHeader(PortfolioItem portfolioItem) {
-    final String imgExtension = imageExtension(portfolioItem.token);
-
     switch (selectedTab) {
       case 'Liquidity':
         return Row(
@@ -39,9 +36,9 @@ class PortfolioItemWidget extends StatelessWidget {
                     left: Dimensions.GRID_LODO / 2,
                     child: RoundImage(
                       image:
-                          '$kImageStorage${portfolioItem.token}$imgExtension',
+                          '$kImageStorage${portfolioItem.token}${portfolioItem.imageExtension}',
                       size: Dimensions.GRID_LODO,
-                      extension: imgExtension,
+                      extension: portfolioItem.imageExtension,
                     ),
                   ),
                   RoundImage(
@@ -63,8 +60,9 @@ class PortfolioItemWidget extends StatelessWidget {
           children: [
             RoundImage(
               size: Dimensions.GRID_LODO,
-              image: '$kImageStorage${portfolioItem.token}$imgExtension',
-              extension: imgExtension,
+              image:
+                  '$kImageStorage${portfolioItem.token}${portfolioItem.imageExtension}',
+              extension: portfolioItem.imageExtension,
             ),
             UIHelper.horizontalSpaceSmall(),
             Text(

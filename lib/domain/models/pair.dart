@@ -1,3 +1,4 @@
+import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 
 class Pair {
@@ -11,6 +12,7 @@ class Pair {
   final double? lockedLiquidity;
   final String? tokenAssetId;
   final String? baseAssetId;
+  String imageExtension = kImageExtension;
 
   Pair({
     this.baseToken,

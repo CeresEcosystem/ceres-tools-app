@@ -5,7 +5,6 @@ import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
@@ -50,9 +49,14 @@ class PairsView extends GetView<PairsController> {
 
   Widget renderBody(SizingInformation sizingInformation) {
     return Obx(() {
-      if (controller.loadingStatus == LoadingStatus.LOADING) return const Expanded(child: CenterLoading());
+      if (controller.loadingStatus == LoadingStatus.LOADING) {
+        return const Expanded(child: CenterLoading());
+      }
 
-      if (controller.loadingStatus == LoadingStatus.ERROR) return Expanded(child: ErrorText(onButtonPress: () => controller.fetchPairs(true)));
+      if (controller.loadingStatus == LoadingStatus.ERROR) {
+        return Expanded(
+            child: ErrorText(onButtonPress: () => controller.fetchPairs(true)));
+      }
 
       return Expanded(
         child: RefreshIndicator(
@@ -76,9 +80,11 @@ class PairsView extends GetView<PairsController> {
                     ),
                     child: Row(
                       children: [
-                        sumContainer(kTotalLiquidity, controller.totalLiquidity, sizingInformation),
+                        sumContainer(kTotalLiquidity, controller.totalLiquidity,
+                            sizingInformation),
                         UIHelper.horizontalSpaceSmall(),
-                        sumContainer(kTotalVolume, controller.totalVolume, sizingInformation),
+                        sumContainer(kTotalVolume, controller.totalVolume,
+                            sizingInformation),
                       ],
                     ),
                   ),
@@ -112,7 +118,8 @@ class PairsView extends GetView<PairsController> {
                       return ActionChip(
                         labelPadding: EdgeInsets.zero,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
                         label: SizedBox(
                           height: Dimensions.CHIP_SIZE,
                           child: Center(
@@ -122,14 +129,16 @@ class PairsView extends GetView<PairsController> {
                                 children: [
                                   if (!showIcon) ...[
                                     RoundImage(
-                                      image: '$kImageStorage$item$kImageExtension',
+                                      image:
+                                          '$kImageStorage$item$kImageExtension',
                                       size: Dimensions.SOCIAL_ICONS_SIZE,
                                     ),
                                     UIHelper.horizontalSpaceExtraSmall(),
                                   ],
                                   Text(
                                     item,
-                                    style: allButtonTextStyle(sizingInformation),
+                                    style:
+                                        allButtonTextStyle(sizingInformation),
                                   ),
                                 ],
                               ),
@@ -140,7 +149,8 @@ class PairsView extends GetView<PairsController> {
                         onPressed: () => controller.setBaseAsset(item),
                       );
                     },
-                    separatorBuilder: (_, __) => UIHelper.horizontalSpaceSmall(),
+                    separatorBuilder: (_, __) =>
+                        UIHelper.horizontalSpaceSmall(),
                     itemCount: controller.baseAssets.length,
                     scrollDirection: Axis.horizontal,
                   ),
@@ -170,10 +180,14 @@ class PairsView extends GetView<PairsController> {
     });
   }
 
-  Widget sumContainer(String label, String info, SizingInformation sizingInformation) {
+  Widget sumContainer(
+      String label, String info, SizingInformation sizingInformation) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(sizingInformation.deviceScreenType == DeviceScreenType.Mobile ? Dimensions.DEFAULT_MARGIN_SMALL : Dimensions.DEFAULT_MARGIN),
+        padding: EdgeInsets.all(
+            sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                ? Dimensions.DEFAULT_MARGIN_SMALL
+                : Dimensions.DEFAULT_MARGIN),
         decoration: BoxDecoration(
           color: backgroundColorDark,
           borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
@@ -212,7 +226,8 @@ class PairsView extends GetView<PairsController> {
             ),
             UIHelper.horizontalSpaceExtraSmall(),
             IconButton(
-              onPressed: () => Get.toNamed(Routes.LOCKER, arguments: {'isPair': true, 'lockerItem': pair}),
+              onPressed: () => Get.toNamed(Routes.LOCKER,
+                  arguments: {'isPair': true, 'lockerItem': pair}),
               icon: Icon(
                 Icons.lock_outline_sharp,
                 color: Colors.white.withOpacity(0.5),
@@ -271,7 +286,8 @@ class PairsView extends GetView<PairsController> {
                     style: pairsInfoStyle(sizingInformation),
                   ),
                   Text(
-                    formatToCurrency(pair.liquidity, showSymbol: true, decimalDigits: 0),
+                    formatToCurrency(pair.liquidity,
+                        showSymbol: true, decimalDigits: 0),
                     style: pairsLiquidityStyle(sizingInformation),
                   ),
                   UIHelper.verticalSpaceSmall(),
@@ -302,18 +318,17 @@ class PairsView extends GetView<PairsController> {
   }
 
   Widget pairImage(Pair pair) {
-    final String imgExtension = imageExtension(pair.shortName);
-
     return SizedBox(
       width: Dimensions.PAIRS_IMAGE_SIZE * 2,
       child: Stack(
         children: [
           Positioned(
-            left: Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
+            left:
+                Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}$imgExtension',
+              image: '$kImageStorage${pair.shortName}${pair.imageExtension}',
               size: Dimensions.PAIRS_IMAGE_SIZE,
-              extension: imgExtension,
+              extension: pair.imageExtension,
             ),
           ),
           RoundImage(

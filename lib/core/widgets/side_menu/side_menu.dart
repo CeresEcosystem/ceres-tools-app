@@ -20,7 +20,8 @@ class SideMenu extends StatelessWidget {
 
   final ScrollController controller = ScrollController();
 
-  SideMenu({Key? key, this.largeScreen = false, this.onMenuItemPress}) : super(key: key);
+  SideMenu({Key? key, this.largeScreen = false, this.onMenuItemPress})
+      : super(key: key);
 
   void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
@@ -84,7 +85,8 @@ class SideMenu extends StatelessWidget {
             (GestureDetector(
               onTap: () => Get.back(),
               child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
+                padding:
+                    EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN),
                 child: Icon(Icons.close, size: Dimensions.ICON_SIZE),
               ),
             )),
@@ -116,7 +118,8 @@ class SideMenu extends StatelessWidget {
     );
   }
 
-  Widget drawerOptionitem(Map<String, dynamic> option, SizingInformation sizingInformation) {
+  Widget drawerOptionitem(
+      Map<String, dynamic> option, SizingInformation sizingInformation) {
     bool selected = option['title'] == SideMenuPage.sideMenuPage.activePage;
 
     return InkWell(
@@ -124,7 +127,10 @@ class SideMenu extends StatelessWidget {
       child: Opacity(
         opacity: selected ? 1 : 0.5,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: sizingInformation.screenSize.height > 600.0 ? Dimensions.DEFAULT_MARGIN / 3 : Dimensions.DEFAULT_MARGIN / 4),
+          padding: EdgeInsets.symmetric(
+              vertical: sizingInformation.screenSize.height > 600.0
+                  ? Dimensions.DEFAULT_MARGIN / 3
+                  : Dimensions.DEFAULT_MARGIN / 4),
           child: Row(
             children: [
               Container(
@@ -163,7 +169,8 @@ class SideMenu extends StatelessWidget {
       padding: EdgeInsets.only(
         left: Dimensions.DEFAULT_MARGIN,
         right: Dimensions.DEFAULT_MARGIN,
-        bottom: sizingInformation.bottomSafeAreaSize + Dimensions.DEFAULT_MARGIN,
+        bottom:
+            sizingInformation.bottomSafeAreaSize + Dimensions.DEFAULT_MARGIN,
       ),
       child: Column(
         children: [
@@ -207,9 +214,13 @@ class SideMenu extends StatelessWidget {
         return GestureDetector(
           onTap: () => _launchURL(social['url']!),
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN / 2),
+            margin: const EdgeInsets.symmetric(
+                horizontal: Dimensions.DEFAULT_MARGIN / 2),
             padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN / 1.5),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius:
+                    BorderRadius.circular(Dimensions.DEFAULT_MARGIN / 2)),
             child: ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: Dimensions.SOCIAL_ICONS_SIZE,
@@ -235,7 +246,8 @@ class SideMenu extends StatelessWidget {
             }
           },
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: Dimensions.DEFAULT_MARGIN_SMALL / 2),
+            margin: const EdgeInsets.symmetric(
+                horizontal: Dimensions.DEFAULT_MARGIN_SMALL / 2),
             child: ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: Dimensions.TOKEN_ICONS_SIZE,

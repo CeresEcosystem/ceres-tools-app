@@ -45,10 +45,13 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
   connectivity_plus: ^4.0.2
-  onesignal_flutter: ^3.5.1
+  onesignal_flutter: ^5.0.1
   carousel_slider: ^4.2.1
   cached_network_image: ^3.2.3
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview:
+    git:
+      url: https://github.com/vixez/flutter_inappwebview.git
+      ref: fix-xcode-17
   shared_preferences: ^2.2.0
   flutter_hooks: ^0.20.0
 
