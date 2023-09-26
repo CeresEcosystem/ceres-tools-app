@@ -52,6 +52,7 @@ const kEmptyLockedTokensList = 'Token has no lockups';
 const kEmptyLockedPairsList = 'Pair has no liquidity lockups';
 const kHMXAddress =
     '0x002d4e9e03f192cc33b128319a049f353db98fbf4d98f717fd0b7f66a0462142';
+const kSyntheticsAddress = '0x0300';
 
 const kChartIcon = 'https://tools.cerestoken.io/chart.svg';
 

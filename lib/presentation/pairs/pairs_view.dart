@@ -106,31 +106,53 @@ class PairsView extends GetView<PairsController> {
               ),
               SliverToBoxAdapter(
                 child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: Dimensions.DEFAULT_MARGIN_SMALL),
                   padding: EdgeInsets.symmetric(
                     horizontal: UIHelper.pagePadding(sizingInformation),
                   ),
-                  height: Dimensions.CHIP_SIZE * 2,
+                  height: 35,
                   child: ListView.separated(
                     itemBuilder: (_, index) {
                       String item = controller.baseAssets[index];
                       bool showIcon = item == 'All';
+                      String icon = item == 'Synthetics' ? 'XST' : item;
+                      bool isActive = item == 'Synthetics'
+                          ? controller.syntheticsFilter
+                          : item == controller.baseAsset
+                              ? true
+                              : false;
 
-                      return ActionChip(
-                        labelPadding: EdgeInsets.zero,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.DEFAULT_MARGIN_SMALL),
-                        label: SizedBox(
-                          height: Dimensions.CHIP_SIZE,
-                          child: Center(
-                            child: Opacity(
-                              opacity: item == controller.baseAsset ? 1 : 0.7,
+                      return GestureDetector(
+                        onTap: () {
+                          if (item == 'Synthetics') {
+                            controller.setSyntheticsFilter();
+                          } else {
+                            controller.setBaseAsset(item);
+                          }
+                        },
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            minWidth: Dimensions.PAIRS_IMAGE_SIZE,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(
+                                Dimensions.DEFAULT_MARGIN),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL / 2,
+                            horizontal: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                          ),
+                          child: Opacity(
+                            opacity: isActive ? 1 : 0.7,
+                            child: Center(
                               child: Row(
                                 children: [
                                   if (!showIcon) ...[
                                     RoundImage(
                                       image:
-                                          '$kImageStorage$item$kImageExtension',
+                                          '$kImageStorage$icon$kImageExtension',
                                       size: Dimensions.SOCIAL_ICONS_SIZE,
                                     ),
                                     UIHelper.horizontalSpaceExtraSmall(),
@@ -145,12 +167,10 @@ class PairsView extends GetView<PairsController> {
                             ),
                           ),
                         ),
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () => controller.setBaseAsset(item),
                       );
                     },
                     separatorBuilder: (_, __) =>
-                        UIHelper.horizontalSpaceSmall(),
+                        UIHelper.horizontalSpaceExtraSmall(),
                     itemCount: controller.baseAssets.length,
                     scrollDirection: Axis.horizontal,
                   ),

@@ -18,31 +18,44 @@ class TokensController extends GetxController {
 
   final _loadingStatus = LoadingStatus.READY.obs;
   List<Token>? _tokens;
-  var searchQueary = ''.obs;
+  final searchQueary = ''.obs;
 
-  var favoriteTokens = <FavoriteToken>[].obs;
-  final _showOnlyFavorites = false.obs;
+  final favoriteTokens = <FavoriteToken>[].obs;
 
-  bool get showOnlyFavorites => _showOnlyFavorites.value;
+  final List<String> filters = ['All', 'Favorites', 'Synthetics'];
+  final _selectedFilter = 'All'.obs;
+
+  String get selectedFilter => _selectedFilter.value;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
   List<Token> get tokens {
     if (_tokens != null && _tokens!.isNotEmpty) {
-      return _tokens!.where((token) {
+      List<Token> filterTokens = _tokens!.where((token) {
         token.isFavorite = checkIfFavorite(token);
         if (token.price != null && token.price! <= 0) return false;
         if (token.fullName != null && token.assetId != null) {
           return (token.fullName!
-                      .toUpperCase()
-                      .contains(searchQueary.value.toUpperCase()) ||
-                  token.assetId!
-                      .toUpperCase()
-                      .contains(searchQueary.value.toUpperCase())) &&
-              (!_showOnlyFavorites.value || token.isFavorite);
+                  .toUpperCase()
+                  .contains(searchQueary.value.toUpperCase()) ||
+              token.assetId!
+                  .toUpperCase()
+                  .contains(searchQueary.value.toUpperCase()));
         }
 
         return false;
       }).toList();
+
+      if (_selectedFilter.value == 'Favorites') {
+        return filterTokens.where((t) => t.isFavorite).toList();
+      }
+
+      if (_selectedFilter.value == 'Synthetics') {
+        return filterTokens
+            .where((t) => t.assetId!.startsWith(kSyntheticsAddress))
+            .toList();
+      }
+
+      return filterTokens;
     }
 
     return [];
@@ -56,9 +69,9 @@ class TokensController extends GetxController {
     });
   }
 
-  void setShowOnlyFavorites(bool show) {
-    if (show != _showOnlyFavorites.value) {
-      _showOnlyFavorites.value = show;
+  void setFilter(String filter) {
+    if (filter != _selectedFilter.value) {
+      _selectedFilter.value = filter;
     }
   }
 
@@ -117,7 +130,7 @@ class TokensController extends GetxController {
       }
 
       if (favoriteTokens.isNotEmpty) {
-        _showOnlyFavorites.value = true;
+        _selectedFilter.value = 'Favorites';
       }
 
       _loadingStatus.value = LoadingStatus.READY;

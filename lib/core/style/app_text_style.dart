@@ -311,8 +311,8 @@ TextStyle graphTitleTextStyle() {
 
 TextStyle allButtonTextStyle(SizingInformation sizingInformation) {
   return const TextStyle(
-    fontSize: subtitle1,
-    fontWeight: FontWeight.w500,
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 }

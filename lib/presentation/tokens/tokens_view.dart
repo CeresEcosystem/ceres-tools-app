@@ -11,6 +11,7 @@ import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_banner.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
+import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
 import 'package:ceres_locker_app/core/widgets/error_text.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
@@ -87,55 +88,59 @@ class TokensView extends GetView<TokensController> {
                           hint: kSearchTextFieldHint,
                         ),
                         UIHelper.verticalSpaceMediumLarge(),
-                        Row(
-                          children: [
-                            ActionChip(
-                              labelPadding: EdgeInsets.zero,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              padding: EdgeInsets.zero,
-                              label: SizedBox(
-                                height: Dimensions.CHIP_SIZE,
-                                width: Dimensions.CHIP_SIZE * 1.2,
-                                child: Center(
+                        SizedBox(
+                          height: 35,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (_, index) {
+                              final filter = controller.filters[index];
+                              final isActive =
+                                  filter == controller.selectedFilter;
+
+                              return GestureDetector(
+                                onTap: () => controller.setFilter(filter),
+                                child: Container(
+                                  constraints: const BoxConstraints(
+                                    minWidth: Dimensions.PAIRS_IMAGE_SIZE,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.DEFAULT_MARGIN),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical:
+                                        Dimensions.DEFAULT_MARGIN_EXTRA_SMALL /
+                                            2,
+                                    horizontal:
+                                        Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                                  ),
                                   child: Opacity(
-                                    opacity:
-                                        controller.showOnlyFavorites ? 0.3 : 1,
-                                    child: Text(
-                                      kAll,
-                                      style:
-                                          allButtonTextStyle(sizingInformation),
+                                    opacity: isActive ? 1 : 0.5,
+                                    child: Center(
+                                      child: Row(
+                                        children: [
+                                          filterIcon(filter),
+                                          if (filter != 'All')
+                                            (UIHelper
+                                                .horizontalSpaceExtraSmall()),
+                                          Text(
+                                            filter,
+                                            style: allButtonTextStyle(
+                                                sizingInformation),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () =>
-                                  controller.setShowOnlyFavorites(false),
-                            ),
-                            UIHelper.horizontalSpaceSmall(),
-                            ActionChip(
-                              labelPadding: EdgeInsets.zero,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              padding: EdgeInsets.zero,
-                              label: SizedBox(
-                                height: Dimensions.CHIP_SIZE,
-                                width: Dimensions.CHIP_SIZE * 1.2,
-                                child: Center(
-                                  child: Opacity(
-                                    opacity:
-                                        !controller.showOnlyFavorites ? 0.3 : 1,
-                                    child: const Icon(Icons.star),
-                                  ),
-                                ),
-                              ),
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () =>
-                                  controller.setShowOnlyFavorites(true),
-                            )
-                          ],
-                        ),
+                              );
+                            },
+                            separatorBuilder: (_, __) =>
+                                UIHelper.horizontalSpaceExtraSmall(),
+                            itemCount: controller.filters.length,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -161,6 +166,19 @@ class TokensView extends GetView<TokensController> {
         ),
       );
     });
+  }
+
+  Widget filterIcon(String filter) {
+    if (filter == 'Favorites') {
+      return const Icon(Icons.star);
+    } else if (filter == 'Synthetics') {
+      return const RoundImage(
+        image: '${kImageStorage}XST.svg',
+        size: Dimensions.SOCIAL_ICONS_SIZE,
+      );
+    } else {
+      return const EmptyWidget();
+    }
   }
 
   Widget tokenItem(Token token, SizingInformation sizingInformation) {

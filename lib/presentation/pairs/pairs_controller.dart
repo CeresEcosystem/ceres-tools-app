@@ -14,6 +14,7 @@ class PairsController extends GetxController {
   final _loadingStatus = LoadingStatus.READY.obs;
   var searchQueary = ''.obs;
   final _baseAsset = 'All'.obs;
+  final _syntheticsFilter = false.obs;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
 
@@ -25,10 +26,21 @@ class PairsController extends GetxController {
 
   List<Pair> get pairs {
     if (_pairs != null && _pairs!.isNotEmpty) {
-      List<Pair>? pairsFiltered = _baseAsset.value == 'All'
-          ? _pairs
-          : _pairs!.where((Pair p) => p.baseToken == _baseAsset.value).toList();
-      return pairsFiltered!.where((pair) {
+      List<Pair> pairsFiltered = _pairs!;
+
+      if (_baseAsset.value != '' && _baseAsset.value != 'All') {
+        pairsFiltered = pairsFiltered
+            .where((Pair p) => p.baseToken == _baseAsset.value)
+            .toList();
+      }
+
+      if (_syntheticsFilter.value) {
+        pairsFiltered = pairsFiltered
+            .where((Pair p) => p.tokenAssetId!.startsWith(kSyntheticsAddress))
+            .toList();
+      }
+
+      return pairsFiltered.where((pair) {
         if (pair.fullName != null && pair.fullName!.isNotEmpty) {
           return pair.fullName!
               .toUpperCase()
@@ -50,6 +62,7 @@ class PairsController extends GetxController {
   String get totalVolume => _totalVolume ?? '0';
   List<String> get baseAssets => _baseAssets.toList();
   String get baseAsset => _baseAsset.value;
+  bool get syntheticsFilter => _syntheticsFilter.value;
 
   @override
   void onInit() {
@@ -58,9 +71,36 @@ class PairsController extends GetxController {
   }
 
   void setBaseAsset(String asset) {
+    bool synthFilter = _syntheticsFilter.value;
+
+    if (asset == 'All' && synthFilter) {
+      synthFilter = false;
+      _syntheticsFilter.value = false;
+    }
+
     if (asset != _baseAsset.value) {
       _baseAsset.value = asset;
+    } else {
+      if (synthFilter) {
+        _baseAsset.value = '';
+      }
     }
+  }
+
+  void setSyntheticsFilter() {
+    bool synthFilter = !_syntheticsFilter.value;
+
+    if (synthFilter) {
+      if (_baseAsset.value == 'All') {
+        _baseAsset.value = '';
+      }
+    } else {
+      if (_baseAsset.value == '') {
+        _baseAsset.value = 'All';
+      }
+    }
+
+    _syntheticsFilter.value = synthFilter;
   }
 
   void fetchPairs([bool refresh = false]) async {
@@ -75,6 +115,7 @@ class PairsController extends GetxController {
         _pairs = pairList.pairs;
 
         _pairs!.where((Pair p) => _baseAssets.add(p.baseToken!)).toList();
+        _baseAssets.add('Synthetics');
 
         double liq = 0;
         double vol = 0;
