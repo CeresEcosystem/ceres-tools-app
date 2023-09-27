@@ -36,7 +36,6 @@ const kFarmingPart6 = ' APR';
 const kTotalLiquidity = 'Total liquidity';
 const kTotalVolume = 'Total volume';
 const kPswap = 'PSWAP';
-const kXORSpent = 'XOR spent';
 const kValLatestBlock = 1243341;
 const kFAQSTitle = 'Frequently Ask Questions';
 const kFAQSSubtitle = 'Here’s most asked questions';

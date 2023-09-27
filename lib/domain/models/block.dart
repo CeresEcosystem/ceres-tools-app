@@ -2,6 +2,7 @@ import 'package:ceres_locker_app/core/utils/default_value.dart';
 
 class Block {
   final int? blockNumber;
+  final String? burnType;
   final double? xorSpent;
   final double? grossBurn;
   final double? remintedLp;
@@ -11,6 +12,7 @@ class Block {
 
   Block({
     this.blockNumber,
+    this.burnType,
     this.xorSpent,
     this.grossBurn,
     this.remintedLp,
@@ -21,6 +23,7 @@ class Block {
 
   factory Block.fromJson(Map<String, dynamic> json) => Block(
         blockNumber: getDefaultIntValue(json['blockNum']),
+        burnType: getDefaultStringValue(json['burnType']),
         xorSpent: getDefaultDoubleValue(json['xorSpent']),
         grossBurn: getDefaultDoubleValue(json['grossBurn']),
         remintedLp: getDefaultDoubleValue(json['remintedLp']),
@@ -29,4 +32,9 @@ class Block {
         xorDedicatedForBuyBack:
             getDefaultDoubleValue(json['xorDedicatedForBuyBack']),
       );
+
+  @override
+  String toString() {
+    return burnType ?? '';
+  }
 }

@@ -20,10 +20,11 @@ class TrackerController extends GetxController {
   final _selectedFilterPSWAPBurn = '24h'.obs;
   final _selectedFilterXORSpent = '24h'.obs;
   Map<String, dynamic>? _burnData;
-  BlockList? _blockList;
+  List<Block> _blocks = [];
+  List<Block> _blocksMainTable = [];
   final int _xorSpentItemsPerPage = 5;
   final _xorSpentPagination = 1.obs;
-  final int _mainTableItemsPerPage = 5;
+  final int _mainTableItemsPerPage = 6;
   final _mainTablePagination = 1.obs;
   int? _lastBlockAdded;
 
@@ -175,33 +176,29 @@ class TrackerController extends GetxController {
   }
 
   int get xorSpentTotalPages {
-    if (_blockList != null &&
-        _blockList!.blocks != null &&
-        _blockList!.blocks!.isNotEmpty) {
+    if (_blocks.isNotEmpty) {
       int limiter = getLimiter();
 
       if (limiter != -1) {
-        List<Block> blocksLimited = _blockList!.blocks!
+        List<Block> blocksLimited = _blocks
             .where((Block block) => block.blockNumber! >= limiter)
             .toList();
         return (blocksLimited.length / _xorSpentItemsPerPage).ceil();
       }
 
-      return (_blockList!.blocks!.length / _xorSpentItemsPerPage).ceil();
+      return (_blocks.length / _xorSpentItemsPerPage).ceil();
     }
 
     return 0;
   }
 
   List<Block>? get xorSpent {
-    if (_blockList != null &&
-        _blockList!.blocks != null &&
-        _blockList!.blocks!.isNotEmpty) {
+    if (_blocks.isNotEmpty) {
       int lastPage = _xorSpentPagination.value * _xorSpentItemsPerPage;
       int limiter = getLimiter();
 
       if (limiter != -1) {
-        List<Block> blocksLimited = _blockList!.blocks!
+        List<Block> blocksLimited = _blocks
             .where((Block block) => block.blockNumber! >= limiter)
             .toList();
 
@@ -215,11 +212,10 @@ class TrackerController extends GetxController {
             .toList();
       }
 
-      int lastPageForList = lastPage > _blockList!.blocks!.length
-          ? _blockList!.blocks!.length
-          : lastPage;
+      int lastPageForList =
+          lastPage > _blocks.length ? _blocks.length : lastPage;
 
-      return _blockList!.blocks!
+      return _blocks
           .getRange(
               (_xorSpentPagination.value * _xorSpentItemsPerPage) -
                   _xorSpentItemsPerPage,
@@ -253,20 +249,16 @@ class TrackerController extends GetxController {
   }
 
   int get mainTablePagination => _mainTablePagination.value;
-  int get mainTableTotalPages => _blockList != null &&
-          _blockList!.blocks != null &&
-          _blockList!.blocks!.isNotEmpty
-      ? (_blockList!.blocks!.length / _mainTableItemsPerPage).ceil()
+  int get mainTableTotalPages => _blocksMainTable.isNotEmpty
+      ? (_blocksMainTable.length / _mainTableItemsPerPage).ceil()
       : 0;
   List<Block>? get mainTableData {
-    if (_blockList != null &&
-        _blockList!.blocks != null &&
-        _blockList!.blocks!.isNotEmpty) {
+    if (_blocksMainTable.isNotEmpty) {
       int lastPage = _mainTablePagination.value * _mainTableItemsPerPage;
-      int lastPageForList = lastPage > _blockList!.blocks!.length
-          ? _blockList!.blocks!.length
+      int lastPageForList = lastPage > _blocksMainTable.length
+          ? _blocksMainTable.length
           : lastPage;
-      return _blockList!.blocks!
+      return _blocksMainTable
           .getRange(
               (_mainTablePagination.value * _mainTableItemsPerPage) -
                   _mainTableItemsPerPage,
@@ -386,7 +378,24 @@ class TrackerController extends GetxController {
 
     if (response != null) {
       if (response['blocks'] != null && response['blocks'] is List) {
-        _blockList = BlockList.fromJson(response['blocks']);
+        BlockList blockList = BlockList.fromJson(response['blocks']);
+
+        List<Block>? allBlocks = blockList.blocks;
+
+        if (allBlocks != null) {
+          if (token == 'VAL') {
+            _blocks =
+                allBlocks.where((block) => block.burnType == 'TBC').toList();
+            _blocksMainTable =
+                allBlocks.where((block) => block.burnType == 'FEES').toList();
+          } else {
+            _blocks = allBlocks;
+            _blocksMainTable = allBlocks;
+          }
+        } else {
+          _blocks = [];
+          _blocksMainTable = [];
+        }
       }
       _burnData = getDefaultMapValue(response['burn'], nullable: true);
       _lastBlockAdded = getDefaultIntValue(response['last']);

@@ -315,7 +315,7 @@ class TrackerView extends GetView<TrackerController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                controller.selectedToken == 'PSWAP' ? kXORSpent : 'XOR fees',
+                controller.selectedToken == 'PSWAP' ? 'XOR spent' : 'TBC burns',
                 style: trackerBlockLabelTitleStyle(sizingInformation),
               ),
               buttons(
@@ -326,7 +326,7 @@ class TrackerView extends GetView<TrackerController> {
               ),
             ],
           ),
-          UIHelper.verticalSpaceMediumLarge(),
+          UIHelper.verticalSpaceSmallMedium(),
           Column(
             children: controller.xorSpent!.map((Block block) {
               return Padding(
@@ -337,14 +337,16 @@ class TrackerView extends GetView<TrackerController> {
                   children: [
                     Expanded(
                       child: Text(
-                        '${controller.selectedToken == 'VAL' && block.blockNumber == kValLatestBlock ? 'until' : 'block'} #${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
+                        'block #${formatToCurrency(block.blockNumber, decimalDigits: 0)}',
                         style: trackerBlockBlockStyle(sizingInformation),
                       ),
                     ),
                     UIHelper.horizontalSpaceSmall(),
                     Expanded(
                       child: Text(
-                        '${formatToCurrency(block.xorSpent, decimalDigits: 4)} $kXOR',
+                        controller.selectedToken == 'VAL'
+                            ? '${formatToCurrency(block.grossBurn, decimalDigits: 4)} VAL'
+                            : '${formatToCurrency(block.xorSpent, decimalDigits: 4)} $kXOR',
                         style: trackerBlockBlockStyle(sizingInformation),
                         textAlign: TextAlign.end,
                       ),
@@ -375,6 +377,12 @@ class TrackerView extends GetView<TrackerController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Burns by fees',
+            style: trackerBlockHeaderStyle(sizingInformation)
+                .copyWith(color: Colors.white),
+          ),
+          UIHelper.verticalSpaceSmallMedium(),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Column(
@@ -392,7 +400,7 @@ class TrackerView extends GetView<TrackerController> {
                     );
                   }).toList(),
                 ),
-                UIHelper.verticalSpaceMediumLarge(),
+                UIHelper.verticalSpaceSmallMedium(),
                 ...controller.mainTableData!.map((Block block) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
