@@ -33,6 +33,13 @@ String formatToCurrency(dynamic value,
   }
 }
 
+String formatDateToLocalTime(String date) {
+  DateTime dateTime = DateTime.parse(date);
+  dateTime = dateTime.toLocal();
+
+  return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+}
+
 String formatCurrencyGraph(dynamic value) {
   if (value != null) {
     final formatCurrency = NumberFormat.compactCurrency(symbol: '');

@@ -60,5 +60,5 @@ const kSideMenuTokens = 'Tokens';
 const kSideMenuPairs = 'Pairs';
 const kSideMenuFarming = 'Farming';
 const kSideMenuTracker = 'Burning Tracker';
-const kSideMenuCharts = 'Charts';
+const kSideMenuCharts = 'Charts & Swaps';
 const kSideMenuPortfolio = 'Portfolio';

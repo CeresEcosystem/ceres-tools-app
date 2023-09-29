@@ -455,3 +455,27 @@ TextStyle chartFavoriteTokensNoteTextStyle() {
     color: Colors.white.withOpacity(.5),
   );
 }
+
+TextStyle chartButtonTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
+TextStyle paginationTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
+TextStyle paginationPageNumberTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}

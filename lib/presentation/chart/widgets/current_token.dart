@@ -12,10 +12,18 @@ import 'package:get/get.dart';
 
 class CurrentToken extends StatelessWidget {
   final String token;
+  final Function goToSwapPage;
+  final IconData icon;
+  final String buttonLabel;
+  final bool bottomPadding;
 
   const CurrentToken({
     Key? key,
     required this.token,
+    required this.goToSwapPage,
+    required this.icon,
+    required this.buttonLabel,
+    this.bottomPadding = true,
   }) : super(key: key);
 
   @override
@@ -25,7 +33,12 @@ class CurrentToken extends StatelessWidget {
     return Responsive(
       builder: (_, sizingInformation) {
         return Padding(
-          padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN_SMALL),
+          padding: EdgeInsets.only(
+            top: Dimensions.DEFAULT_MARGIN_SMALL,
+            left: Dimensions.DEFAULT_MARGIN_SMALL,
+            right: Dimensions.DEFAULT_MARGIN_SMALL,
+            bottom: bottomPadding ? Dimensions.DEFAULT_MARGIN_SMALL : 0,
+          ),
           child: Center(
             child: GestureDetector(
               onTap: () => Get.dialog(
@@ -34,11 +47,7 @@ class CurrentToken extends StatelessWidget {
                 ),
               ),
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 300.0),
-                padding: const EdgeInsets.symmetric(
-                  vertical: Dimensions.DEFAULT_MARGIN_SMALL,
-                  horizontal: Dimensions.DEFAULT_MARGIN,
-                ),
+                padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN_SMALL),
                 decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
@@ -66,6 +75,32 @@ class CurrentToken extends StatelessWidget {
                           style: chartCurrentTokenSubtitleTextStyle(),
                         ),
                       ],
+                    ),
+                    UIHelper.horizontalSpaceMedium(),
+                    GestureDetector(
+                      onTap: () => goToSwapPage(),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(
+                          Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                          ),
+                          color: Colors.white.withOpacity(0.1),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(icon),
+                            UIHelper.horizontalSpaceExtraSmall(),
+                            Text(
+                              buttonLabel,
+                              style: chartButtonTextStyle(),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),

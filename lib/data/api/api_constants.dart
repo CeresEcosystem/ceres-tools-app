@@ -19,4 +19,5 @@ class ApiConstants {
   static const LOCK_PAIR_PERMALINK = '/lock/pairs/{baseAsset}/{token}';
   static const TOKEN_INFOS_PERMALINK = '/tokens-infos';
   static const PORTFOLIO_PERMALINK = '/portfolio/{address}';
+  static const SWAPS_PERMALINK = '/swaps/{address}';
 }

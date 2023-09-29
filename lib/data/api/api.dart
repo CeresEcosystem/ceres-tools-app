@@ -50,4 +50,7 @@ abstract class RestClient {
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PORTFOLIO_PERMALINK}')
   Future getPortfolioItems(@Path("address") String address);
+
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
+  Future getSwaps(@Path("address") String address, @Query("page") int page);
 }

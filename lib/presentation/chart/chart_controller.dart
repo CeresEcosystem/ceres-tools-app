@@ -1,21 +1,36 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/db/database_helper.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
+import 'package:ceres_locker_app/core/style/app_colors.dart';
+import 'package:ceres_locker_app/core/utils/address_format.dart';
+import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/favorite_token.dart';
+import 'package:ceres_locker_app/domain/models/page_meta.dart';
+import 'package:ceres_locker_app/domain/models/swap.dart';
+import 'package:ceres_locker_app/domain/models/swap_list.dart';
 import 'package:ceres_locker_app/domain/models/token.dart';
 import 'package:ceres_locker_app/domain/models/token_list.dart';
+import 'package:ceres_locker_app/domain/models/wallet.dart';
+import 'package:ceres_locker_app/domain/usecase/get_swaps.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
+import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChartController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
+  final getSwaps = Injector.resolve!<GetSwaps>();
 
   final _loadingStatus = LoadingStatus.READY.obs;
+  final _swapLoadingStatus = LoadingStatus.READY.obs;
   final _token = ''.obs;
   final _searchQuery = ''.obs;
 
@@ -24,9 +39,15 @@ class ChartController extends GetxController {
   InAppWebViewController? _webViewController;
 
   List<Token> _tokens = [];
+  String? _address;
   final List<FavoriteToken> _favoriteTokens = [];
 
+  List<Swap> _swaps = [];
+  final _pageMeta = PageMeta(0, 0, 0, 0, false, false).obs;
+  final List<Wallet> _wallets = [];
+
   LoadingStatus get loadingStatus => _loadingStatus.value;
+  LoadingStatus get swapLoadingStatus => _swapLoadingStatus.value;
   String get token => _token.value;
   InAppWebViewController? get webViewController => _webViewController;
   List<Token> get tokens {
@@ -45,6 +66,9 @@ class ChartController extends GetxController {
     }).toList();
   }
 
+  PageMeta get pageMeta => _pageMeta.value;
+  List<Swap> get swaps => _swaps;
+
   setInAppWebViewController(InAppWebViewController contrl) {
     _webViewController ??= contrl;
   }
@@ -58,6 +82,10 @@ class ChartController extends GetxController {
           url: Uri.parse('$kChartURL$t'),
         ));
       }
+
+      _address = _tokens.firstWhere((token) => token.shortName == t).assetId;
+
+      _fetchSwaps();
     }
   }
 
@@ -98,8 +126,93 @@ class ChartController extends GetxController {
     });
   }
 
-  void fetchTokens([bool refresh = false]) async {
-    _loadingStatus.value = refresh ? LoadingStatus.IDLE : LoadingStatus.LOADING;
+  void _fetchSwaps([int page = 1]) async {
+    _swapLoadingStatus.value = LoadingStatus.LOADING;
+
+    if (_address != null) {
+      final response = await getSwaps.execute(_address!, page);
+
+      if (response != null) {
+        SwapList swapList = SwapList.fromJson(response['data']);
+
+        if (swapList.swaps.isNotEmpty) {
+          List<Swap> swapFormatted = [];
+
+          for (final swap in swapList.swaps) {
+            Swap s = swap;
+            s.inputAsset = _tokens
+                .firstWhere((t) => t.assetId == s.inputAssetId)
+                .shortName;
+            s.outputAsset = _tokens
+                .firstWhere((t) => t.assetId == s.outputAssetId)
+                .shortName;
+            s.type = _address == s.inputAssetId ? 'Sell' : 'Buy';
+            s.inputImageExtension = imageExtension(s.inputAsset);
+            s.outputImageExtension = imageExtension(s.outputAsset);
+            s.swappedAt = formatDateToLocalTime(s.swappedAt);
+            s.formattedAccountId = _wallets
+                    .firstWhereOrNull((w) => w.address == s.accountId)
+                    ?.name ??
+                formatAddress(s.accountId);
+            swapFormatted.add(s);
+          }
+
+          _swaps = swapFormatted;
+        } else {
+          _swaps = [];
+        }
+
+        _pageMeta.value = PageMeta.fromJson(response['meta']);
+        _swapLoadingStatus.value = LoadingStatus.READY;
+      }
+    } else {
+      _swapLoadingStatus.value = LoadingStatus.READY;
+    }
+  }
+
+  void goToFirstPage() {
+    if (_pageMeta.value.hasPreviousPage) {
+      _fetchSwaps();
+    }
+  }
+
+  void goToPreviousPage() {
+    if (_pageMeta.value.hasPreviousPage) {
+      _fetchSwaps(_pageMeta.value.pageNumber - 1);
+    }
+  }
+
+  void goToNextPage() {
+    if (_pageMeta.value.hasNextPage) {
+      _fetchSwaps(_pageMeta.value.pageNumber + 1);
+    }
+  }
+
+  void goToLastPage() {
+    if (_pageMeta.value.hasNextPage) {
+      _fetchSwaps(_pageMeta.value.pageCount);
+    }
+  }
+
+  Future _getWalletsFromDatabase() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final List<String>? walletsJSON = prefs.getStringList(kWallets);
+
+    if (walletsJSON != null && walletsJSON.isNotEmpty) {
+      for (String wallet in walletsJSON) {
+        _wallets.add(Wallet.fromJson(jsonDecode(wallet)));
+      }
+
+      _fetchSwaps();
+    } else {
+      _fetchSwaps();
+    }
+  }
+
+  void fetchTokens([bool refresh = false, bool reloadFromError = false]) async {
+    _loadingStatus.value =
+        refresh || reloadFromError ? LoadingStatus.IDLE : LoadingStatus.LOADING;
 
     final response = await getTokens.execute();
 
@@ -126,11 +239,34 @@ class ChartController extends GetxController {
         }
 
         _tokens = [...favoriteTokens, ...otherTokens];
+
+        if (!refresh || reloadFromError) {
+          _address = _tokens
+              .firstWhere((token) => token.shortName == _token.value)
+              .assetId;
+          _getWalletsFromDatabase();
+        }
       }
 
       _loadingStatus.value = LoadingStatus.READY;
     } else {
       _loadingStatus.value = LoadingStatus.ERROR;
     }
+  }
+
+  void copyAsset(String assetId) {
+    Clipboard.setData(ClipboardData(text: assetId));
+
+    Get.snackbar(
+      'Copied account:',
+      assetId,
+      backgroundColor: backgroundColorLight,
+      snackPosition: SnackPosition.BOTTOM,
+      duration: const Duration(seconds: 2),
+      animationDuration: const Duration(milliseconds: 500),
+      isDismissible: false,
+      margin: const EdgeInsets.all(0),
+      snackStyle: SnackStyle.GROUNDED,
+    );
   }
 }

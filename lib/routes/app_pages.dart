@@ -42,7 +42,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.CHART,
-      page: () => const ChartView(),
+      page: () => ChartView(),
       binding: ChartBinding(),
     ),
     GetPage(

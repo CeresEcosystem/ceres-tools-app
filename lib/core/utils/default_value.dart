@@ -1,4 +1,5 @@
-String? getDefaultStringValue(dynamic value, {String defaultValue = '', bool nullable = false}) {
+String? getDefaultStringValue(dynamic value,
+    {String defaultValue = '', bool nullable = false}) {
   if (value != null) {
     if (value is String) {
       return value;
@@ -14,7 +15,8 @@ String? getDefaultStringValue(dynamic value, {String defaultValue = '', bool nul
   return defaultValue;
 }
 
-int? getDefaultIntValue(dynamic value, {int defaultValue = 0, bool nullable = false}) {
+int? getDefaultIntValue(dynamic value,
+    {int defaultValue = 0, bool nullable = false}) {
   if (value != null) {
     if (value is int) {
       return value;
@@ -36,7 +38,8 @@ int? getDefaultIntValue(dynamic value, {int defaultValue = 0, bool nullable = fa
   return defaultValue;
 }
 
-double? getDefaultDoubleValue(dynamic value, {double defaultValue = 0, bool nullable = false}) {
+double? getDefaultDoubleValue(dynamic value,
+    {double defaultValue = 0, bool nullable = false}) {
   if (value != null) {
     if (value is double) {
       return value;
@@ -58,7 +61,27 @@ double? getDefaultDoubleValue(dynamic value, {double defaultValue = 0, bool null
   return defaultValue;
 }
 
-bool? getDefaultBoolValue(dynamic value, {bool defaultValue = false, bool nullable = false}) {
+double getDefaultDoubleValueNotNullable(dynamic value,
+    {double defaultValue = 0}) {
+  if (value != null) {
+    if (value is double) {
+      return value;
+    }
+    if (value is String) {
+      if (double.tryParse(value) != null) {
+        return double.parse(value);
+      }
+    }
+    if (value is int) {
+      return value.toDouble();
+    }
+  }
+
+  return defaultValue;
+}
+
+bool? getDefaultBoolValue(dynamic value,
+    {bool defaultValue = false, bool nullable = false}) {
   if (value != null) {
     if (value is bool) {
       return value;
@@ -79,7 +102,8 @@ bool? getDefaultBoolValue(dynamic value, {bool defaultValue = false, bool nullab
   return defaultValue;
 }
 
-Map<String, dynamic>? getDefaultMapValue(dynamic value, {bool nullable = false}) {
+Map<String, dynamic>? getDefaultMapValue(dynamic value,
+    {bool nullable = false}) {
   if (value != null) {
     if (value is Map<String, dynamic>) {
       return value;
