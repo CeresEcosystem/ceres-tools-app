@@ -115,7 +115,7 @@ class TokensDialog extends StatelessWidget {
                           ),
                           onTap: () {
                             chartController.changeToken(token.shortName!, true);
-                            Get.back();
+                            chartController.closeDialog();
                           },
                         );
                       },
@@ -138,7 +138,7 @@ class TokensDialog extends StatelessWidget {
                         'Close',
                         style: buttonLightTextStyle(sizingInformation),
                       ),
-                      onPressed: () => Get.back(),
+                      onPressed: () => chartController.closeDialog(),
                     ),
                   ),
                 ],

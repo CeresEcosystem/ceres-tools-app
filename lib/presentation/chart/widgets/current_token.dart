@@ -45,6 +45,7 @@ class CurrentToken extends StatelessWidget {
                 TokensDialog(
                   sizingInformation: sizingInformation,
                 ),
+                barrierDismissible: false,
               ),
               child: Container(
                 padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN_SMALL),

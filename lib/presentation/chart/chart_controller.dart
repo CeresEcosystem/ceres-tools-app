@@ -29,9 +29,9 @@ class ChartController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
   final getSwaps = Injector.resolve!<GetSwaps>();
 
-  final _loadingStatus = LoadingStatus.READY.obs;
-  final _swapLoadingStatus = LoadingStatus.READY.obs;
-  final _token = ''.obs;
+  final _loadingStatus = LoadingStatus.LOADING.obs;
+  final _swapLoadingStatus = LoadingStatus.LOADING.obs;
+  final _token = (Get.arguments ?? kTokenName).toString().obs;
   final _searchQuery = ''.obs;
 
   Timer? _timer;
@@ -43,7 +43,7 @@ class ChartController extends GetxController {
   final List<FavoriteToken> _favoriteTokens = [];
 
   List<Swap> _swaps = [];
-  final _pageMeta = PageMeta(0, 0, 0, 0, false, false).obs;
+  PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
   final List<Wallet> _wallets = [];
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
@@ -66,8 +66,18 @@ class ChartController extends GetxController {
     }).toList();
   }
 
-  PageMeta get pageMeta => _pageMeta.value;
+  PageMeta get pageMeta => _pageMeta;
   List<Swap> get swaps => _swaps;
+
+  void closeDialog() {
+    Get.back();
+
+    if (_searchQuery.value.isNotEmpty) {
+      Future.delayed(const Duration(seconds: 1), () {
+        _searchQuery.value = '';
+      });
+    }
+  }
 
   setInAppWebViewController(InAppWebViewController contrl) {
     _webViewController ??= contrl;
@@ -85,6 +95,7 @@ class ChartController extends GetxController {
 
       _address = _tokens.firstWhere((token) => token.shortName == t).assetId;
 
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
       _fetchSwaps();
     }
   }
@@ -102,8 +113,6 @@ class ChartController extends GetxController {
 
   @override
   void onInit() {
-    String t = Get.arguments ?? kTokenName;
-    _token.value = t;
     _fetchFavoriteTokens();
     _timer = Timer.periodic(const Duration(seconds: 60), (_) {
       fetchTokens(true);
@@ -127,13 +136,12 @@ class ChartController extends GetxController {
   }
 
   void _fetchSwaps([int page = 1]) async {
-    _swapLoadingStatus.value = LoadingStatus.LOADING;
-
     if (_address != null) {
       final response = await getSwaps.execute(_address!, page);
 
       if (response != null) {
         SwapList swapList = SwapList.fromJson(response['data']);
+        _pageMeta = PageMeta.fromJson(response['meta']);
 
         if (swapList.swaps.isNotEmpty) {
           List<Swap> swapFormatted = [];
@@ -162,7 +170,6 @@ class ChartController extends GetxController {
           _swaps = [];
         }
 
-        _pageMeta.value = PageMeta.fromJson(response['meta']);
         _swapLoadingStatus.value = LoadingStatus.READY;
       }
     } else {
@@ -171,26 +178,30 @@ class ChartController extends GetxController {
   }
 
   void goToFirstPage() {
-    if (_pageMeta.value.hasPreviousPage) {
+    if (_pageMeta.hasPreviousPage) {
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
       _fetchSwaps();
     }
   }
 
   void goToPreviousPage() {
-    if (_pageMeta.value.hasPreviousPage) {
-      _fetchSwaps(_pageMeta.value.pageNumber - 1);
+    if (_pageMeta.hasPreviousPage) {
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
+      _fetchSwaps(_pageMeta.pageNumber - 1);
     }
   }
 
   void goToNextPage() {
-    if (_pageMeta.value.hasNextPage) {
-      _fetchSwaps(_pageMeta.value.pageNumber + 1);
+    if (_pageMeta.hasNextPage) {
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
+      _fetchSwaps(_pageMeta.pageNumber + 1);
     }
   }
 
   void goToLastPage() {
-    if (_pageMeta.value.hasNextPage) {
-      _fetchSwaps(_pageMeta.value.pageCount);
+    if (_pageMeta.hasNextPage) {
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
+      _fetchSwaps(_pageMeta.pageCount);
     }
   }
 

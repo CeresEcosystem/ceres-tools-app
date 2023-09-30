@@ -30,11 +30,7 @@ class Pagination extends StatelessWidget {
     return Container(
       color: chartBackground,
       width: double.infinity,
-      padding: const EdgeInsets.only(
-        top: Dimensions.DEFAULT_MARGIN_SMALL,
-        left: Dimensions.DEFAULT_MARGIN_SMALL,
-        right: Dimensions.DEFAULT_MARGIN_SMALL,
-      ),
+      padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN_SMALL),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         direction: Axis.horizontal,

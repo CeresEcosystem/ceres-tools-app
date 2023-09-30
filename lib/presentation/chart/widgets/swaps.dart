@@ -60,7 +60,7 @@ class _SwapsState extends State<Swaps>
           ),
           (() {
             if (controller.swapLoadingStatus == LoadingStatus.LOADING) {
-              return const CenterLoading();
+              return const Expanded(child: CenterLoading());
             } else {
               return controller.swaps.isEmpty
                   ? Padding(
