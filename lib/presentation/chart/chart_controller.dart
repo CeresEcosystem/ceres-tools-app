@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChartController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
@@ -35,6 +36,7 @@ class ChartController extends GetxController {
   final _searchQuery = ''.obs;
 
   Timer? _timer;
+  // IO.Socket? _socket;
 
   InAppWebViewController? _webViewController;
 
@@ -114,6 +116,26 @@ class ChartController extends GetxController {
   @override
   void onInit() {
     _fetchFavoriteTokens();
+
+    // _socket = IO.io(
+    //     'http://data.cerestoken.io/swapsocket',
+    //     IO.OptionBuilder()
+    //         .setTransports(['websocket']) // for Flutter or Dart VM
+    //         .disableAutoConnect() // disable auto-connection
+    //         // .setExtraHeaders({'foo': 'bar'}) // optional
+    //         .build());
+    // _socket?.connect();
+
+    // // _socket = IO.io('http://192.168.1.61:3004/swapsocket');
+    // _socket?.onConnect((_) {
+    //   print('connect');
+    // });
+    // // _socket?.on('connect_error', (data) => print(data));
+    // _socket?.on(
+    //     '0x0200000000000000000000000000000000000000000000000000000000000000',
+    //     (data) => print(data));
+    // _socket?.onDisconnect((_) => print('disconnect'));
+
     _timer = Timer.periodic(const Duration(seconds: 60), (_) {
       fetchTokens(true);
     });
@@ -123,6 +145,7 @@ class ChartController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
+    // _socket?.close();
     super.onClose();
   }
 
@@ -149,11 +172,13 @@ class ChartController extends GetxController {
           for (final swap in swapList.swaps) {
             Swap s = swap;
             s.inputAsset = _tokens
-                .firstWhere((t) => t.assetId == s.inputAssetId)
-                .shortName;
+                    .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
+                    ?.shortName ??
+                '';
             s.outputAsset = _tokens
-                .firstWhere((t) => t.assetId == s.outputAssetId)
-                .shortName;
+                    .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
+                    ?.shortName ??
+                '';
             s.type = _address == s.inputAssetId ? 'Sell' : 'Buy';
             s.inputImageExtension = imageExtension(s.inputAsset);
             s.outputImageExtension = imageExtension(s.outputAsset);

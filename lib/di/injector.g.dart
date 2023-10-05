@@ -8,15 +8,6 @@ part of 'injector.dart';
 
 class _$Injector extends Injector {
   @override
-  void _configureCore() {
-    final KiwiContainer container = KiwiContainer();
-    container
-      ..registerSingleton((c) => Connectivity())
-      ..registerSingleton<NetworkInfoI>(
-          (c) => NetworkInfo(connectivity: c<Connectivity>()));
-  }
-
-  @override
   void _configureTokensModuleFactories() {
     final KiwiContainer container = KiwiContainer();
     container
