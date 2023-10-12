@@ -1,6 +1,6 @@
-String formatAddress(dynamic value) {
-  if (value != null && value is String && value.length > 14) {
-    return '${value.substring(0, 7)}-${value.substring(value.length - 7, value.length)}';
+String formatAddress(dynamic value, [int lenght = 7]) {
+  if (value != null && value is String && value.length > lenght * 2) {
+    return '${value.substring(0, lenght)}-${value.substring(value.length - lenght, value.length)}';
   }
 
   return '';

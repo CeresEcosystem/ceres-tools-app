@@ -25,12 +25,14 @@ class PortfolioView extends GetView<PortfolioController> {
 
   @override
   Widget build(BuildContext context) {
+    String address = Get.arguments != null ? Get.arguments['address'] : '';
+
     return Responsive(
       builder: (context, sizingInformation) {
         return Scaffold(
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
-          endDrawer: SideMenu(),
+          endDrawer: address.isEmpty ? SideMenu() : null,
           body: Column(
             children: [
               const StatusBar(),
@@ -38,6 +40,8 @@ class PortfolioView extends GetView<PortfolioController> {
                 scaffoldKey: _scaffoldKey,
                 backgroundColor: backgroundColorDark,
                 verticalSpace: true,
+                showBackButton: address.isNotEmpty,
+                showDrawerButton: address.isEmpty,
               ),
               Obx(() {
                 if (controller.pageLoading == LoadingStatus.LOADING) {
@@ -86,7 +90,9 @@ class PortfolioView extends GetView<PortfolioController> {
                                                     ),
                                                   ),
                                           ),
-                                          if (controller.wallets.isNotEmpty)
+                                          if (controller.wallets.isNotEmpty &&
+                                              controller.selectedWallet.name
+                                                  .isNotEmpty)
                                             (Container(
                                               margin: const EdgeInsets.only(
                                                 left: Dimensions
@@ -160,8 +166,8 @@ class PortfolioView extends GetView<PortfolioController> {
                                                         builder: (BuildContext
                                                             context) {
                                                           return PortfolioModal(
-                                                            wallet:
-                                                                Wallet('', ''),
+                                                            wallet: Wallet(
+                                                                '', '', false),
                                                             addEditWallet:
                                                                 controller
                                                                     .addEditWallet,

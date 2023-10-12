@@ -1,10 +1,10 @@
 class PageMeta {
   final int pageNumber;
   final int pageSize;
-  final int totalCount;
+  int totalCount;
   final int pageCount;
   final bool hasPreviousPage;
-  final bool hasNextPage;
+  bool hasNextPage;
 
   PageMeta(
     this.pageNumber,

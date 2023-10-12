@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/db/database_helper.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/image_extension.dart';
@@ -19,12 +18,10 @@ import 'package:ceres_locker_app/domain/models/wallet.dart';
 import 'package:ceres_locker_app/domain/usecase/get_swaps.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class ChartController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
@@ -36,7 +33,7 @@ class ChartController extends GetxController {
   final _searchQuery = ''.obs;
 
   Timer? _timer;
-  // IO.Socket? _socket;
+  io.Socket? _socket;
 
   InAppWebViewController? _webViewController;
 
@@ -44,7 +41,7 @@ class ChartController extends GetxController {
   String? _address;
   final List<FavoriteToken> _favoriteTokens = [];
 
-  List<Swap> _swaps = [];
+  final _swaps = <Swap>[].obs;
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
   final List<Wallet> _wallets = [];
 
@@ -95,6 +92,10 @@ class ChartController extends GetxController {
         ));
       }
 
+      if (_address != null && _address!.isNotEmpty) {
+        _socket?.off(_address!);
+      }
+
       _address = _tokens.firstWhere((token) => token.shortName == t).assetId;
 
       _swapLoadingStatus.value = LoadingStatus.LOADING;
@@ -113,28 +114,62 @@ class ChartController extends GetxController {
     return fToken.assetId.isNotEmpty;
   }
 
+  connectSocket() {
+    _socket = io.io(
+        kSwapsSocketURL,
+        io.OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .build());
+
+    _socket?.connect();
+  }
+
+  connectToASocketEvent() {
+    if (_address != null && _address!.isNotEmpty) {
+      _socket?.connect();
+      _socket?.on(_address!, (data) {
+        Swap s = Swap.fromJson(data);
+
+        s.inputAsset = _tokens
+                .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
+                ?.shortName ??
+            '';
+        s.outputAsset = _tokens
+                .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
+                ?.shortName ??
+            '';
+        s.type = _address == s.inputAssetId ? 'Sell' : 'Buy';
+        s.inputImageExtension = imageExtension(s.inputAsset);
+        s.outputImageExtension = imageExtension(s.outputAsset);
+        s.swappedAt = formatDateToLocalTime(s.swappedAt);
+        s.formattedAccountId =
+            _wallets.firstWhereOrNull((w) => w.address == s.accountId)?.name ??
+                formatAddress(s.accountId);
+
+        if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
+          pageMeta.hasNextPage = true;
+        }
+
+        pageMeta.totalCount++;
+
+        _swaps.value = [s, ..._swaps].take(10).toList();
+      });
+    }
+  }
+
+  disconnectSocket() {
+    if (_address != null && _address!.isNotEmpty) {
+      _socket?.off(_address!);
+    }
+    _socket?.disconnect();
+  }
+
   @override
   void onInit() {
+    connectSocket();
+
     _fetchFavoriteTokens();
-
-    // _socket = IO.io(
-    //     'http://data.cerestoken.io/swapsocket',
-    //     IO.OptionBuilder()
-    //         .setTransports(['websocket']) // for Flutter or Dart VM
-    //         .disableAutoConnect() // disable auto-connection
-    //         // .setExtraHeaders({'foo': 'bar'}) // optional
-    //         .build());
-    // _socket?.connect();
-
-    // // _socket = IO.io('http://192.168.1.61:3004/swapsocket');
-    // _socket?.onConnect((_) {
-    //   print('connect');
-    // });
-    // // _socket?.on('connect_error', (data) => print(data));
-    // _socket?.on(
-    //     '0x0200000000000000000000000000000000000000000000000000000000000000',
-    //     (data) => print(data));
-    // _socket?.onDisconnect((_) => print('disconnect'));
 
     _timer = Timer.periodic(const Duration(seconds: 60), (_) {
       fetchTokens(true);
@@ -145,7 +180,9 @@ class ChartController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-    // _socket?.close();
+
+    _socket?.dispose();
+
     super.onClose();
   }
 
@@ -190,9 +227,15 @@ class ChartController extends GetxController {
             swapFormatted.add(s);
           }
 
-          _swaps = swapFormatted;
+          _swaps.value = swapFormatted;
         } else {
-          _swaps = [];
+          _swaps.value = [];
+        }
+
+        if (page > 1) {
+          disconnectSocket();
+        } else {
+          connectToASocketEvent();
         }
 
         _swapLoadingStatus.value = LoadingStatus.READY;
@@ -288,21 +331,5 @@ class ChartController extends GetxController {
     } else {
       _loadingStatus.value = LoadingStatus.ERROR;
     }
-  }
-
-  void copyAsset(String assetId) {
-    Clipboard.setData(ClipboardData(text: assetId));
-
-    Get.snackbar(
-      'Copied account:',
-      assetId,
-      backgroundColor: backgroundColorLight,
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-      animationDuration: const Duration(milliseconds: 500),
-      isDismissible: false,
-      margin: const EdgeInsets.all(0),
-      snackStyle: SnackStyle.GROUNDED,
-    );
   }
 }

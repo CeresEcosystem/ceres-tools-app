@@ -36,7 +36,7 @@ class ChartView extends GetView<ChartController> {
               height: Dimensions.HEADER_LOGO,
             ),
           ),
-          endDrawer: SideMenu(),
+          endDrawer: Get.arguments != null ? null : SideMenu(),
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: Container(
             height: sizingInformation.bottomSafeAreaSize,

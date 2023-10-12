@@ -13,6 +13,7 @@ import 'package:ceres_locker_app/domain/models/swap.dart';
 import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
 import 'package:ceres_locker_app/presentation/chart/widgets/current_token.dart';
 import 'package:ceres_locker_app/presentation/chart/widgets/pagination.dart';
+import 'package:ceres_locker_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -111,12 +112,16 @@ class _SwapsState extends State<Swaps>
                                                     image:
                                                         '$kImageStorage${swap.outputAsset}${swap.outputImageExtension}',
                                                     size: Dimensions.GRID_LODO,
+                                                    extension: swap
+                                                        .outputImageExtension,
                                                   ),
                                                 ),
                                                 RoundImage(
                                                   image:
                                                       '$kImageStorage${swap.inputAsset}${swap.inputImageExtension}',
                                                   size: Dimensions.GRID_LODO,
+                                                  extension:
+                                                      swap.inputImageExtension,
                                                 ),
                                               ],
                                             ),
@@ -140,8 +145,10 @@ class _SwapsState extends State<Swaps>
                                 ),
                                 UIHelper.verticalSpaceSmall(),
                                 GestureDetector(
-                                  onTap: () =>
-                                      controller.copyAsset(swap.accountId),
+                                  onTap: () {
+                                    Get.toNamed(Routes.PORTFOLIO,
+                                        arguments: {'address': swap.accountId});
+                                  },
                                   child: RichText(
                                     text: TextSpan(
                                       text: 'Account: ',

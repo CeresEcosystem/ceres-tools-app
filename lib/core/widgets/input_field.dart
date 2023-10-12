@@ -7,19 +7,24 @@ import 'package:flutter/material.dart';
 class InputField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
+  final bool enabledValidation;
+  final bool enabled;
 
   const InputField({
     Key? key,
     required this.hint,
     required this.controller,
+    this.enabledValidation = false,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Responsive(
       builder: (context, sizingInformation) {
-        return TextField(
+        return TextFormField(
           controller: controller,
+          enabled: enabled,
           decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(
@@ -42,6 +47,12 @@ class InputField extends StatelessWidget {
           autocorrect: false,
           autofocus: false,
           style: searchTextFieldTextStyle(sizingInformation),
+          validator: (value) {
+            if (enabledValidation && (value == null || value.isEmpty)) {
+              return 'This field is required!';
+            }
+            return null;
+          },
         );
       },
     );

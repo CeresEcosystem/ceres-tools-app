@@ -25,7 +25,7 @@ class PortfolioController extends GetxController {
   double _totalValueChangeForTimeFrame = 0;
 
   final List<Wallet> _wallets = [];
-  final _selectedWallet = Wallet('', '').obs;
+  final _selectedWallet = Wallet('', '', false).obs;
 
   final _pageLoading = LoadingStatus.LOADING.obs;
   final _loadingStatus = LoadingStatus.READY.obs;
@@ -36,6 +36,8 @@ class PortfolioController extends GetxController {
   LoadingStatus get loadingStatus => _loadingStatus.value;
 
   List<Wallet> get wallets => _wallets;
+  List<Wallet> get walletsForDB =>
+      _wallets.where((w) => w.temporaryAddress == false).toList();
   Wallet get selectedWallet => _selectedWallet.value;
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   double get totalValue => _totalValue;
@@ -47,7 +49,8 @@ class PortfolioController extends GetxController {
 
   @override
   void onInit() {
-    getWalletsFromDatabase();
+    String address = Get.arguments != null ? Get.arguments['address'] : '';
+    getWalletsFromDatabase(address);
     super.onInit();
   }
 
@@ -86,7 +89,7 @@ class PortfolioController extends GetxController {
     }
   }
 
-  Future getWalletsFromDatabase() async {
+  Future getWalletsFromDatabase(String address) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String>? walletsJSON = prefs.getStringList(kWallets);
 
@@ -95,18 +98,39 @@ class PortfolioController extends GetxController {
         _wallets.add(Wallet.fromJson(jsonDecode(wallet)));
       }
 
-      final String? selectedWalletJSON = prefs.getString(kSelectedWallet);
+      if (address.isNotEmpty) {
+        final walletExist =
+            _wallets.firstWhereOrNull((w) => w.address == address);
 
-      if (selectedWalletJSON != null && selectedWalletJSON.isNotEmpty) {
-        _selectedWallet.value = Wallet.fromJson(jsonDecode(selectedWalletJSON));
+        if (walletExist != null) {
+          prefs.setString(kSelectedWallet, jsonEncode(walletExist.toJson()));
+          _selectedWallet.value = walletExist;
+        } else {
+          Wallet w = Wallet('', address, true);
+          _wallets.add(w);
+          _selectedWallet.value = w;
+        }
       } else {
-        _selectedWallet.value = _wallets[0];
+        final String? selectedWalletJSON = prefs.getString(kSelectedWallet);
+
+        if (selectedWalletJSON != null && selectedWalletJSON.isNotEmpty) {
+          _selectedWallet.value =
+              Wallet.fromJson(jsonDecode(selectedWalletJSON));
+        } else {
+          _selectedWallet.value = _wallets[0];
+        }
       }
 
       _pageLoading.value = LoadingStatus.READY;
       await fetchPortfolioItems();
     } else {
       _pageLoading.value = LoadingStatus.READY;
+      if (address.isNotEmpty) {
+        Wallet w = Wallet('', address, true);
+        _wallets.add(w);
+        _selectedWallet.value = w;
+        await fetchPortfolioItems();
+      }
     }
   }
 
@@ -114,31 +138,67 @@ class PortfolioController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (wallet != _selectedWallet.value) {
-      prefs.setString(kSelectedWallet, jsonEncode(wallet.toJson()));
+      if (wallet.name.isNotEmpty) {
+        prefs.setString(kSelectedWallet, jsonEncode(wallet.toJson()));
+      }
+
       _selectedWallet.value = wallet;
       fetchPortfolioItems();
     }
   }
 
-  Future addEditWallet(Wallet wallet, Wallet previousWallet) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  addWallet(Wallet wallet, bool storeWallets, SharedPreferences prefs) {
+    Wallet? walletExist =
+        _wallets.firstWhereOrNull((w) => w.address == wallet.address);
 
-    if (previousWallet.address.isNotEmpty) {
-      int editWalletIndex = _wallets.indexWhere((w) =>
-          w.name == previousWallet.name && w.address == previousWallet.address);
-
-      if (editWalletIndex != -1) {
-        _wallets[editWalletIndex] = Wallet(wallet.name, wallet.address);
+    if (walletExist != null) {
+      if (storeWallets) {
+        prefs.setString(kSelectedWallet, jsonEncode(walletExist.toJson()));
       }
+
+      _selectedWallet.value = walletExist;
     } else {
       _wallets.add(wallet);
+
+      if (storeWallets) {
+        List<String> walletsJSON =
+            walletsForDB.map((w) => jsonEncode(w.toJson())).toList();
+        prefs.setStringList(kWallets, walletsJSON);
+        prefs.setString(kSelectedWallet, jsonEncode(wallet.toJson()));
+      }
+
+      _selectedWallet.value = wallet;
+    }
+  }
+
+  editWallet(Wallet wallet, int index, SharedPreferences prefs) {
+    if (index != -1) {
+      _wallets[index] =
+          Wallet(wallet.name, wallet.address, wallet.temporaryAddress);
     }
 
     List<String> walletsJSON =
-        _wallets.map((w) => jsonEncode(w.toJson())).toList();
+        walletsForDB.map((w) => jsonEncode(w.toJson())).toList();
     prefs.setStringList(kWallets, walletsJSON);
     prefs.setString(kSelectedWallet, jsonEncode(wallet.toJson()));
     _selectedWallet.value = wallet;
+  }
+
+  Future addEditWallet(Wallet wallet, Wallet previousWallet) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (wallet.name.isNotEmpty) {
+      if (previousWallet.address.isNotEmpty) {
+        int editWalletIndex =
+            _wallets.indexWhere((w) => w.address == previousWallet.address);
+
+        editWallet(wallet, editWalletIndex, prefs);
+      } else {
+        addWallet(wallet, true, prefs);
+      }
+    } else {
+      addWallet(wallet, false, prefs);
+    }
 
     fetchPortfolioItems();
   }
@@ -146,24 +206,22 @@ class PortfolioController extends GetxController {
   Future removeWallet(Wallet wallet) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    bool status = _wallets.remove(wallet);
+    _wallets.removeWhere((w) => w.address == wallet.address);
 
-    if (status) {
-      List<String> walletsJSON =
-          _wallets.map((w) => jsonEncode(w.toJson())).toList();
-      prefs.setStringList(kWallets, walletsJSON);
+    List<String> walletsJSON =
+        walletsForDB.map((w) => jsonEncode(w.toJson())).toList();
+    prefs.setStringList(kWallets, walletsJSON);
 
-      if (_wallets.isNotEmpty) {
-        prefs.setString(kSelectedWallet, jsonEncode(_wallets[0].toJson()));
-        _selectedWallet.value = _wallets[0];
-      } else {
-        Wallet emptyWallet = Wallet('', '');
-        prefs.setString(kSelectedWallet, jsonEncode(emptyWallet.toJson()));
-        _selectedWallet.value = emptyWallet;
-      }
-
-      fetchPortfolioItems();
+    if (_wallets.isNotEmpty) {
+      prefs.setString(kSelectedWallet, jsonEncode(_wallets[0].toJson()));
+      _selectedWallet.value = _wallets[0];
+    } else {
+      Wallet emptyWallet = Wallet('', '', false);
+      prefs.setString(kSelectedWallet, jsonEncode(emptyWallet.toJson()));
+      _selectedWallet.value = emptyWallet;
     }
+
+    fetchPortfolioItems();
   }
 
   String getPortfolioItemsURL() {
