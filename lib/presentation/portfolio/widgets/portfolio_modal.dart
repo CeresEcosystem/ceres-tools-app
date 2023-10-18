@@ -87,7 +87,6 @@ class _PortfolioModalState extends State<PortfolioModal> {
               InputField(
                 controller: addressController,
                 enabledValidation: true,
-                enabled: widget.wallet.address.isEmpty,
                 hint: 'Enter wallet address',
               ),
               const SizedBox(height: Dimensions.DEFAULT_MARGIN),

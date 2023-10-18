@@ -6,6 +6,7 @@ import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_locker_app/core/utils/toast.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/item_container.dart';
@@ -168,7 +169,9 @@ class LockerView extends GetView<LockerController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: () => controller.copyAsset(lockedItem.account),
+              onTap: () => showToastAndCopy(
+                  'Copied Account:', lockedItem.account,
+                  clipboardText: lockedItem.account),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

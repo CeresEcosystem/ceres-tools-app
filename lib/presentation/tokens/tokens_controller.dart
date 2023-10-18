@@ -1,7 +1,6 @@
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/db/database_helper.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/utils/image_extension.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/favorite_token.dart';
@@ -9,8 +8,6 @@ import 'package:ceres_locker_app/domain/models/token.dart';
 import 'package:ceres_locker_app/domain/models/token_list.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_locker_app/routes/app_routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class TokensController extends GetxController {
@@ -137,21 +134,6 @@ class TokensController extends GetxController {
     } else {
       _loadingStatus.value = LoadingStatus.ERROR;
     }
-  }
-
-  void copyAsset(String assetId) {
-    Clipboard.setData(ClipboardData(text: assetId));
-    Get.snackbar(
-      'Copied assetID:',
-      assetId,
-      backgroundColor: backgroundColorLight,
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-      animationDuration: const Duration(milliseconds: 500),
-      isDismissible: false,
-      margin: const EdgeInsets.all(0),
-      snackStyle: SnackStyle.GROUNDED,
-    );
   }
 
   void openChartForToken(String? token) {

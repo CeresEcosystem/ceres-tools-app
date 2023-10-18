@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/utils/image_extension.dart';
+import 'package:ceres_locker_app/core/utils/toast.dart';
 import 'package:ceres_locker_app/di/injector.dart';
 import 'package:ceres_locker_app/domain/models/portfolio_item.dart';
 import 'package:ceres_locker_app/domain/models/portfolio_list.dart';
@@ -15,6 +16,7 @@ const _tabs = ['Portfolio', 'Staking', 'Rewards', 'Liquidity'];
 const _timeFrames = ['1h', '24h', '7d', '30d'];
 const kWallets = 'WALLETS';
 const kSelectedWallet = 'SELECTED_WALLET';
+const kWalletExistError = 'Wallet with entered address already exist.';
 
 class PortfolioController extends GetxController {
   final getPortfolioItems = Injector.resolve!<GetPortfolioItems>();
@@ -152,11 +154,7 @@ class PortfolioController extends GetxController {
         _wallets.firstWhereOrNull((w) => w.address == wallet.address);
 
     if (walletExist != null) {
-      if (storeWallets) {
-        prefs.setString(kSelectedWallet, jsonEncode(walletExist.toJson()));
-      }
-
-      _selectedWallet.value = walletExist;
+      showToastAndCopy(kWalletExistError, '', shouldCopy: false);
     } else {
       _wallets.add(wallet);
 
@@ -168,39 +166,44 @@ class PortfolioController extends GetxController {
       }
 
       _selectedWallet.value = wallet;
+
+      fetchPortfolioItems();
     }
   }
 
-  editWallet(Wallet wallet, int index, SharedPreferences prefs) {
-    if (index != -1) {
-      _wallets[index] =
-          Wallet(wallet.name, wallet.address, wallet.temporaryAddress);
-    }
+  editWallet(Wallet wallet, Wallet previousWallet, SharedPreferences prefs) {
+    int walletIndex =
+        _wallets.indexWhere((w) => w.address == previousWallet.address);
 
-    List<String> walletsJSON =
-        walletsForDB.map((w) => jsonEncode(w.toJson())).toList();
-    prefs.setStringList(kWallets, walletsJSON);
-    prefs.setString(kSelectedWallet, jsonEncode(wallet.toJson()));
-    _selectedWallet.value = wallet;
+    Wallet? walletExist =
+        _wallets.firstWhereOrNull((w) => w.address == wallet.address);
+
+    bool shouldEdit =
+        walletExist == null || wallet.address == previousWallet.address;
+
+    if (shouldEdit) {
+      _wallets[walletIndex] =
+          Wallet(wallet.name, wallet.address, wallet.temporaryAddress);
+      List<String> walletsJSON =
+          walletsForDB.map((w) => jsonEncode(w.toJson())).toList();
+      prefs.setStringList(kWallets, walletsJSON);
+      prefs.setString(kSelectedWallet, jsonEncode(wallet.toJson()));
+      _selectedWallet.value = wallet;
+
+      fetchPortfolioItems();
+    } else {
+      showToastAndCopy(kWalletExistError, '', shouldCopy: false);
+    }
   }
 
   Future addEditWallet(Wallet wallet, Wallet previousWallet) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (wallet.name.isNotEmpty) {
-      if (previousWallet.address.isNotEmpty) {
-        int editWalletIndex =
-            _wallets.indexWhere((w) => w.address == previousWallet.address);
-
-        editWallet(wallet, editWalletIndex, prefs);
-      } else {
-        addWallet(wallet, true, prefs);
-      }
+    if (previousWallet.address.isNotEmpty) {
+      editWallet(wallet, previousWallet, prefs);
     } else {
-      addWallet(wallet, false, prefs);
+      addWallet(wallet, wallet.name.isNotEmpty, prefs);
     }
-
-    fetchPortfolioItems();
   }
 
   Future removeWallet(Wallet wallet) async {

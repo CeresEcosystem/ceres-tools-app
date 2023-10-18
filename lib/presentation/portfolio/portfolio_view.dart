@@ -2,6 +2,7 @@ import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
+import 'package:ceres_locker_app/core/utils/toast.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
@@ -82,6 +83,16 @@ class PortfolioView extends GetView<PortfolioController> {
                                                           .handleWalletChange(
                                                               w);
                                                     },
+                                                    showCopyButton: true,
+                                                    onCopy: () =>
+                                                        showToastAndCopy(
+                                                      'Copied Account: ',
+                                                      controller.selectedWallet
+                                                          .address,
+                                                      clipboardText: controller
+                                                          .selectedWallet
+                                                          .address,
+                                                    ),
                                                   )
                                                 : Text(
                                                     'No added wallets. Please, add one.',

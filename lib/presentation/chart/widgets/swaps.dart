@@ -5,6 +5,7 @@ import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_locker_app/core/utils/toast.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/error_text.dart';
@@ -144,24 +145,39 @@ class _SwapsState extends State<Swaps>
                                   ],
                                 ),
                                 UIHelper.verticalSpaceSmall(),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.PORTFOLIO,
-                                        arguments: {'address': swap.accountId});
-                                  },
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: 'Account: ',
-                                      style: dataTableLabelTextStyle(),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: swap.formattedAccountId,
-                                          style: dataTableTextStyle(
-                                              widget.sizingInformation),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(Routes.PORTFOLIO,
+                                            arguments: {
+                                              'address': swap.accountId
+                                            });
+                                      },
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Account: ',
+                                          style: dataTableLabelTextStyle(),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: swap.formattedAccountId,
+                                              style: dataTableTextStyle(
+                                                  widget.sizingInformation),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    UIHelper.horizontalSpaceSmall(),
+                                    GestureDetector(
+                                      onTap: () => showToastAndCopy(
+                                        'Copied Account: ',
+                                        swap.accountId,
+                                        clipboardText: swap.accountId,
+                                      ),
+                                      child: const Icon(Icons.copy, size: 16),
+                                    ),
+                                  ],
                                 ),
                                 UIHelper.verticalSpaceSmall(),
                                 Row(

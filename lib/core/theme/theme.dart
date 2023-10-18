@@ -14,7 +14,9 @@ ThemeData darkThemeData() {
         ),
     canvasColor: backgroundColorDark,
     colorScheme: const ColorScheme.dark(
-        primary: backgroundPink, secondary: backgroundColorLight),
+      primary: backgroundPink,
+      secondary: backgroundColorLight,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: backgroundColorDark,
       iconTheme: IconThemeData(

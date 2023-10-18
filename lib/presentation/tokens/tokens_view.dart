@@ -7,6 +7,7 @@ import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_locker_app/core/utils/toast.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_banner.dart';
@@ -208,7 +209,11 @@ class TokensView extends GetView<TokensController> {
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
                         GestureDetector(
-                          onTap: () => controller.copyAsset(token.assetId!),
+                          onTap: () => showToastAndCopy(
+                            'Copied assetID:',
+                            token.assetId,
+                            clipboardText: token.assetId,
+                          ),
                           child: Text(
                             'AssetID: ${formatAddress(token.assetId)}',
                             style: tokensAssetIdStyle(sizingInformation),
