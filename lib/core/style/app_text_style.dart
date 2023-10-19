@@ -382,8 +382,8 @@ TextStyle tokenTabTextStyle() {
 
 TextStyle portfolioTabTextStyle() {
   return const TextStyle(
-    fontSize: subtitle2,
-    fontWeight: FontWeight.w500,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 }

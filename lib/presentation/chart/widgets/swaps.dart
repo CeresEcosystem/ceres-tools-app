@@ -1,20 +1,15 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
-import 'package:ceres_locker_app/core/utils/toast.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/error_text.dart';
-import 'package:ceres_locker_app/core/widgets/round_image.dart';
+import 'package:ceres_locker_app/core/widgets/pagination.dart';
+import 'package:ceres_locker_app/core/widgets/swap_item.dart';
 import 'package:ceres_locker_app/domain/models/swap.dart';
 import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
 import 'package:ceres_locker_app/presentation/chart/widgets/current_token.dart';
-import 'package:ceres_locker_app/presentation/chart/widgets/pagination.dart';
-import 'package:ceres_locker_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -81,183 +76,9 @@ class _SwapsState extends State<Swaps>
                         itemBuilder: (context, index) {
                           final Swap swap = controller.swaps[index];
 
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.DEFAULT_MARGIN,
-                              vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                            ),
-                            decoration: BoxDecoration(
-                              color: backgroundColorDark,
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.DEFAULT_MARGIN_SMALL),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: Dimensions.GRID_LODO * 2,
-                                            child: Stack(
-                                              children: [
-                                                Positioned(
-                                                  left: Dimensions.GRID_LODO -
-                                                      (Dimensions.GRID_LODO /
-                                                          4),
-                                                  child: RoundImage(
-                                                    image:
-                                                        '$kImageStorage${swap.outputAsset}${swap.outputImageExtension}',
-                                                    size: Dimensions.GRID_LODO,
-                                                    extension: swap
-                                                        .outputImageExtension,
-                                                  ),
-                                                ),
-                                                RoundImage(
-                                                  image:
-                                                      '$kImageStorage${swap.inputAsset}${swap.inputImageExtension}',
-                                                  size: Dimensions.GRID_LODO,
-                                                  extension:
-                                                      swap.inputImageExtension,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          UIHelper.horizontalSpaceExtraSmall(),
-                                          Text(
-                                            '${swap.inputAsset} -> ${swap.outputAsset}',
-                                            style: dataTableTextStyle(
-                                                widget.sizingInformation),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                      swap.swappedAt,
-                                      style: dataTableTextStyle(
-                                              widget.sizingInformation)
-                                          .copyWith(fontSize: overline),
-                                    )
-                                  ],
-                                ),
-                                UIHelper.verticalSpaceSmall(),
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(Routes.PORTFOLIO,
-                                            arguments: {
-                                              'address': swap.accountId
-                                            });
-                                      },
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: 'Account: ',
-                                          style: dataTableLabelTextStyle(),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: swap.formattedAccountId,
-                                              style: dataTableTextStyle(
-                                                  widget.sizingInformation),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    UIHelper.horizontalSpaceSmall(),
-                                    GestureDetector(
-                                      onTap: () => showToastAndCopy(
-                                        'Copied Account: ',
-                                        swap.accountId,
-                                        clipboardText: swap.accountId,
-                                      ),
-                                      child: const Icon(Icons.copy, size: 16),
-                                    ),
-                                  ],
-                                ),
-                                UIHelper.verticalSpaceSmall(),
-                                Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Sold Amount',
-                                          style: dataTableLabelTextStyle(),
-                                        ),
-                                        Text(
-                                          formatToCurrency(
-                                              swap.assetInputAmount,
-                                              showSymbol: false,
-                                              formatOnlyFirstPart: true),
-                                          style: dataTableTextStyle(
-                                              widget.sizingInformation),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 25,
-                                      child: VerticalDivider(
-                                        color: Colors.white.withOpacity(.1),
-                                        thickness: 2,
-                                        width: Dimensions.DEFAULT_MARGIN,
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Bought Amount',
-                                          style: dataTableLabelTextStyle(),
-                                        ),
-                                        Text(
-                                          formatToCurrency(
-                                              swap.assetOutputAmount,
-                                              showSymbol: false,
-                                              formatOnlyFirstPart: true),
-                                          style: dataTableTextStyle(
-                                              widget.sizingInformation),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 25,
-                                      child: VerticalDivider(
-                                        color: Colors.white.withOpacity(.1),
-                                        thickness: 2,
-                                        width: Dimensions.DEFAULT_MARGIN,
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Type',
-                                          style: dataTableLabelTextStyle(),
-                                        ),
-                                        Text(
-                                          swap.type ?? '/',
-                                          style: dataTableTextStyle(
-                                                  widget.sizingInformation)
-                                              .copyWith(
-                                            color: swap.type == 'Buy'
-                                                ? Colors.greenAccent
-                                                : Colors.redAccent,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                          return SwapItem(
+                            sizingInformation: widget.sizingInformation,
+                            swap: swap,
                           );
                         },
                         separatorBuilder: (context, index) =>
@@ -269,7 +90,14 @@ class _SwapsState extends State<Swaps>
           }()),
           if (controller.swapLoadingStatus == LoadingStatus.READY &&
               controller.pageMeta.pageCount > 1)
-            (Pagination()),
+            (Pagination(
+              pageMeta: controller.pageMeta,
+              goToFirstPage: controller.goToFirstPage,
+              goToPreviousPage: controller.goToPreviousPage,
+              goToNextPage: controller.goToNextPage,
+              goToLastPage: controller.goToLastPage,
+              label: 'Total Swaps',
+            )),
         ],
       );
     });

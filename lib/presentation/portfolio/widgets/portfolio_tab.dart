@@ -25,7 +25,7 @@ class PortfolioTab extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
         vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-        horizontal: Dimensions.DEFAULT_MARGIN,
+        horizontal: Dimensions.DEFAULT_MARGIN_SMALL,
       ),
       color: backgroundColorDark,
       child: Row(

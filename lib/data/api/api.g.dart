@@ -360,9 +360,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> getPortfolioItems(String address) async {
+  Future<dynamic> getPortfolioItems(
+    String address,
+    int page,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'page': page};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(

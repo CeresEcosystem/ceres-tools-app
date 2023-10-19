@@ -6,9 +6,9 @@ class PortfolioDatasource {
 
   PortfolioDatasource({required this.client});
 
-  Future getPortfolioItems(String address) async {
+  Future getPortfolioItems(String address, int page) async {
     try {
-      return await client.getPortfolioItems(address);
+      return await client.getPortfolioItems(address, page);
     } on DioException catch (_) {}
   }
 }

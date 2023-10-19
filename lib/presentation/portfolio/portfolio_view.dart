@@ -7,6 +7,7 @@ import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/center_loading.dart';
 import 'package:ceres_locker_app/core/widgets/ceres_header.dart';
 import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
+import 'package:ceres_locker_app/core/widgets/pagination.dart';
 import 'package:ceres_locker_app/core/widgets/responsive.dart';
 import 'package:ceres_locker_app/core/widgets/select.dart';
 import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
@@ -33,6 +34,10 @@ class PortfolioView extends GetView<PortfolioController> {
         return Scaffold(
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
+          bottomNavigationBar: Container(
+            height: sizingInformation.bottomSafeAreaSize,
+            color: chartBackground,
+          ),
           endDrawer: address.isEmpty ? SideMenu() : null,
           body: Column(
             children: [
@@ -214,37 +219,23 @@ class PortfolioView extends GetView<PortfolioController> {
                                   const CenterLoading(),
                                 ]),
                               ))
-                            else if (controller.portfolioItems.isEmpty)
-                              (SliverList(
-                                delegate: SliverChildListDelegate([
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: UIHelper.pagePadding(
-                                            sizingInformation)),
-                                    child: Text(
-                                      'No items in ${controller.selectedTab}.',
-                                      style:
-                                          emptyListTextStyle(sizingInformation),
-                                    ),
-                                  ),
-                                ]),
-                              ))
                             else
                               (PortfolioTable(
-                                portfolioItems: controller.portfolioItems,
-                                selectedTab: controller.selectedTab,
-                                totalValue: controller.totalValue,
-                                totalValueChangeForTimeFrame:
-                                    controller.totalValueChangeForTimeFrame,
                                 sizingInformation: sizingInformation,
-                                timeFrames: controller.timeFrames,
-                                selectedTimeFrame: controller.selectedTimeFrame,
-                                onChangeSelectedTimeFrame:
-                                    controller.changeSelectedTimeFrame,
                               ))
                           ],
                         ),
                       ),
+                      if (controller.selectedTab == 'Swaps' &&
+                          controller.pageMeta.pageCount > 1)
+                        (Pagination(
+                          pageMeta: controller.pageMeta,
+                          goToFirstPage: controller.goToFirstPage,
+                          goToPreviousPage: controller.goToPreviousPage,
+                          goToNextPage: controller.goToNextPage,
+                          goToLastPage: controller.goToLastPage,
+                          label: 'Total tx',
+                        )),
                     ],
                   ),
                 );

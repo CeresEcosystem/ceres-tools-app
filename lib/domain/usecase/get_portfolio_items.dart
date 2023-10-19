@@ -5,7 +5,7 @@ class GetPortfolioItems {
 
   GetPortfolioItems({required this.repository});
 
-  Future execute(String address) async {
-    return repository.getPortfolioItems(address);
+  Future execute(String address, int page) async {
+    return repository.getPortfolioItems(address, page);
   }
 }

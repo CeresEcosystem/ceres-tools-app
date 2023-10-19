@@ -7,9 +7,9 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
   PortfolioRepositoryImpl({required this.datasource});
 
   @override
-  Future getPortfolioItems(String address) async {
+  Future getPortfolioItems(String address, int page) async {
     try {
-      return await datasource.getPortfolioItems(address);
+      return await datasource.getPortfolioItems(address, page);
     } on Exception catch (_) {}
   }
 }

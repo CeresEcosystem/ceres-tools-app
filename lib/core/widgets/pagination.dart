@@ -1,14 +1,26 @@
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
+import 'package:ceres_locker_app/domain/models/page_meta.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Pagination extends StatelessWidget {
-  final ChartController controller = Get.find();
+  final PageMeta pageMeta;
+  final Function goToFirstPage;
+  final Function goToPreviousPage;
+  final Function goToNextPage;
+  final Function goToLastPage;
+  final String label;
 
-  Pagination({Key? key}) : super(key: key);
+  const Pagination({
+    Key? key,
+    required this.pageMeta,
+    required this.goToFirstPage,
+    required this.goToPreviousPage,
+    required this.goToNextPage,
+    required this.goToLastPage,
+    required this.label,
+  }) : super(key: key);
 
   Widget button(IconData icon, Function paginate) {
     return GestureDetector(
@@ -38,15 +50,14 @@ class Pagination extends StatelessWidget {
         runSpacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
         children: [
           Text(
-            'Total Swaps: ${controller.pageMeta.totalCount}',
+            '$label: ${pageMeta.totalCount}',
             style: paginationTextStyle(),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              button(
-                  Icons.keyboard_double_arrow_left, controller.goToFirstPage),
-              button(Icons.keyboard_arrow_left, controller.goToPreviousPage),
+              button(Icons.keyboard_double_arrow_left, goToFirstPage),
+              button(Icons.keyboard_arrow_left, goToPreviousPage),
               Container(
                 constraints: const BoxConstraints(
                   maxWidth: 150,
@@ -62,15 +73,14 @@ class Pagination extends StatelessWidget {
                   color: backgroundPink,
                 ),
                 child: Text(
-                  '${controller.pageMeta.pageNumber}/${controller.pageMeta.pageCount}',
+                  '${pageMeta.pageNumber}/${pageMeta.pageCount}',
                   style: paginationPageNumberTextStyle(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              button(Icons.keyboard_arrow_right, controller.goToNextPage),
-              button(
-                  Icons.keyboard_double_arrow_right, controller.goToLastPage),
+              button(Icons.keyboard_arrow_right, goToNextPage),
+              button(Icons.keyboard_double_arrow_right, goToLastPage),
             ],
           ),
         ],

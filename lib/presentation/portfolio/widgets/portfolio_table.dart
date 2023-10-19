@@ -6,8 +6,12 @@ import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
+import 'package:ceres_locker_app/core/widgets/swap_item.dart';
 import 'package:ceres_locker_app/domain/models/portfolio_item.dart';
+import 'package:ceres_locker_app/domain/models/swap.dart';
+import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PortfolioItemWidget extends StatelessWidget {
   final PortfolioItem portfolioItem;
@@ -228,133 +232,212 @@ class PortfolioItemWidget extends StatelessWidget {
   }
 }
 
-class PortfolioTable extends StatelessWidget {
-  final List<PortfolioItem> portfolioItems;
-  final double totalValue;
-  final double totalValueChangeForTimeFrame;
-  final String selectedTab;
+class SwapsTable extends StatelessWidget {
   final SizingInformation sizingInformation;
-  final List<String> timeFrames;
-  final String selectedTimeFrame;
-  final Function onChangeSelectedTimeFrame;
+  final List<Swap> swaps;
 
-  const PortfolioTable({
+  const SwapsTable({
     Key? key,
-    required this.portfolioItems,
-    required this.totalValue,
-    required this.totalValueChangeForTimeFrame,
-    required this.selectedTab,
     required this.sizingInformation,
-    required this.timeFrames,
-    required this.selectedTimeFrame,
-    required this.onChangeSelectedTimeFrame,
+    required this.swaps,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          bottom: Dimensions.DEFAULT_MARGIN_LARGE,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: UIHelper.pagePadding(sizingInformation),
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        left: UIHelper.pagePadding(sizingInformation),
+        right: UIHelper.pagePadding(sizingInformation),
+        bottom: UIHelper.pagePadding(sizingInformation),
+      ),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            final Swap swap = swaps[index];
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 5.0),
+              child: SwapItem(
+                sizingInformation: sizingInformation,
+                swap: swap,
+                showAccount: false,
+                showType: false,
               ),
-              padding: const EdgeInsets.symmetric(
-                vertical: Dimensions.DEFAULT_MARGIN_SMALL,
-                horizontal: Dimensions.DEFAULT_MARGIN,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius:
-                    BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    'Total Value',
-                    style: dataTableFooterTextStyle(),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        formatToCurrency(totalValue,
-                            showSymbol: true, decimalDigits: 2),
-                        style: dataTableFooterTextStyle()
-                            .copyWith(fontSize: title),
-                      ),
-                      if (selectedTab == 'Portfolio')
-                        (Text(
-                          totalValueChangeForTimeFrame == 0
-                              ? '\$0'
-                              : totalValueChangeForTimeFrame > 0
-                                  ? '+${formatToCurrency(totalValueChangeForTimeFrame, showSymbol: true, decimalDigits: 2)}'
-                                  : formatToCurrency(
-                                      totalValueChangeForTimeFrame,
-                                      showSymbol: true,
-                                      decimalDigits: 2),
-                          style: totalValueChangeForTimeFrame == 0
-                              ? dataTableTextStyle(sizingInformation)
-                                  .copyWith(color: Colors.white.withOpacity(.5))
-                              : totalValueChangeForTimeFrame >= 0
-                                  ? dataTableTextStyle(sizingInformation)
-                                      .copyWith(color: Colors.greenAccent)
-                                  : dataTableTextStyle(sizingInformation)
-                                      .copyWith(color: Colors.redAccent),
-                        )),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            if (selectedTab == 'Portfolio') (UIHelper.verticalSpaceSmall()),
-            if (selectedTab == 'Portfolio')
-              (Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: UIHelper.pagePadding(sizingInformation),
-                ),
-                child: Row(
-                  children: timeFrames.map((timeFrame) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        right: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                      ),
-                      child: ChoiceChip(
-                        label: Text(
-                          timeFrame,
-                          style: timeFrameChipTextStyle(),
-                        ),
-                        visualDensity: VisualDensity.compact,
-                        selected: selectedTimeFrame == timeFrame,
-                        onSelected: (value) =>
-                            onChangeSelectedTimeFrame(timeFrame),
-                        selectedColor: backgroundPink,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              )),
-            UIHelper.verticalSpaceMedium(),
-            Column(
-              children: portfolioItems.map((portfolioItem) {
-                return PortfolioItemWidget(
-                  portfolioItem: portfolioItem,
-                  selectedTab: selectedTab,
-                  sizingInformation: sizingInformation,
-                  selectedTimeFrame: selectedTimeFrame,
-                );
-              }).toList(),
-            ),
-          ],
+            );
+          },
+          childCount: swaps.length,
         ),
       ),
     );
+  }
+}
+
+class EmptyArray extends StatelessWidget {
+  final SizingInformation sizingInformation;
+  final String selectedTab;
+
+  const EmptyArray({
+    Key? key,
+    required this.sizingInformation,
+    required this.selectedTab,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: UIHelper.pagePadding(sizingInformation)),
+          child: Text(
+            'No items in $selectedTab.',
+            style: emptyListTextStyle(sizingInformation),
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
+class PortfolioTable extends StatelessWidget {
+  final PortfolioController controller = Get.find();
+  final SizingInformation sizingInformation;
+
+  PortfolioTable({
+    Key? key,
+    required this.sizingInformation,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (controller.selectedTab == 'Swaps') {
+        if (controller.swaps.isEmpty) {
+          return EmptyArray(
+            sizingInformation: sizingInformation,
+            selectedTab: controller.selectedTab,
+          );
+        }
+
+        return SwapsTable(
+          sizingInformation: sizingInformation,
+          swaps: controller.swaps,
+        );
+      }
+
+      if (controller.portfolioItems.isEmpty) {
+        return EmptyArray(
+          sizingInformation: sizingInformation,
+          selectedTab: controller.selectedTab,
+        );
+      }
+
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            bottom: Dimensions.DEFAULT_MARGIN_LARGE,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: UIHelper.pagePadding(sizingInformation),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: Dimensions.DEFAULT_MARGIN_SMALL,
+                  horizontal: Dimensions.DEFAULT_MARGIN,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      'Total Value',
+                      style: dataTableFooterTextStyle(),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          formatToCurrency(controller.totalValue,
+                              showSymbol: true, decimalDigits: 2),
+                          style: dataTableFooterTextStyle()
+                              .copyWith(fontSize: title),
+                        ),
+                        if (controller.selectedTab == 'Portfolio')
+                          (Text(
+                            controller.totalValueChangeForTimeFrame == 0
+                                ? '\$0'
+                                : controller.totalValueChangeForTimeFrame > 0
+                                    ? '+${formatToCurrency(controller.totalValueChangeForTimeFrame, showSymbol: true, decimalDigits: 2)}'
+                                    : formatToCurrency(
+                                        controller.totalValueChangeForTimeFrame,
+                                        showSymbol: true,
+                                        decimalDigits: 2),
+                            style: controller.totalValueChangeForTimeFrame == 0
+                                ? dataTableTextStyle(sizingInformation)
+                                    .copyWith(
+                                        color: Colors.white.withOpacity(.5))
+                                : controller.totalValueChangeForTimeFrame >= 0
+                                    ? dataTableTextStyle(sizingInformation)
+                                        .copyWith(color: Colors.greenAccent)
+                                    : dataTableTextStyle(sizingInformation)
+                                        .copyWith(color: Colors.redAccent),
+                          )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              if (controller.selectedTab == 'Portfolio')
+                (UIHelper.verticalSpaceSmall()),
+              if (controller.selectedTab == 'Portfolio')
+                (Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: UIHelper.pagePadding(sizingInformation),
+                  ),
+                  child: Row(
+                    children: controller.timeFrames.map((timeFrame) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          right: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                        ),
+                        child: ChoiceChip(
+                          label: Text(
+                            timeFrame,
+                            style: timeFrameChipTextStyle(),
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          selected: controller.selectedTimeFrame == timeFrame,
+                          onSelected: (value) =>
+                              controller.changeSelectedTimeFrame(timeFrame),
+                          selectedColor: backgroundPink,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                )),
+              UIHelper.verticalSpaceMedium(),
+              Column(
+                children: controller.portfolioItems.map((portfolioItem) {
+                  return PortfolioItemWidget(
+                    portfolioItem: portfolioItem,
+                    selectedTab: controller.selectedTab,
+                    sizingInformation: sizingInformation,
+                    selectedTimeFrame: controller.selectedTimeFrame,
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

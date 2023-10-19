@@ -49,7 +49,8 @@ abstract class RestClient {
   Future getDemeterPools();
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PORTFOLIO_PERMALINK}')
-  Future getPortfolioItems(@Path("address") String address);
+  Future getPortfolioItems(
+      @Path("address") String address, @Query("page") int page);
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
   Future getSwaps(@Path("address") String address, @Query("page") int page);
