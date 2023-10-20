@@ -17,7 +17,6 @@ import 'package:ceres_locker_app/domain/models/token_list.dart';
 import 'package:ceres_locker_app/domain/models/wallet.dart';
 import 'package:ceres_locker_app/domain/usecase/get_swaps.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
-import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

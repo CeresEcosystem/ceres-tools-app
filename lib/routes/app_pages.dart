@@ -6,6 +6,8 @@ import 'package:ceres_locker_app/presentation/locker/locker_binding.dart';
 import 'package:ceres_locker_app/presentation/locker/locker_view.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_binding.dart';
 import 'package:ceres_locker_app/presentation/pairs/pairs_view.dart';
+import 'package:ceres_locker_app/presentation/pairs_liquidity/pairs_liquidity_binding.dart';
+import 'package:ceres_locker_app/presentation/pairs_liquidity/pairs_liquidity_view.dart';
 import 'package:ceres_locker_app/presentation/portfolio/portfolio_binding.dart';
 import 'package:ceres_locker_app/presentation/portfolio/portfolio_view.dart';
 import 'package:ceres_locker_app/presentation/supply/supply_binding.dart';
@@ -59,6 +61,11 @@ class AppPages {
       name: Routes.SUPPLY,
       page: () => const SupplyView(),
       binding: SupplyBinding(),
+    ),
+    GetPage(
+      name: Routes.PAIRS_LIQUIDITY,
+      page: () => const PairsLiquidityView(),
+      binding: PairsLiquidityBinding(),
     ),
   ];
 }

@@ -1,18 +1,14 @@
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
 import 'package:ceres_locker_app/core/style/app_colors.dart';
 import 'package:ceres_locker_app/core/style/app_text_style.dart';
 import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class PortfolioTab extends StatelessWidget {
-  final PortfolioController controller = Get.find();
   final List<String> tabs;
   final String selectedTab;
   final Function changeTab;
 
-  PortfolioTab({
+  const PortfolioTab({
     Key? key,
     required this.tabs,
     required this.selectedTab,
@@ -34,11 +30,7 @@ class PortfolioTab extends StatelessWidget {
 
           return Expanded(
             child: GestureDetector(
-              onTap: () {
-                if (controller.loadingStatus == LoadingStatus.READY) {
-                  changeTab(tab);
-                }
-              },
+              onTap: () => changeTab(tab),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10.0,

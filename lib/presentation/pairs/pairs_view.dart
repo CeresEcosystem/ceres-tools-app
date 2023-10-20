@@ -22,6 +22,7 @@ import 'package:ceres_locker_app/presentation/pairs/pairs_controller.dart';
 import 'package:ceres_locker_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 
 class PairsView extends GetView<PairsController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -244,15 +245,6 @@ class PairsView extends GetView<PairsController> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            UIHelper.horizontalSpaceExtraSmall(),
-            IconButton(
-              onPressed: () => Get.toNamed(Routes.LOCKER,
-                  arguments: {'isPair': true, 'lockerItem': pair}),
-              icon: Icon(
-                Icons.lock_outline_sharp,
-                color: Colors.white.withOpacity(0.5),
-              ),
-            ),
           ],
         ),
         UIHelper.verticalSpaceMedium(),
@@ -333,6 +325,34 @@ class PairsView extends GetView<PairsController> {
             ),
           ],
         ),
+        UIHelper.verticalSpaceMedium(),
+        Row(
+          children: [
+            actionButton(
+              () => Get.toNamed(
+                Routes.PAIRS_LIQUIDITY,
+                arguments: pair,
+              ),
+              HeroIcon(
+                HeroIcons.circleStack,
+                color: Colors.white.withOpacity(0.5),
+              ),
+              kShowLiquidity,
+              sizingInformation,
+            ),
+            UIHelper.horizontalSpaceMedium(),
+            actionButton(
+              () => Get.toNamed(Routes.LOCKER,
+                  arguments: {'isPair': true, 'lockerItem': pair}),
+              Icon(
+                Icons.lock_outline_sharp,
+                color: Colors.white.withOpacity(0.5),
+              ),
+              kShowLocks,
+              sizingInformation,
+            ),
+          ],
+        )
       ],
     );
   }
@@ -356,6 +376,41 @@ class PairsView extends GetView<PairsController> {
             size: Dimensions.PAIRS_IMAGE_SIZE,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget actionButton(Function onTap, Widget icon, String text,
+      SizingInformation sizingInformation) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => onTap(),
+        child: Container(
+          padding: const EdgeInsets.all(5.0),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius:
+                BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon,
+              UIHelper.horizontalSpaceExtraSmall(),
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 100.0,
+                ),
+                child: Text(
+                  text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: tokenButtonTextStyle(sizingInformation),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -14,6 +14,10 @@ abstract class RestClient {
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIRS_PERMALINK}')
   Future getPairs();
 
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIRS_LIQUIDITY}')
+  Future getPairsLiquidity(@Path("baseAsset") String baseAsset,
+      @Path("tokenAsset") String tokenAsset, @Query("page") int page);
+
   @GET('${ApiConstants.DEMETER_URL}${ApiConstants.TOKEN_INFOS_PERMALINK}')
   Future getTokenInfos();
 

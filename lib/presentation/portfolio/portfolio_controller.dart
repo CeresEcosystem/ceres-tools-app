@@ -21,7 +21,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const _tabs = ['Portfolio', 'Staking', 'Rewards', 'Liquidity', 'Swaps'];
 const _timeFrames = ['1h', '24h', '7d', '30d'];
-const kWallets = 'WALLETS';
 const kSelectedWallet = 'SELECTED_WALLET';
 const kWalletExistError = 'Wallet with entered address already exist.';
 
@@ -31,6 +30,7 @@ class PortfolioController extends GetxController {
 
   List<PortfolioItem> _portfolioItems = [];
   List<Swap> _swaps = [];
+  List<Token> _tokens = [];
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
 
   double _totalValue = 0;
@@ -257,13 +257,14 @@ class PortfolioController extends GetxController {
   }
 
   setSwaps(dynamic response) async {
-    final tokensResponse = await getTokens.execute();
-    List<Token> tokens = [];
+    if (_tokens.isEmpty) {
+      final tokensResponse = await getTokens.execute();
 
-    if (tokensResponse != null) {
-      TokenList tokenList = TokenList.fromJson(tokensResponse);
-      if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
-        tokens = tokenList.tokens!;
+      if (tokensResponse != null) {
+        TokenList tokenList = TokenList.fromJson(tokensResponse);
+        if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
+          _tokens = tokenList.tokens!;
+        }
       }
     }
 
@@ -275,11 +276,11 @@ class PortfolioController extends GetxController {
 
       for (final swap in swapList.swaps) {
         Swap s = swap;
-        s.inputAsset = tokens
+        s.inputAsset = _tokens
                 .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
                 ?.shortName ??
             '';
-        s.outputAsset = tokens
+        s.outputAsset = _tokens
                 .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
                 ?.shortName ??
             '';
