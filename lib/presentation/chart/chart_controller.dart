@@ -17,6 +17,7 @@ import 'package:ceres_locker_app/domain/models/token_list.dart';
 import 'package:ceres_locker_app/domain/models/wallet.dart';
 import 'package:ceres_locker_app/domain/usecase/get_swaps.dart';
 import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,10 +27,13 @@ class ChartController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
   final getSwaps = Injector.resolve!<GetSwaps>();
 
+  final PageController _pageController = PageController();
+
   final _loadingStatus = LoadingStatus.LOADING.obs;
   final _swapLoadingStatus = LoadingStatus.LOADING.obs;
   final _token = (Get.arguments ?? kTokenName).toString().obs;
   final _searchQuery = ''.obs;
+  final _showFavoriteTokens = false.obs;
 
   Timer? _timer;
   io.Socket? _socket;
@@ -37,16 +41,19 @@ class ChartController extends GetxController {
   InAppWebViewController? _webViewController;
 
   List<Token> _tokens = [];
-  String? _address;
+  List<String> _addresses = [];
   final List<FavoriteToken> _favoriteTokens = [];
 
   final _swaps = <Swap>[].obs;
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
   final List<Wallet> _wallets = [];
 
+  PageController get pageController => _pageController;
   LoadingStatus get loadingStatus => _loadingStatus.value;
   LoadingStatus get swapLoadingStatus => _swapLoadingStatus.value;
   String get token => _token.value;
+  bool get showFavoriteTokens => _showFavoriteTokens.value;
+  List<FavoriteToken> get favoriteTokens => _favoriteTokens;
   InAppWebViewController? get webViewController => _webViewController;
   List<Token> get tokens {
     return _tokens.where((token) {
@@ -67,6 +74,16 @@ class ChartController extends GetxController {
   PageMeta get pageMeta => _pageMeta;
   List<Swap> get swaps => _swaps;
 
+  void goToSwapPage() {
+    _pageController.animateToPage(1,
+        duration: const Duration(milliseconds: 350), curve: Curves.ease);
+  }
+
+  void goToChartPage() {
+    _pageController.animateToPage(0,
+        duration: const Duration(milliseconds: 350), curve: Curves.ease);
+  }
+
   void closeDialog() {
     Get.back();
 
@@ -81,9 +98,34 @@ class ChartController extends GetxController {
     _webViewController ??= contrl;
   }
 
+  offSocketForAddresses() {
+    if (_addresses.isNotEmpty) {
+      for (String address in _addresses) {
+        _socket?.off(address);
+      }
+    }
+  }
+
+  switchFavoriteTokens() {
+    if (!_showFavoriteTokens.value) {
+      offSocketForAddresses();
+
+      _token.value = '';
+      _showFavoriteTokens.value = true;
+
+      _addresses = _favoriteTokens.map((ft) => ft.assetId).toList();
+
+      if (pageController.page == 0) {
+        goToSwapPage();
+      }
+
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
+      _fetchSwaps();
+    }
+  }
+
   changeToken(String t, [bool reloadWebView = false]) {
     if (t != _token.value) {
-      _token.value = t;
       if (reloadWebView) {
         _webViewController?.loadUrl(
             urlRequest: URLRequest(
@@ -91,11 +133,17 @@ class ChartController extends GetxController {
         ));
       }
 
-      if (_address != null && _address!.isNotEmpty) {
-        _socket?.off(_address!);
+      _token.value = t;
+
+      offSocketForAddresses();
+
+      if (_showFavoriteTokens.value) {
+        _showFavoriteTokens.value = false;
       }
 
-      _address = _tokens.firstWhere((token) => token.shortName == t).assetId;
+      _addresses = [
+        _tokens.firstWhere((token) => token.shortName == t).assetId ?? ''
+      ];
 
       _swapLoadingStatus.value = LoadingStatus.LOADING;
       _fetchSwaps();
@@ -125,42 +173,45 @@ class ChartController extends GetxController {
   }
 
   connectToASocketEvent() {
-    if (_address != null && _address!.isNotEmpty) {
+    if (_addresses.isNotEmpty) {
       _socket?.connect();
-      _socket?.on(_address!, (data) {
-        Swap s = Swap.fromJson(data);
 
-        s.inputAsset = _tokens
-                .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
-                ?.shortName ??
-            '';
-        s.outputAsset = _tokens
-                .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
-                ?.shortName ??
-            '';
-        s.type = _address == s.inputAssetId ? 'Sell' : 'Buy';
-        s.inputImageExtension = imageExtension(s.inputAsset);
-        s.outputImageExtension = imageExtension(s.outputAsset);
-        s.swappedAt = formatDateToLocalTime(s.swappedAt);
-        s.formattedAccountId =
-            _wallets.firstWhereOrNull((w) => w.address == s.accountId)?.name ??
-                formatAddress(s.accountId);
+      for (String address in _addresses) {
+        _socket?.on(address, (data) {
+          Swap s = Swap.fromJson(data);
 
-        if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
-          pageMeta.hasNextPage = true;
-        }
+          s.inputAsset = _tokens
+                  .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
+                  ?.shortName ??
+              '';
+          s.outputAsset = _tokens
+                  .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
+                  ?.shortName ??
+              '';
+          s.type = address == s.inputAssetId ? 'Sell' : 'Buy';
+          s.inputImageExtension = imageExtension(s.inputAsset);
+          s.outputImageExtension = imageExtension(s.outputAsset);
+          s.swappedAt = formatDateToLocalTime(s.swappedAt);
+          s.formattedAccountId = _wallets
+                  .firstWhereOrNull((w) => w.address == s.accountId)
+                  ?.name ??
+              formatAddress(s.accountId);
 
-        pageMeta.totalCount++;
+          if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
+            pageMeta.hasNextPage = true;
+          }
 
-        _swaps.value = [s, ..._swaps].take(10).toList();
-      });
+          pageMeta.totalCount++;
+
+          _swaps.value = [s, ..._swaps].take(10).toList();
+        });
+      }
     }
   }
 
   disconnectSocket() {
-    if (_address != null && _address!.isNotEmpty) {
-      _socket?.off(_address!);
-    }
+    offSocketForAddresses();
+
     _socket?.disconnect();
   }
 
@@ -195,8 +246,8 @@ class ChartController extends GetxController {
   }
 
   void _fetchSwaps([int page = 1]) async {
-    if (_address != null) {
-      final response = await getSwaps.execute(_address!, page);
+    if (_addresses.isNotEmpty) {
+      final response = await getSwaps.execute(_addresses, page);
 
       if (response != null) {
         SwapList swapList = SwapList.fromJson(response['data']);
@@ -215,7 +266,7 @@ class ChartController extends GetxController {
                     .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
                     ?.shortName ??
                 '';
-            s.type = _address == s.inputAssetId ? 'Sell' : 'Buy';
+            s.type = _addresses[0] == s.inputAssetId ? 'Sell' : 'Buy';
             s.inputImageExtension = imageExtension(s.inputAsset);
             s.outputImageExtension = imageExtension(s.outputAsset);
             s.swappedAt = formatDateToLocalTime(s.swappedAt);
@@ -240,6 +291,8 @@ class ChartController extends GetxController {
         _swapLoadingStatus.value = LoadingStatus.READY;
       }
     } else {
+      _pageMeta = PageMeta(0, 0, 0, 0, false, false);
+      _swaps.value = [];
       _swapLoadingStatus.value = LoadingStatus.READY;
     }
   }
@@ -319,9 +372,12 @@ class ChartController extends GetxController {
         _tokens = [...favoriteTokens, ...otherTokens];
 
         if (!refresh || reloadFromError) {
-          _address = _tokens
-              .firstWhere((token) => token.shortName == _token.value)
-              .assetId;
+          _addresses = [
+            _tokens
+                    .firstWhere((token) => token.shortName == _token.value)
+                    .assetId ??
+                ''
+          ];
           _getWalletsFromDatabase();
         }
       }

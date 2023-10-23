@@ -44,7 +44,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.CHART,
-      page: () => ChartView(),
+      page: () => const ChartView(),
       binding: ChartBinding(),
     ),
     GetPage(

@@ -7,6 +7,7 @@ import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/default_value.dart';
 import 'package:ceres_locker_app/core/utils/sizing_information.dart';
 import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
+import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
 import 'package:ceres_locker_app/core/widgets/round_image.dart';
 import 'package:ceres_locker_app/core/widgets/search_text_field.dart';
 import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
@@ -64,61 +65,115 @@ class TokensDialog extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.separated(
-                      itemCount: chartController.tokens.length,
-                      separatorBuilder: (_, __) =>
-                          UIHelper.verticalSpaceSmall(),
-                      itemBuilder: (_, index) {
-                        final token = chartController.tokens[index];
-
-                        return ListTile(
-                          tileColor: backgroundColorDark,
-                          visualDensity: VisualDensity.compact,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                          ),
-                          horizontalTitleGap:
-                              Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                          leading: RoundImage(
-                            image:
-                                '$kImageStorage${token.shortName}${token.imageExtension}',
-                            extension: token.imageExtension,
-                            size: Dimensions.ICON_SIZE,
-                          ),
-                          title: Row(
-                            children: [
-                              ConstrainedBox(
-                                constraints:
-                                    const BoxConstraints(maxWidth: 100.0),
-                                child: Text(
-                                  checkEmptyString(token.shortName),
-                                  style: tokensTitleStyle(sizingInformation)
-                                      .copyWith(fontSize: subtitle2),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          if (chartController.favoriteTokens.isNotEmpty) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  tileColor: backgroundColorDark,
+                                  visualDensity: VisualDensity.compact,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal:
+                                        Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                                  ),
+                                  horizontalTitleGap:
+                                      Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                                  leading: Container(
+                                    height: Dimensions.ICON_SIZE,
+                                    width: Dimensions.ICON_SIZE,
+                                    decoration: const BoxDecoration(
+                                      color: backgroundPink,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.favorite,
+                                        size: Dimensions.ICON_SIZE_SMALL,
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    'Favorite tokens',
+                                    style: tokensTitleStyle(sizingInformation)
+                                        .copyWith(fontSize: subtitle2),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  onTap: () {
+                                    chartController.switchFavoriteTokens();
+                                    chartController.closeDialog();
+                                  },
                                 ),
+                                UIHelper.verticalSpaceSmall(),
+                              ],
+                            );
+                          } else {
+                            return const EmptyWidget();
+                          }
+                        } else {
+                          final token = chartController.tokens[index - 1];
+
+                          return Container(
+                            margin: const EdgeInsets.only(
+                                bottom: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL),
+                            child: ListTile(
+                              tileColor: backgroundColorDark,
+                              visualDensity: VisualDensity.compact,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal:
+                                    Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
                               ),
-                              UIHelper.horizontalSpaceExtraSmall(),
-                              if (token.isFavorite)
-                                (const Icon(
-                                  Icons.star,
-                                  color: backgroundOrange,
-                                )),
-                            ],
-                          ),
-                          trailing: Text(
-                            formatToCurrency(token.price,
-                                showSymbol: true, formatOnlyFirstPart: true),
-                            style: tokensPriceStyle(sizingInformation)
-                                .copyWith(fontSize: caption),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          onTap: () {
-                            chartController.changeToken(token.shortName!, true);
-                            chartController.closeDialog();
-                          },
-                        );
+                              horizontalTitleGap:
+                                  Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                              leading: RoundImage(
+                                image:
+                                    '$kImageStorage${token.shortName}${token.imageExtension}',
+                                extension: token.imageExtension,
+                                size: Dimensions.ICON_SIZE,
+                              ),
+                              title: Row(
+                                children: [
+                                  ConstrainedBox(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 100.0),
+                                    child: Text(
+                                      checkEmptyString(token.shortName),
+                                      style: tokensTitleStyle(sizingInformation)
+                                          .copyWith(fontSize: subtitle2),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  UIHelper.horizontalSpaceExtraSmall(),
+                                  if (token.isFavorite)
+                                    (const Icon(
+                                      Icons.star,
+                                      color: backgroundOrange,
+                                    )),
+                                ],
+                              ),
+                              trailing: Text(
+                                formatToCurrency(token.price,
+                                    showSymbol: true,
+                                    formatOnlyFirstPart: true),
+                                style: tokensPriceStyle(sizingInformation)
+                                    .copyWith(fontSize: caption),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              onTap: () {
+                                chartController.changeToken(
+                                    token.shortName!, true);
+                                chartController.closeDialog();
+                              },
+                            ),
+                          );
+                        }
                       },
+                      separatorBuilder: (_, __) =>
+                          UIHelper.verticalSpaceExtraSmall(),
+                      itemCount: chartController.tokens.length + 1,
                     ),
                   ),
                   Container(

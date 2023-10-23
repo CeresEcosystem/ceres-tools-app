@@ -6,9 +6,9 @@ class SwapsDatasource {
 
   SwapsDatasource({required this.client});
 
-  Future getSwaps(String address, int page) async {
+  Future getSwaps(List<String> tokens, int page) async {
     try {
-      return await client.getSwaps(address, page);
+      return await client.getSwaps(tokens, page);
     } on DioException catch (_) {}
   }
 }

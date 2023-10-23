@@ -15,12 +15,10 @@ import 'package:get/get.dart';
 
 class Swaps extends StatefulWidget {
   final SizingInformation sizingInformation;
-  final Function goToChartPage;
 
   const Swaps({
     Key? key,
     required this.sizingInformation,
-    required this.goToChartPage,
   }) : super(key: key);
 
   @override
@@ -50,10 +48,11 @@ class _SwapsState extends State<Swaps>
         children: [
           CurrentToken(
             token: controller.token,
-            goToSwapPage: widget.goToChartPage,
+            goToSwapPage: controller.goToChartPage,
             icon: Icons.trending_up,
             buttonLabel: 'Chart',
             bottomPadding: false,
+            showFavorites: controller.showFavoriteTokens,
           ),
           (() {
             if (controller.swapLoadingStatus == LoadingStatus.LOADING) {
@@ -79,6 +78,7 @@ class _SwapsState extends State<Swaps>
                           return SwapItem(
                             sizingInformation: widget.sizingInformation,
                             swap: swap,
+                            showType: !controller.showFavoriteTokens,
                           );
                         },
                         separatorBuilder: (context, index) =>

@@ -57,5 +57,5 @@ abstract class RestClient {
       @Path("address") String address, @Query("page") int page);
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
-  Future getSwaps(@Path("address") String address, @Query("page") int page);
+  Future getSwaps(@Query("token") List<String> tokens, @Query("page") int page);
 }

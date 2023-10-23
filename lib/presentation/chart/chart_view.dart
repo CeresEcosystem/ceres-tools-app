@@ -9,19 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChartView extends GetView<ChartController> {
-  final PageController _pageController = PageController();
-
-  ChartView({Key? key}) : super(key: key);
-
-  void goToSwapPage() {
-    _pageController.animateToPage(1,
-        duration: const Duration(milliseconds: 350), curve: Curves.ease);
-  }
-
-  void goToChartPage() {
-    _pageController.animateToPage(0,
-        duration: const Duration(milliseconds: 350), curve: Curves.ease);
-  }
+  const ChartView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +33,13 @@ class ChartView extends GetView<ChartController> {
           body: SafeArea(
             top: false,
             child: PageView(
-              controller: _pageController,
+              controller: controller.pageController,
               scrollDirection: Axis.vertical,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                Chart(goToSwapPage: goToSwapPage),
+                const Chart(),
                 Swaps(
                   sizingInformation: sizingInformation,
-                  goToChartPage: goToChartPage,
                 ),
               ],
             ),

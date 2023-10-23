@@ -9,12 +9,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
 class Chart extends StatefulWidget {
-  final Function goToSwapPage;
-
-  const Chart({
-    Key? key,
-    required this.goToSwapPage,
-  }) : super(key: key);
+  const Chart({Key? key}) : super(key: key);
 
   @override
   State<Chart> createState() => _ChartState();
@@ -43,9 +38,10 @@ class _ChartState extends State<Chart>
         children: [
           CurrentToken(
             token: controller.token,
-            goToSwapPage: widget.goToSwapPage,
+            goToSwapPage: controller.goToSwapPage,
             icon: Icons.swap_horiz,
             buttonLabel: 'Swaps',
+            showFavorites: controller.showFavoriteTokens,
           ),
           Expanded(
             child: InAppWebView(

@@ -5,7 +5,7 @@ class GetSwaps {
 
   GetSwaps({required this.repository});
 
-  Future execute(String address, int page) async {
-    return repository.getSwaps(address, page);
+  Future execute(List<String> tokens, int page) async {
+    return repository.getSwaps(tokens, page);
   }
 }

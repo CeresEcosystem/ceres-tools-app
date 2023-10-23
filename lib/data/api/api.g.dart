@@ -420,11 +420,14 @@ class _RestClient implements RestClient {
 
   @override
   Future<dynamic> getSwaps(
-    String address,
+    List<String> tokens,
     int page,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'page': page};
+    final queryParameters = <String, dynamic>{
+      r'token': tokens,
+      r'page': page,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
@@ -434,7 +437,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'https://data.cerestoken.io/api/swaps/${address}',
+          'https://data.cerestoken.io/api/swaps',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -1,3 +1,3 @@
 abstract class SwapsRepository {
-  Future getSwaps(String address, int page);
+  Future getSwaps(List<String> tokens, int page);
 }

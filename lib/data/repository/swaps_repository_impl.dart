@@ -7,9 +7,9 @@ class SwapsRepositoryImpl implements SwapsRepository {
   SwapsRepositoryImpl({required this.datasource});
 
   @override
-  Future getSwaps(String address, int page) async {
+  Future getSwaps(List<String> tokens, int page) async {
     try {
-      return await datasource.getSwaps(address, page);
+      return await datasource.getSwaps(tokens, page);
     } on Exception catch (_) {}
   }
 }

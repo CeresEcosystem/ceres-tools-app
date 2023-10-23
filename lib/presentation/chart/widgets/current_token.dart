@@ -16,6 +16,7 @@ class CurrentToken extends StatelessWidget {
   final IconData icon;
   final String buttonLabel;
   final bool bottomPadding;
+  final bool showFavorites;
 
   const CurrentToken({
     Key? key,
@@ -24,6 +25,7 @@ class CurrentToken extends StatelessWidget {
     required this.icon,
     required this.buttonLabel,
     this.bottomPadding = true,
+    required this.showFavorites,
   }) : super(key: key);
 
   @override
@@ -57,17 +59,33 @@ class CurrentToken extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    RoundImage(
-                      image: '$kImageStorage$token$imgExtension',
-                      extension: imgExtension,
-                      size: Dimensions.TOKEN_ICONS_SIZE,
-                    ),
+                    (() {
+                      if (showFavorites) {
+                        return Container(
+                          height: Dimensions.TOKEN_ICONS_SIZE,
+                          width: Dimensions.TOKEN_ICONS_SIZE,
+                          decoration: const BoxDecoration(
+                            color: backgroundPink,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.favorite),
+                          ),
+                        );
+                      } else {
+                        return RoundImage(
+                          image: '$kImageStorage$token$imgExtension',
+                          extension: imgExtension,
+                          size: Dimensions.TOKEN_ICONS_SIZE,
+                        );
+                      }
+                    }()),
                     UIHelper.horizontalSpaceSmall(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          token,
+                          showFavorites ? 'Favorite tokens' : token,
                           style: chartCurrentTokenTitleTextStyle(),
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
@@ -77,32 +95,37 @@ class CurrentToken extends StatelessWidget {
                         ),
                       ],
                     ),
-                    UIHelper.horizontalSpaceMedium(),
-                    GestureDetector(
-                      onTap: () => goToSwapPage(),
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(
-                          Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                    if (!showFavorites)
+                      (Row(
+                        children: [
+                          UIHelper.horizontalSpaceMedium(),
+                          GestureDetector(
+                            onTap: () => goToSwapPage(),
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(
+                                Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                                ),
+                                color: Colors.white.withOpacity(0.1),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(icon),
+                                  UIHelper.horizontalSpaceExtraSmall(),
+                                  Text(
+                                    buttonLabel,
+                                    style: chartButtonTextStyle(),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                          color: Colors.white.withOpacity(0.1),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(icon),
-                            UIHelper.horizontalSpaceExtraSmall(),
-                            Text(
-                              buttonLabel,
-                              style: chartButtonTextStyle(),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                        ],
+                      )),
                   ],
                 ),
               ),
