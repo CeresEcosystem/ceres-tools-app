@@ -1,4 +1,6 @@
 import 'package:ceres_locker_app/data/api/api_constants.dart';
+import 'package:ceres_locker_app/domain/models/favorite_token_json.dart';
+import 'package:ceres_locker_app/domain/models/initial_favs.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -58,4 +60,16 @@ abstract class RestClient {
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
   Future getSwaps(@Query("token") List<String> tokens, @Query("page") int page);
+
+  @POST('http://192.168.1.61:3004/api${ApiConstants.INITIAL_FAVS_PERMALINK}')
+  Future postInitialFavs(@Body() InitialFavs initialFavs);
+
+  @POST(
+      'http://192.168.1.61:3004/api${ApiConstants.ADD_TOKEN_TO_FAVORITES_PERMALINK}')
+  Future addTokenToFavorites(@Body() FavoriteTokenJSON favoriteToken);
+
+  @DELETE(
+      'http://192.168.1.61:3004/api${ApiConstants.REMOVE_TOKEN_FROM_FAVORITES_PERMALINK}')
+  Future removeTokenFromFavorites(
+      @Path() String deviceId, @Path() String token);
 }

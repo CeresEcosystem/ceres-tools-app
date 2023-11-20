@@ -5,6 +5,7 @@ import 'package:ceres_locker_app/data/datasource/locker_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/pairs_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/pairs_liquidity_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/portfolio_datasource.dart';
+import 'package:ceres_locker_app/data/datasource/price_alert_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/swaps_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/tokens_datasource.dart';
 import 'package:ceres_locker_app/data/datasource/tracker_datasource.dart';
@@ -75,6 +76,7 @@ abstract class Injector {
   @Register.factory(PortfolioDatasource)
   @Register.factory(SwapsDatasource)
   @Register.factory(PairsLiquidityDatasource)
+  @Register.factory(PriceAlertDatasource)
   @Register.factory(GetTokens)
   @Register.factory(GetPairs)
   @Register.factory(GetFarming)

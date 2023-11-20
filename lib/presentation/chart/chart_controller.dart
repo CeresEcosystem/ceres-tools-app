@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/db/database_helper.dart';
 import 'package:ceres_locker_app/core/enums/loading_status.dart';
+import 'package:ceres_locker_app/core/services/global_service.dart';
 import 'package:ceres_locker_app/core/utils/address_format.dart';
 import 'package:ceres_locker_app/core/utils/currency_format.dart';
 import 'package:ceres_locker_app/core/utils/image_extension.dart';
@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class ChartController extends GetxController {
+  final GlobalService _globalService = Get.find<GlobalService>();
   final getTokens = Injector.resolve!<GetTokens>();
   final getSwaps = Injector.resolve!<GetSwaps>();
 
@@ -31,7 +32,9 @@ class ChartController extends GetxController {
 
   final _loadingStatus = LoadingStatus.LOADING.obs;
   final _swapLoadingStatus = LoadingStatus.LOADING.obs;
-  final _token = (Get.arguments ?? kTokenName).toString().obs;
+  final _token = (Get.arguments != null ? Get.arguments['token'] : kTokenName)
+      .toString()
+      .obs;
   final _searchQuery = ''.obs;
   final _showFavoriteTokens = false.obs;
 
@@ -42,7 +45,6 @@ class ChartController extends GetxController {
 
   List<Token> _tokens = [];
   List<String> _addresses = [];
-  final List<FavoriteToken> _favoriteTokens = [];
 
   final _swaps = <Swap>[].obs;
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
@@ -53,7 +55,7 @@ class ChartController extends GetxController {
   LoadingStatus get swapLoadingStatus => _swapLoadingStatus.value;
   String get token => _token.value;
   bool get showFavoriteTokens => _showFavoriteTokens.value;
-  List<FavoriteToken> get favoriteTokens => _favoriteTokens;
+  List<FavoriteToken> get favoriteTokens => _globalService.favoriteTokens;
   InAppWebViewController? get webViewController => _webViewController;
   List<Token> get tokens {
     return _tokens.where((token) {
@@ -113,7 +115,8 @@ class ChartController extends GetxController {
       _token.value = '';
       _showFavoriteTokens.value = true;
 
-      _addresses = _favoriteTokens.map((ft) => ft.assetId).toList();
+      _addresses =
+          _globalService.favoriteTokens.map((ft) => ft.assetId).toList();
 
       if (pageController.page == 0) {
         goToSwapPage();
@@ -155,10 +158,7 @@ class ChartController extends GetxController {
   }
 
   bool checkIfFavorite(Token t) {
-    FavoriteToken fToken = _favoriteTokens.firstWhere(
-        (FavoriteToken token) => token.assetId == t.assetId,
-        orElse: () => FavoriteToken(assetId: ''));
-    return fToken.assetId.isNotEmpty;
+    return _globalService.checkIfFavorite(t);
   }
 
   connectSocket() {
@@ -219,7 +219,7 @@ class ChartController extends GetxController {
   void onInit() {
     connectSocket();
 
-    _fetchFavoriteTokens();
+    fetchTokens();
 
     _timer = Timer.periodic(const Duration(seconds: 60), (_) {
       fetchTokens(true);
@@ -234,15 +234,6 @@ class ChartController extends GetxController {
     _socket?.dispose();
 
     super.onClose();
-  }
-
-  Future _fetchFavoriteTokens() async {
-    DatabaseHelper.instance.queryAllRows().then((favorites) {
-      for (final token in favorites) {
-        _favoriteTokens.add(FavoriteToken(assetId: token['assetId']));
-      }
-      fetchTokens();
-    });
   }
 
   void _fetchSwaps([int page = 1]) async {

@@ -19,14 +19,6 @@ void main() async {
 
   Injector.setup();
 
-  await Get.putAsync(() => GlobalService().init());
-
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.dark,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarColor: backgroundColorDark,
-  ));
-
   OneSignal.initialize(kPushNotificationID);
 
   OneSignal.Notifications.canRequest().then((canRequest) {
@@ -34,6 +26,16 @@ void main() async {
       OneSignal.Notifications.requestPermission(true);
     }
   });
+
+  OneSignal.Debug.setLogLevel(OSLogLevel.error);
+
+  await Get.putAsync(() => GlobalService().init());
+
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarColor: backgroundColorDark,
+  ));
 
   runApp(
     DevicePreview(

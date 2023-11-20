@@ -21,6 +21,7 @@ class _$Injector extends Injector {
       ..registerFactory((c) => SwapsDatasource(client: c<RestClient>()))
       ..registerFactory(
           (c) => PairsLiquidityDatasource(client: c<RestClient>()))
+      ..registerFactory((c) => PriceAlertDatasource(client: c<RestClient>()))
       ..registerFactory((c) => GetTokens(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetPairs(repository: c<PairsRepository>()))
       ..registerFactory((c) => GetFarming(repository: c<FarmingRepository>()))

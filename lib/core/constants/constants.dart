@@ -2,6 +2,8 @@ const kAppName = 'Ceres';
 const kAppTitle = 'Ceres Tools';
 const kTokenName = 'CERES';
 const kPushNotificationID = '30318207-4f3e-41ea-9ed8-9a1f0c5abcc1';
+const kPushNotificationRESTApi =
+    'YzliNTY5ZjItNjZkMi00YWY0LWEwOGEtMzIxNGQwY2JlNjM1';
 const kCeresWebsite = 'https://cerestoken.io';
 const kPolkaswapWebsite = 'https://polkaswap.io/#/swap';
 const kPSWAPCommunity = 'https://twitter.com/PSWAPCommunity';
