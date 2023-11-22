@@ -23,6 +23,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
+const kChartToken = 'CHART_TOKEN';
+
 class ChartController extends GetxController {
   final GlobalService _globalService = Get.find<GlobalService>();
   final getTokens = Injector.resolve!<GetTokens>();
@@ -32,9 +34,7 @@ class ChartController extends GetxController {
 
   final _loadingStatus = LoadingStatus.LOADING.obs;
   final _swapLoadingStatus = LoadingStatus.LOADING.obs;
-  final _token = (Get.arguments != null ? Get.arguments['token'] : kTokenName)
-      .toString()
-      .obs;
+  final _token = ''.obs;
   final _searchQuery = ''.obs;
   final _showFavoriteTokens = false.obs;
 
@@ -127,8 +127,10 @@ class ChartController extends GetxController {
     }
   }
 
-  changeToken(String t, [bool reloadWebView = false]) {
+  Future changeToken(String t, [bool reloadWebView = false]) async {
     if (t != _token.value) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
       if (reloadWebView) {
         _webViewController?.loadUrl(
             urlRequest: URLRequest(
@@ -137,6 +139,7 @@ class ChartController extends GetxController {
       }
 
       _token.value = t;
+      prefs.setString(kChartToken, t);
 
       offSocketForAddresses();
 
@@ -215,8 +218,25 @@ class ChartController extends GetxController {
     _socket?.disconnect();
   }
 
+  Future _setToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? storedToken = prefs.getString(kChartToken);
+
+    if (Get.arguments != null) {
+      _token.value = Get.arguments['token'];
+
+      if (Get.arguments['token'] != storedToken) {
+        prefs.setString(kChartToken, Get.arguments['token']);
+      }
+    } else {
+      _token.value = storedToken ?? kTokenName;
+    }
+  }
+
   @override
-  void onInit() {
+  void onInit() async {
+    await _setToken();
+
     connectSocket();
 
     fetchTokens();

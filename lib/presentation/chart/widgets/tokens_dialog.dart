@@ -154,7 +154,7 @@ class TokensDialog extends StatelessWidget {
                                 ],
                               ),
                               trailing: Text(
-                                formatToCurrency(token.price,
+                                formatToCurrency(token.priceString,
                                     showSymbol: true,
                                     formatOnlyFirstPart: true),
                                 style: tokensPriceStyle(sizingInformation)

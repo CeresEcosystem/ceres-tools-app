@@ -464,7 +464,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'http://192.168.1.61:3004/api/device/initial-favs',
+          'https://data.cerestoken.io/api/device/initial-favs',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -491,7 +491,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'http://192.168.1.61:3004/api/device/add-token',
+          'https://data.cerestoken.io/api/device/add-token',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -520,7 +520,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'http://192.168.1.61:3004/api/device/remove-token/${deviceId}/${token}',
+          'https://data.cerestoken.io/api/device/remove-token/${deviceId}/${token}',
           queryParameters: queryParameters,
           data: _data,
         )

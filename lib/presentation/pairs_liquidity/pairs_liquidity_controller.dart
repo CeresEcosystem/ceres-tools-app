@@ -64,10 +64,10 @@ class PairsLiquidityController extends GetxController {
         for (final pairLiquidity in pairLiquidityList.pairLiquidities) {
           PairLiquidity pl = pairLiquidity;
 
-          BigInt divisor = BigInt.from(10).pow(18);
-          BigInt firstAssetNumber = BigInt.parse(pl.firstAssetAmount);
+          int divisor = 1000000000000000000;
+          double firstAssetNumber = double.parse(pl.firstAssetAmount);
           double firstAssetNumberDouble = firstAssetNumber / divisor;
-          BigInt secondAssetNumber = BigInt.parse(pl.secondAssetAmount);
+          double secondAssetNumber = double.parse(pl.secondAssetAmount);
           double secondAssetNumberDouble = secondAssetNumber / divisor;
 
           pl.firstAssetAmountFormatted = formatToCurrency(

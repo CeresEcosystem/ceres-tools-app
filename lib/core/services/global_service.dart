@@ -51,11 +51,11 @@ class GlobalService extends GetxService {
 
   void addTokenToFavorites(Token t) async {
     if (t.assetId != null) {
-      int success = await DatabaseHelper.instance
-          .insert(FavoriteToken(assetId: t.assetId!));
+      FavoriteToken favToken = FavoriteToken(assetId: t.assetId!);
+      int success = await DatabaseHelper.instance.insert(favToken);
 
       if (success != 0) {
-        _favoriteTokens.add(FavoriteToken(assetId: t.assetId!));
+        _favoriteTokens.add(favToken);
         if (_oneSignalId != null) {
           FavoriteTokenJSON favoriteToken =
               FavoriteTokenJSON(deviceId: _oneSignalId, token: t.assetId);

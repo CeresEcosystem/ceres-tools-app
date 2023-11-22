@@ -61,15 +61,15 @@ abstract class RestClient {
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
   Future getSwaps(@Query("token") List<String> tokens, @Query("page") int page);
 
-  @POST('http://192.168.1.61:3004/api${ApiConstants.INITIAL_FAVS_PERMALINK}')
+  @POST('${ApiConstants.NEW_BASE_URL}${ApiConstants.INITIAL_FAVS_PERMALINK}')
   Future postInitialFavs(@Body() InitialFavs initialFavs);
 
   @POST(
-      'http://192.168.1.61:3004/api${ApiConstants.ADD_TOKEN_TO_FAVORITES_PERMALINK}')
+      '${ApiConstants.NEW_BASE_URL}${ApiConstants.ADD_TOKEN_TO_FAVORITES_PERMALINK}')
   Future addTokenToFavorites(@Body() FavoriteTokenJSON favoriteToken);
 
   @DELETE(
-      'http://192.168.1.61:3004/api${ApiConstants.REMOVE_TOKEN_FROM_FAVORITES_PERMALINK}')
+      '${ApiConstants.NEW_BASE_URL}${ApiConstants.REMOVE_TOKEN_FROM_FAVORITES_PERMALINK}')
   Future removeTokenFromFavorites(
       @Path() String deviceId, @Path() String token);
 }

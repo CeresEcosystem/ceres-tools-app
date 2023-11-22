@@ -223,7 +223,7 @@ class TokensView extends GetView<TokensController> {
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
                         Text(
-                          formatToCurrency(token.price,
+                          formatToCurrency(token.priceString,
                               showSymbol: true, formatOnlyFirstPart: true),
                           style: tokensPriceStyle(sizingInformation),
                           maxLines: 1,
