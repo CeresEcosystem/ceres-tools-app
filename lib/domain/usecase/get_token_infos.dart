@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/repository/farming_repository.dart';
+import 'package:ceres_tools_app/domain/repository/farming_repository.dart';
 
 class GetTokenInfos {
   final FarmingRepository repository;

@@ -1,21 +1,23 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
-import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
-import 'package:ceres_locker_app/core/widgets/round_image.dart';
-import 'package:ceres_locker_app/core/widgets/swap_item.dart';
-import 'package:ceres_locker_app/domain/models/portfolio_item.dart';
-import 'package:ceres_locker_app/domain/models/swap.dart';
-import 'package:ceres_locker_app/presentation/portfolio/portfolio_controller.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/style/app_text_style.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
+import 'package:ceres_tools_app/core/widgets/round_image.dart';
+import 'package:ceres_tools_app/core/widgets/swap_item.dart';
+import 'package:ceres_tools_app/core/widgets/transfer_item.dart';
+import 'package:ceres_tools_app/domain/models/portfolio_item.dart';
+import 'package:ceres_tools_app/domain/models/swap.dart';
+import 'package:ceres_tools_app/domain/models/transfer.dart';
+import 'package:ceres_tools_app/presentation/portfolio/portfolio_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PortfolioItemWidget extends StatelessWidget {
   final PortfolioItem portfolioItem;
-  final String selectedTab;
+  final int selectedTab;
   final SizingInformation sizingInformation;
   final String selectedTimeFrame;
 
@@ -29,7 +31,7 @@ class PortfolioItemWidget extends StatelessWidget {
 
   Widget getHeader(PortfolioItem portfolioItem) {
     switch (selectedTab) {
-      case 'Liquidity':
+      case 3:
         return Row(
           children: [
             SizedBox(
@@ -139,7 +141,7 @@ class PortfolioItemWidget extends StatelessWidget {
                           showSymbol: true, decimalDigits: 3),
                       style: dataTableTextStyle(sizingInformation),
                     ),
-                    if (selectedTab == 'Portfolio')
+                    if (selectedTab == 0)
                       (Text(
                         valueChangeForTimeFrame == 0
                             ? '\$0'
@@ -162,9 +164,8 @@ class PortfolioItemWidget extends StatelessWidget {
                 ),
               ],
             ),
-            if (selectedTab != 'Liquidity')
-              (UIHelper.verticalSpaceExtraSmall()),
-            if (selectedTab != 'Liquidity')
+            if (selectedTab != 3) (UIHelper.verticalSpaceExtraSmall()),
+            if (selectedTab != 3)
               (Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -209,7 +210,7 @@ class PortfolioItemWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (selectedTab == 'Portfolio')
+                  if (selectedTab == 0)
                     (Text(
                       valueForTimeFrame == 0
                           ? '0%'
@@ -272,13 +273,53 @@ class SwapsTable extends StatelessWidget {
   }
 }
 
+class TransferTable extends StatelessWidget {
+  final SizingInformation sizingInformation;
+  final List<Transfer> transfers;
+
+  const TransferTable({
+    Key? key,
+    required this.sizingInformation,
+    required this.transfers,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        left: UIHelper.pagePadding(sizingInformation),
+        right: UIHelper.pagePadding(sizingInformation),
+        bottom: UIHelper.pagePadding(sizingInformation),
+      ),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            final Transfer transfer = transfers[index];
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 5.0),
+              child: TransferItem(
+                sizingInformation: sizingInformation,
+                transfer: transfer,
+              ),
+            );
+          },
+          childCount: transfers.length,
+        ),
+      ),
+    );
+  }
+}
+
 class EmptyArray extends StatelessWidget {
   final SizingInformation sizingInformation;
-  final String selectedTab;
+  final List<Map<String, dynamic>> tabs;
+  final int selectedTab;
 
   const EmptyArray({
     Key? key,
     required this.sizingInformation,
+    required this.tabs,
     required this.selectedTab,
   }) : super(key: key);
 
@@ -290,7 +331,7 @@ class EmptyArray extends StatelessWidget {
           padding: EdgeInsets.symmetric(
               horizontal: UIHelper.pagePadding(sizingInformation)),
           child: Text(
-            'No items in $selectedTab.',
+            'No items in ${tabs.firstWhere((t) => t['index'] == selectedTab)['label']}.',
             style: emptyListTextStyle(sizingInformation),
           ),
         ),
@@ -311,10 +352,11 @@ class PortfolioTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller.selectedTab == 'Swaps') {
+      if (controller.selectedTab == 4) {
         if (controller.swaps.isEmpty) {
           return EmptyArray(
             sizingInformation: sizingInformation,
+            tabs: controller.tabs,
             selectedTab: controller.selectedTab,
           );
         }
@@ -325,9 +367,25 @@ class PortfolioTable extends StatelessWidget {
         );
       }
 
+      if (controller.selectedTab == 5) {
+        if (controller.transfers.isEmpty) {
+          return EmptyArray(
+            sizingInformation: sizingInformation,
+            tabs: controller.tabs,
+            selectedTab: controller.selectedTab,
+          );
+        }
+
+        return TransferTable(
+          sizingInformation: sizingInformation,
+          transfers: controller.transfers,
+        );
+      }
+
       if (controller.portfolioItems.isEmpty) {
         return EmptyArray(
           sizingInformation: sizingInformation,
+          tabs: controller.tabs,
           selectedTab: controller.selectedTab,
         );
       }
@@ -370,7 +428,7 @@ class PortfolioTable extends StatelessWidget {
                           style: dataTableFooterTextStyle()
                               .copyWith(fontSize: title),
                         ),
-                        if (controller.selectedTab == 'Portfolio')
+                        if (controller.selectedTab == 0)
                           (Text(
                             controller.totalValueChangeForTimeFrame == 0
                                 ? '\$0'
@@ -395,9 +453,8 @@ class PortfolioTable extends StatelessWidget {
                   ],
                 ),
               ),
-              if (controller.selectedTab == 'Portfolio')
-                (UIHelper.verticalSpaceSmall()),
-              if (controller.selectedTab == 'Portfolio')
+              if (controller.selectedTab == 0) (UIHelper.verticalSpaceSmall()),
+              if (controller.selectedTab == 0)
                 (Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: UIHelper.pagePadding(sizingInformation),

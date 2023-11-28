@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

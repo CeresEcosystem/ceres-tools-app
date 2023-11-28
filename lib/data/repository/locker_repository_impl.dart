@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/data/datasource/locker_datasource.dart';
-import 'package:ceres_locker_app/domain/repository/locker_repository.dart';
+import 'package:ceres_tools_app/data/datasource/locker_datasource.dart';
+import 'package:ceres_tools_app/domain/repository/locker_repository.dart';
 
 class LockerRepositoryImpl implements LockerRepository {
   final LockerDatasource datasource;

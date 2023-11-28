@@ -1,6 +1,6 @@
-import 'package:ceres_locker_app/core/assets/fonts/flaticon.dart';
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/routes/app_routes.dart';
+import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 List<Map<String, dynamic>> sideMenuOptions = [

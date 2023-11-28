@@ -1,7 +1,7 @@
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
-import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:flutter/material.dart';
 
 class ItemContainer extends StatelessWidget {
@@ -34,8 +34,12 @@ class ItemContainer extends StatelessWidget {
 
   Widget itemContainer() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: UIHelper.pagePadding(sizingInformation), vertical: Dimensions.DEFAULT_MARGIN / 4),
-      padding: EdgeInsets.all(smallMargin ? Dimensions.DEFAULT_MARGIN_SMALL : Dimensions.DEFAULT_MARGIN),
+      margin: EdgeInsets.symmetric(
+          horizontal: UIHelper.pagePadding(sizingInformation),
+          vertical: Dimensions.DEFAULT_MARGIN / 4),
+      padding: EdgeInsets.all(smallMargin
+          ? Dimensions.DEFAULT_MARGIN_SMALL
+          : Dimensions.DEFAULT_MARGIN),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),

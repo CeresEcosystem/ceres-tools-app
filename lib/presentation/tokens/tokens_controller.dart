@@ -1,12 +1,12 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/services/global_service.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
-import 'package:ceres_locker_app/di/injector.dart';
-import 'package:ceres_locker_app/domain/models/token.dart';
-import 'package:ceres_locker_app/domain/models/token_list.dart';
-import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
-import 'package:ceres_locker_app/routes/app_routes.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/services/global_service.dart';
+import 'package:ceres_tools_app/core/utils/image_extension.dart';
+import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/token.dart';
+import 'package:ceres_tools_app/domain/models/token_list.dart';
+import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
+import 'package:ceres_tools_app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 class TokensController extends GetxController {

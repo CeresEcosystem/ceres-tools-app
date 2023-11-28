@@ -1,9 +1,9 @@
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/default_value.dart';
-import 'package:ceres_locker_app/di/injector.dart';
-import 'package:ceres_locker_app/domain/models/token.dart';
-import 'package:ceres_locker_app/domain/usecase/get_tracker.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/default_value.dart';
+import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/token.dart';
+import 'package:ceres_tools_app/domain/usecase/get_tracker.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 

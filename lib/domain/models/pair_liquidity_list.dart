@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/pair_liquidity.dart';
+import 'package:ceres_tools_app/domain/models/pair_liquidity.dart';
 
 class PairLiquidityList {
   List<PairLiquidity> _pairLiquidities = [];

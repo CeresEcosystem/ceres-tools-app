@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/style/app_text_style.dart';

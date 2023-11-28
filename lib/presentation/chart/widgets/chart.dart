@@ -1,9 +1,9 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/widgets/center_loading.dart';
-import 'package:ceres_locker_app/core/widgets/error_text.dart';
-import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
-import 'package:ceres_locker_app/presentation/chart/widgets/current_token.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/widgets/center_loading.dart';
+import 'package:ceres_tools_app/core/widgets/error_text.dart';
+import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/current_token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';

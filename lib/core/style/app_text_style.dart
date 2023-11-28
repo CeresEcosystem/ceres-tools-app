@@ -1,6 +1,6 @@
-import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:flutter/material.dart';
 
 const headline1 = 96.0;

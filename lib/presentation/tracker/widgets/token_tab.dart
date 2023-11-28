@@ -1,6 +1,6 @@
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/style/app_text_style.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class TokenTab extends StatelessWidget {

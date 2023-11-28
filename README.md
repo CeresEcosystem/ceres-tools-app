@@ -1,6 +1,6 @@
-# ceres_locker_app
+# ceres_tools_app
 
-A new Flutter project.
+Track prices of tokens on Polkaswap decentralized exchange
 
 ## Getting Started
 

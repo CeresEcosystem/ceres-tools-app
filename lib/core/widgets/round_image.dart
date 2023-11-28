@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/widgets/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

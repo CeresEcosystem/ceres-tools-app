@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/portfolio_item.dart';
+import 'package:ceres_tools_app/domain/models/portfolio_item.dart';
 
 class PortfolioList {
   final List<PortfolioItem>? _portfolioItems;

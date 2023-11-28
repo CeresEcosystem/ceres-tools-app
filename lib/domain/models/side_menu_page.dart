@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
 
 class SideMenuPage {
   static final SideMenuPage sideMenuPage = SideMenuPage._internal();

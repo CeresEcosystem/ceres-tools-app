@@ -1,12 +1,12 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
-import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
-import 'package:ceres_locker_app/core/widgets/round_image.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/style/app_text_style.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
+import 'package:ceres_tools_app/core/widgets/round_image.dart';
 import 'package:flutter/material.dart';
 
 class DemeterFarming extends StatelessWidget {

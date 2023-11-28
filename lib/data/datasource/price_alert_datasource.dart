@@ -1,6 +1,6 @@
-import 'package:ceres_locker_app/data/api/api.dart';
-import 'package:ceres_locker_app/domain/models/favorite_token_json.dart';
-import 'package:ceres_locker_app/domain/models/initial_favs.dart';
+import 'package:ceres_tools_app/data/api/api.dart';
+import 'package:ceres_tools_app/domain/models/favorite_token_json.dart';
+import 'package:ceres_tools_app/domain/models/initial_favs.dart';
 import 'package:dio/dio.dart';
 
 class PriceAlertDatasource {

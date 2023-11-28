@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
+import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
 import 'package:flutter/material.dart';
 
 class SizingInformation {

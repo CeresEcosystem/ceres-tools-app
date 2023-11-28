@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:flutter/material.dart';
 
 ThemeData lightThemeData() {
@@ -29,6 +29,10 @@ ThemeData darkThemeData() {
         borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
       ),
       contentTextStyle: const TextStyle(color: Colors.white),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: backgroundPink,
+      unselectedItemColor: Colors.white.withOpacity(.5),
     ),
   );
 }

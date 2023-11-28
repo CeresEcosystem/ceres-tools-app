@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/pair.dart';
+import 'package:ceres_tools_app/domain/models/pair.dart';
 
 class PairList {
   final List<Pair>? _pairs;

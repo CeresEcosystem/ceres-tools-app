@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/locked_item.dart';
+import 'package:ceres_tools_app/domain/models/locked_item.dart';
 
 class LockedItemList {
   final List<LockedItem>? _lockedItems;

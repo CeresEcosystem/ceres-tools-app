@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/token.dart';
+import 'package:ceres_tools_app/domain/models/token.dart';
 
 class TokenList {
   final List<Token>? _tokens;

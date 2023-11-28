@@ -1,15 +1,15 @@
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
-import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
-import 'package:ceres_locker_app/core/widgets/center_loading.dart';
-import 'package:ceres_locker_app/core/widgets/error_text.dart';
-import 'package:ceres_locker_app/core/widgets/pagination.dart';
-import 'package:ceres_locker_app/core/widgets/swap_item.dart';
-import 'package:ceres_locker_app/domain/models/swap.dart';
-import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
-import 'package:ceres_locker_app/presentation/chart/widgets/current_token.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/style/app_text_style.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
+import 'package:ceres_tools_app/core/widgets/center_loading.dart';
+import 'package:ceres_tools_app/core/widgets/error_text.dart';
+import 'package:ceres_tools_app/core/widgets/pagination.dart';
+import 'package:ceres_tools_app/core/widgets/swap_item.dart';
+import 'package:ceres_tools_app/domain/models/swap.dart';
+import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/current_token.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

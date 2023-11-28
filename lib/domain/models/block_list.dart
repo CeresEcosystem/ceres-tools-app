@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/block.dart';
+import 'package:ceres_tools_app/domain/models/block.dart';
 
 class BlockList {
   final List<Block>? _blocks;

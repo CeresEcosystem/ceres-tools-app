@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/data/datasource/tokens_datasource.dart';
-import 'package:ceres_locker_app/domain/repository/tokens_repository.dart';
+import 'package:ceres_tools_app/data/datasource/tokens_datasource.dart';
+import 'package:ceres_tools_app/domain/repository/tokens_repository.dart';
 
 class TokensRepositoryImpl implements TokensRepository {
   final TokensDatasource datasource;

@@ -1,9 +1,9 @@
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
-import 'package:ceres_locker_app/core/widgets/responsive.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/style/app_text_style.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +35,9 @@ class TrackerChart extends StatelessWidget {
 
   List<LineTooltipItem> defaultTooltipItem(List<LineBarSpot> touchedSpots) {
     return touchedSpots.map((LineBarSpot touchedSpot) {
-      return LineTooltipItem(getTooltipData(touchedSpot), graphTooltipTextStyle(), textAlign: TextAlign.left);
+      return LineTooltipItem(
+          getTooltipData(touchedSpot), graphTooltipTextStyle(),
+          textAlign: TextAlign.left);
     }).toList();
   }
 
@@ -45,7 +47,8 @@ class TrackerChart extends StatelessWidget {
         touchTooltipData: LineTouchTooltipData(
           getTooltipItems: defaultTooltipItem,
           tooltipBgColor: backgroundColorLight,
-          maxContentWidth: sizingInformation.screenSize.width - Dimensions.DEFAULT_MARGIN_LARGE,
+          maxContentWidth: sizingInformation.screenSize.width -
+              Dimensions.DEFAULT_MARGIN_LARGE,
           fitInsideHorizontally: true,
         ),
       ),
@@ -70,7 +73,9 @@ class TrackerChart extends StatelessWidget {
           showTitles: true,
           interval: graphData['intervalY'],
           getTextStyles: (context, value) => graphTitleTextStyle(),
-          getTitles: (value) => showFullValue ? formatToCurrency(value, decimalDigits: 3) : formatCurrencyGraph(value),
+          getTitles: (value) => showFullValue
+              ? formatToCurrency(value, decimalDigits: 3)
+              : formatCurrencyGraph(value),
           reservedSize: showFullValue ? 80 : 30,
           margin: 10,
         ),

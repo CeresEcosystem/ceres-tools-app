@@ -1,10 +1,10 @@
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/widgets/responsive.dart';
-import 'package:ceres_locker_app/core/widgets/side_menu/side_menu.dart';
-import 'package:ceres_locker_app/presentation/chart/chart_controller.dart';
-import 'package:ceres_locker_app/presentation/chart/widgets/chart.dart';
-import 'package:ceres_locker_app/presentation/chart/widgets/swaps.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/widgets/responsive.dart';
+import 'package:ceres_tools_app/core/widgets/side_menu/side_menu.dart';
+import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/chart.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/swaps.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

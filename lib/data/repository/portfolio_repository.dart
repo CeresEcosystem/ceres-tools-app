@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/data/datasource/portfolio_datasource.dart';
-import 'package:ceres_locker_app/domain/repository/portfolio_repository.dart';
+import 'package:ceres_tools_app/data/datasource/portfolio_datasource.dart';
+import 'package:ceres_tools_app/domain/repository/portfolio_repository.dart';
 
 class PortfolioRepositoryImpl implements PortfolioRepository {
   final PortfolioDatasource datasource;

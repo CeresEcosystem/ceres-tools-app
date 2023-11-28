@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/repository/pairs_liquidity_repository.dart';
+import 'package:ceres_tools_app/domain/repository/pairs_liquidity_repository.dart';
 
 class GetPairsLiquidity {
   final PairsLiquidityRepository repository;

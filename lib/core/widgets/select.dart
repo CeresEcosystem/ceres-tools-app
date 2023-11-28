@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/widgets/responsive.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 
 import '../style/app_text_style.dart';

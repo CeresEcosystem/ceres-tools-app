@@ -1,11 +1,11 @@
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/di/injector.dart';
-import 'package:ceres_locker_app/domain/models/locked_item.dart';
-import 'package:ceres_locker_app/domain/models/locked_item_list.dart';
-import 'package:ceres_locker_app/domain/models/pair.dart';
-import 'package:ceres_locker_app/domain/models/token.dart';
-import 'package:ceres_locker_app/domain/usecase/get_locked_pairs.dart';
-import 'package:ceres_locker_app/domain/usecase/get_locked_tokens.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/locked_item.dart';
+import 'package:ceres_tools_app/domain/models/locked_item_list.dart';
+import 'package:ceres_tools_app/domain/models/pair.dart';
+import 'package:ceres_tools_app/domain/models/token.dart';
+import 'package:ceres_tools_app/domain/usecase/get_locked_pairs.dart';
+import 'package:ceres_tools_app/domain/usecase/get_locked_tokens.dart';
 import 'package:get/get.dart';
 
 class LockerController extends GetxController {

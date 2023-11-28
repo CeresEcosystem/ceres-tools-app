@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/data/datasource/swaps_datasource.dart';
-import 'package:ceres_locker_app/domain/repository/swaps_repository.dart';
+import 'package:ceres_tools_app/data/datasource/swaps_datasource.dart';
+import 'package:ceres_tools_app/domain/repository/swaps_repository.dart';
 
 class SwapsRepositoryImpl implements SwapsRepository {
   final SwapsDatasource datasource;

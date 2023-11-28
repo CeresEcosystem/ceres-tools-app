@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/core/utils/default_value.dart';
+import 'package:ceres_tools_app/core/utils/default_value.dart';
 
 class TVL {
   final double? maxSupply;

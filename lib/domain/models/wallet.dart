@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/core/utils/address_format.dart';
-import 'package:ceres_locker_app/core/utils/default_value.dart';
+import 'package:ceres_tools_app/core/utils/address_format.dart';
+import 'package:ceres_tools_app/core/utils/default_value.dart';
 
 class Wallet {
   final String name;

@@ -1,25 +1,63 @@
 import 'dart:convert';
 
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
-import 'package:ceres_locker_app/core/utils/toast.dart';
-import 'package:ceres_locker_app/di/injector.dart';
-import 'package:ceres_locker_app/domain/models/page_meta.dart';
-import 'package:ceres_locker_app/domain/models/portfolio_item.dart';
-import 'package:ceres_locker_app/domain/models/portfolio_list.dart';
-import 'package:ceres_locker_app/domain/models/swap.dart';
-import 'package:ceres_locker_app/domain/models/swap_list.dart';
-import 'package:ceres_locker_app/domain/models/token.dart';
-import 'package:ceres_locker_app/domain/models/token_list.dart';
-import 'package:ceres_locker_app/domain/models/wallet.dart';
-import 'package:ceres_locker_app/domain/usecase/get_portfolio_items.dart';
-import 'package:ceres_locker_app/domain/usecase/get_tokens.dart';
+import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/image_extension.dart';
+import 'package:ceres_tools_app/core/utils/toast.dart';
+import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/page_meta.dart';
+import 'package:ceres_tools_app/domain/models/portfolio_item.dart';
+import 'package:ceres_tools_app/domain/models/portfolio_list.dart';
+import 'package:ceres_tools_app/domain/models/swap.dart';
+import 'package:ceres_tools_app/domain/models/swap_list.dart';
+import 'package:ceres_tools_app/domain/models/token.dart';
+import 'package:ceres_tools_app/domain/models/token_list.dart';
+import 'package:ceres_tools_app/domain/models/transfer.dart';
+import 'package:ceres_tools_app/domain/models/transfer_list.dart';
+import 'package:ceres_tools_app/domain/models/wallet.dart';
+import 'package:ceres_tools_app/domain/usecase/get_portfolio_items.dart';
+import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const _tabs = ['Portfolio', 'Staking', 'Rewards', 'Liquidity', 'Swaps'];
+const List<Map<String, dynamic>> _tabs = [
+  {
+    'label': 'Portfolio',
+    'icon': Icon(Icons.star),
+    'index': 0,
+  },
+  {
+    'label': 'Staking',
+    'icon': Icon(Flaticon.token),
+    'index': 1,
+  },
+  {
+    'label': 'Rewards',
+    'icon': Icon(Icons.emoji_events),
+    'index': 2,
+  },
+  {
+    'label': 'Liquidity',
+    'icon': HeroIcon(
+      HeroIcons.circleStack,
+    ),
+    'index': 3,
+  },
+  {
+    'label': 'Swaps',
+    'icon': Icon(Icons.swap_horiz),
+    'index': 4,
+  },
+  {
+    'label': 'Transfers',
+    'icon': Icon(Icons.swap_vert),
+    'index': 5,
+  }
+];
 const _timeFrames = ['1h', '24h', '7d', '30d'];
 const kSelectedWallet = 'SELECTED_WALLET';
 const kWalletExistError = 'Wallet with entered address already exist.';
@@ -30,6 +68,7 @@ class PortfolioController extends GetxController {
 
   List<PortfolioItem> _portfolioItems = [];
   List<Swap> _swaps = [];
+  List<Transfer> _transfers = [];
   List<Token> _tokens = [];
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
 
@@ -41,7 +80,7 @@ class PortfolioController extends GetxController {
 
   final _pageLoading = LoadingStatus.LOADING.obs;
   final _loadingStatus = LoadingStatus.READY.obs;
-  final _selectedTab = _tabs[0].obs;
+  final _selectedTab = 0.obs;
   final _selectedTimeFrame = _timeFrames[0].obs;
 
   LoadingStatus get pageLoading => _pageLoading.value;
@@ -53,12 +92,13 @@ class PortfolioController extends GetxController {
   Wallet get selectedWallet => _selectedWallet.value;
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   List<Swap> get swaps => _swaps;
+  List<Transfer> get transfers => _transfers;
   PageMeta get pageMeta => _pageMeta;
   double get totalValue => _totalValue;
   double get totalValueChangeForTimeFrame => _totalValueChangeForTimeFrame;
-  List<String> get tabs => _tabs;
+  List<Map<String, dynamic>> get tabs => _tabs;
   List<String> get timeFrames => _timeFrames;
-  String get selectedTab => _selectedTab.value;
+  int get selectedTab => _selectedTab.value;
   String get selectedTimeFrame => _selectedTimeFrame.value;
 
   @override
@@ -68,7 +108,7 @@ class PortfolioController extends GetxController {
     super.onInit();
   }
 
-  changeSelectedTab(String tab) {
+  changeSelectedTab(int tab) {
     if (tab != _selectedTab.value) {
       _selectedTab.value = tab;
       fetchPortfolioItems();
@@ -241,16 +281,18 @@ class PortfolioController extends GetxController {
 
   String getPortfolioItemsURL() {
     switch (_selectedTab.value) {
-      case 'Portfolio':
+      case 0:
         return _selectedWallet.value.address;
-      case 'Staking':
+      case 1:
         return 'staking/${_selectedWallet.value.address}';
-      case 'Rewards':
+      case 2:
         return 'rewards/${_selectedWallet.value.address}';
-      case 'Liquidity':
+      case 3:
         return 'liquidity/${_selectedWallet.value.address}';
-      case 'Swaps':
+      case 4:
         return 'swaps/${_selectedWallet.value.address}';
+      case 5:
+        return 'transfers/${_selectedWallet.value.address}';
       default:
         return _selectedWallet.value.address;
     }
@@ -298,6 +340,43 @@ class PortfolioController extends GetxController {
     _loadingStatus.value = LoadingStatus.READY;
   }
 
+  setTransfers(dynamic response) async {
+    if (_tokens.isEmpty) {
+      final tokensResponse = await getTokens.execute();
+
+      if (tokensResponse != null) {
+        TokenList tokenList = TokenList.fromJson(tokensResponse);
+        if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
+          _tokens = tokenList.tokens!;
+        }
+      }
+    }
+
+    TransferList transferList = TransferList.fromJson(response['data']);
+    _pageMeta = PageMeta.fromJson(response['meta']);
+
+    if (transferList.transfers.isNotEmpty) {
+      List<Transfer> transferFormatted = [];
+
+      for (final transfer in transferList.transfers) {
+        Transfer tr = transfer;
+        tr.tokenFormatted =
+            _tokens.firstWhereOrNull((t) => t.assetId == tr.asset)?.shortName ??
+                '';
+        tr.tokenImageExtension = imageExtension(tr.asset);
+        tr.transferredAtFormatted = formatDateToLocalTime(tr.transferredAt);
+
+        transferFormatted.add(tr);
+      }
+
+      _transfers = transferFormatted;
+    } else {
+      _swaps = [];
+    }
+
+    _loadingStatus.value = LoadingStatus.READY;
+  }
+
   Future fetchPortfolioItems([int page = 1]) async {
     if (_wallets.isNotEmpty && _selectedWallet.value.address.isNotEmpty) {
       _loadingStatus.value = LoadingStatus.LOADING;
@@ -307,8 +386,10 @@ class PortfolioController extends GetxController {
       final response = await getPortfolioItems.execute(url, page);
 
       if (response != null) {
-        if (_selectedTab.value == 'Swaps') {
+        if (_selectedTab.value == 4) {
           setSwaps(response);
+        } else if (_selectedTab.value == 5) {
+          setTransfers(response);
         } else {
           PortfolioList portfolioList = PortfolioList.fromJson(response);
 
@@ -321,7 +402,7 @@ class PortfolioController extends GetxController {
             }
             List<PortfolioItem> itemsFiltered =
                 portfolioList.portfolioItems!.where((pi) {
-              if (_selectedTab.value == 'Liquidity') {
+              if (_selectedTab.value == 3) {
                 return pi.value! >= 0.0001;
               }
 

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/utils/address_format.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/di/injector.dart';
-import 'package:ceres_locker_app/domain/models/page_meta.dart';
-import 'package:ceres_locker_app/domain/models/pair.dart';
-import 'package:ceres_locker_app/domain/models/pair_liquidity.dart';
-import 'package:ceres_locker_app/domain/models/pair_liquidity_list.dart';
-import 'package:ceres_locker_app/domain/models/wallet.dart';
-import 'package:ceres_locker_app/domain/usecase/get_pairs_liquidity.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/utils/address_format.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/page_meta.dart';
+import 'package:ceres_tools_app/domain/models/pair.dart';
+import 'package:ceres_tools_app/domain/models/pair_liquidity.dart';
+import 'package:ceres_tools_app/domain/models/pair_liquidity_list.dart';
+import 'package:ceres_tools_app/domain/models/wallet.dart';
+import 'package:ceres_tools_app/domain/usecase/get_pairs_liquidity.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

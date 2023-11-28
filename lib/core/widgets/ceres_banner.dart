@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ceres_locker_app/core/enums/device_screen_type.dart';
-import 'package:ceres_locker_app/core/widgets/empty_widget.dart';
-import 'package:ceres_locker_app/core/widgets/responsive.dart';
-import 'package:ceres_locker_app/domain/models/banners.dart';
+import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
+import 'package:ceres_tools_app/core/widgets/empty_widget.dart';
+import 'package:ceres_tools_app/core/widgets/responsive.dart';
+import 'package:ceres_tools_app/domain/models/banners.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';

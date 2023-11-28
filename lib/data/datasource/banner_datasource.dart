@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/data/api/api.dart';
+import 'package:ceres_tools_app/data/api/api.dart';
 import 'package:dio/dio.dart';
 
 class BannerDatasource {

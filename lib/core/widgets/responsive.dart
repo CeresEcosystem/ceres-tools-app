@@ -1,5 +1,5 @@
-import 'package:ceres_locker_app/core/utils/platform.dart';
-import 'package:ceres_locker_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/utils/platform.dart';
+import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:flutter/material.dart';
 
 class Responsive extends StatelessWidget {

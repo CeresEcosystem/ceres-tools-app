@@ -1,12 +1,12 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/style/app_colors.dart';
-import 'package:ceres_locker_app/core/style/app_text_style.dart';
-import 'package:ceres_locker_app/core/theme/dimensions.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
-import 'package:ceres_locker_app/core/utils/ui_helpers.dart';
-import 'package:ceres_locker_app/core/widgets/responsive.dart';
-import 'package:ceres_locker_app/core/widgets/round_image.dart';
-import 'package:ceres_locker_app/presentation/chart/widgets/tokens_dialog.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/style/app_colors.dart';
+import 'package:ceres_tools_app/core/style/app_text_style.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/image_extension.dart';
+import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
+import 'package:ceres_tools_app/core/widgets/responsive.dart';
+import 'package:ceres_tools_app/core/widgets/round_image.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/tokens_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

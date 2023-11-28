@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/swap.dart';
+import 'package:ceres_tools_app/domain/models/swap.dart';
 
 class SwapList {
   List<Swap> _swaps = [];

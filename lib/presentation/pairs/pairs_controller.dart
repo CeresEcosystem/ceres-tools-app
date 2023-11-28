@@ -1,11 +1,11 @@
-import 'package:ceres_locker_app/core/constants/constants.dart';
-import 'package:ceres_locker_app/core/enums/loading_status.dart';
-import 'package:ceres_locker_app/core/utils/currency_format.dart';
-import 'package:ceres_locker_app/core/utils/image_extension.dart';
-import 'package:ceres_locker_app/di/injector.dart';
-import 'package:ceres_locker_app/domain/models/pair.dart';
-import 'package:ceres_locker_app/domain/models/pair_list.dart';
-import 'package:ceres_locker_app/domain/usecase/get_pairs.dart';
+import 'package:ceres_tools_app/core/constants/constants.dart';
+import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/image_extension.dart';
+import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/pair.dart';
+import 'package:ceres_tools_app/domain/models/pair_list.dart';
+import 'package:ceres_tools_app/domain/usecase/get_pairs.dart';
 import 'package:get/get.dart';
 
 class PairsController extends GetxController {

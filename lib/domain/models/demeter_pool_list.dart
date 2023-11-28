@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/models/demeter_pool.dart';
+import 'package:ceres_tools_app/domain/models/demeter_pool.dart';
 
 class DemeterPoolList {
   final List<DemeterPool>? _demeterPools;

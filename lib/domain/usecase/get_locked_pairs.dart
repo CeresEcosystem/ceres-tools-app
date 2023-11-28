@@ -1,4 +1,4 @@
-import 'package:ceres_locker_app/domain/repository/locker_repository.dart';
+import 'package:ceres_tools_app/domain/repository/locker_repository.dart';
 
 class GetLockedPairs {
   final LockerRepository repository;
