@@ -250,7 +250,7 @@ class PortfolioView extends GetView<PortfolioController> {
                             goToPreviousPage: controller.goToPreviousPage,
                             goToNextPage: controller.goToNextPage,
                             goToLastPage: controller.goToLastPage,
-                            label: 'Total tx',
+                            label: 'Total',
                           )),
                       ],
                     ),

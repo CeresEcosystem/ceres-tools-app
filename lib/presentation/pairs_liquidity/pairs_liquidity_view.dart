@@ -240,7 +240,7 @@ class PairsLiquidityView extends GetView<PairsLiquidityController> {
                       goToPreviousPage: controller.goToPreviousPage,
                       goToNextPage: controller.goToNextPage,
                       goToLastPage: controller.goToLastPage,
-                      label: 'Total tx',
+                      label: 'Total',
                     )),
                 ],
               );
