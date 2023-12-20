@@ -8,6 +8,7 @@ const kPSWAPCommunity = 'https://twitter.com/PSWAPCommunity';
 const kImageStorage = 'https://data.cerestoken.io/storage/icons/';
 const kChartURL = 'https://tools.cerestoken.io/trading?token=';
 const kSwapsSocketURL = 'http://data.cerestoken.io/swapsocket';
+const kEthScan = 'https://etherscan.io/address/';
 const kImageExtension = '.svg';
 const kImagePNGExtension = '.png';
 const kBannerTitle = 'Ceres is live!';

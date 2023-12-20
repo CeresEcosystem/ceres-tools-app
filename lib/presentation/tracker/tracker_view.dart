@@ -4,6 +4,7 @@ import 'package:ceres_tools_app/core/enums/loading_status.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
+import 'package:ceres_tools_app/core/utils/launch_url.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/center_loading.dart';
@@ -22,7 +23,6 @@ import 'package:ceres_tools_app/presentation/tracker/widgets/faqs_item.dart';
 import 'package:ceres_tools_app/presentation/tracker/widgets/token_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TrackerView extends GetView<TrackerController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -519,14 +519,6 @@ class TrackerView extends GetView<TrackerController> {
     );
   }
 
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
-  }
-
   Widget seventhBlock(SizingInformation sizingInformation) {
     return Column(
       children: [
@@ -579,7 +571,7 @@ class TrackerView extends GetView<TrackerController> {
           ),
           UIHelper.verticalSpaceMediumLarge(),
           GestureDetector(
-            onTap: () => _launchURL(kPSWAPCommunity),
+            onTap: () => launchURL(kPSWAPCommunity),
             child: const RoundImage(
               image: 'lib/core/assets/images/pococo_icon.png',
               localImage: true,

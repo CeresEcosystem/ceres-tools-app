@@ -1,12 +1,12 @@
 import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/launch_url.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/item_container.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class FaqsItem extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -52,14 +52,6 @@ class FaqsItemState extends State<FaqsItem>
         open = false;
       }
     });
-  }
-
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
   }
 
   @override
@@ -116,7 +108,7 @@ class FaqsItemState extends State<FaqsItem>
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                _launchURL(widget.item['link']);
+                                launchURL(widget.item['link']);
                               },
                           ),
                         ],

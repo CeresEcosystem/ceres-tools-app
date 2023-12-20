@@ -506,3 +506,11 @@ TextStyle tbcReservesInfoTextStyle() {
     color: Colors.white,
   );
 }
+
+TextStyle bridgeTransferTextStyle() {
+  return const TextStyle(
+    fontSize: overline,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}

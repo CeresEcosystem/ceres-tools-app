@@ -3,6 +3,7 @@ import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/launch_url.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
@@ -12,7 +13,6 @@ import 'package:ceres_tools_app/domain/models/side_menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SideMenu extends StatelessWidget {
   final bool largeScreen;
@@ -22,14 +22,6 @@ class SideMenu extends StatelessWidget {
 
   SideMenu({Key? key, this.largeScreen = false, this.onMenuItemPress})
       : super(key: key);
-
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
-  }
 
   void _navigate(Map<String, dynamic> option) {
     SideMenuPage.sideMenuPage.setActivePage(option['title']);
@@ -176,7 +168,7 @@ class SideMenu extends StatelessWidget {
         children: [
           if (sizingInformation.screenSize.height > 600.0)
             (GestureDetector(
-              onTap: () => _launchURL(kPolkaswapWebsite),
+              onTap: () => launchURL(kPolkaswapWebsite),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: Dimensions.POLKASWAP_LOGO_SIZE,
@@ -212,7 +204,7 @@ class SideMenu extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: sideMenuSocials.map((social) {
         return GestureDetector(
-          onTap: () => _launchURL(social['url']!),
+          onTap: () => launchURL(social['url']!),
           child: Container(
             margin: const EdgeInsets.symmetric(
                 horizontal: Dimensions.DEFAULT_MARGIN / 2),
@@ -242,7 +234,7 @@ class SideMenu extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             if (url != null) {
-              _launchURL(url);
+              launchURL(url);
             }
           },
           child: Container(
