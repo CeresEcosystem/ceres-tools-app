@@ -2,6 +2,7 @@ import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 List<Map<String, dynamic>> sideMenuOptions = [
   {
@@ -38,6 +39,12 @@ List<Map<String, dynamic>> sideMenuOptions = [
     'icon': Icons.star,
     'title': kSideMenuPortfolio,
     'path': Routes.PORTFOLIO,
+    'type': 'icon'
+  },
+  {
+    'icon': FontAwesome5Solid.coins,
+    'title': kSideMenuReserves,
+    'path': Routes.TBC_RESERVES,
     'type': 'icon'
   },
 ];

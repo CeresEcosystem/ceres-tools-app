@@ -10,4 +10,5 @@ abstract class Routes {
   static const PORTFOLIO = '/portfolio';
   static const SUPPLY = '/supply';
   static const PAIRS_LIQUIDITY = '/pairs_liquidity';
+  static const TBC_RESERVES = '/tbc_reserves';
 }

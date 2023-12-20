@@ -191,6 +191,17 @@ TextStyle pairsSumContainerInfoStyle(SizingInformation sizingInformation) {
   );
 }
 
+TextStyle tbcReservesSumContainerInfoStyle(
+    SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? subtitle2
+        : headline4,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+}
+
 TextStyle pageTitleStyle(SizingInformation sizingInformation) {
   return const TextStyle(
     fontSize: headline45,
@@ -476,6 +487,22 @@ TextStyle paginationPageNumberTextStyle() {
   return const TextStyle(
     fontSize: subtitle2,
     fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
+TextStyle tbcReservesLabelTextStyle() {
+  return TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w500,
+    color: Colors.white.withOpacity(.5),
+  );
+}
+
+TextStyle tbcReservesInfoTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 }

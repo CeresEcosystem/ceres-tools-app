@@ -53,6 +53,7 @@ const kEmptyLockedTokensList = 'Token has no lockups';
 const kEmptyLockedPairsList = 'Pair has no liquidity lockups';
 const kHMXAddress =
     '0x002d4e9e03f192cc33b128319a049f353db98fbf4d98f717fd0b7f66a0462142';
+const kTBCReservesAddress = 'cnTQ1kbv7PBNNQrEb1tZpmK7eE2hQTwktcdewhc55bpkDrYBX';
 const kSyntheticsAddress = '0x0300';
 const kWallets = 'WALLETS';
 
@@ -65,3 +66,4 @@ const kSideMenuFarming = 'Farming';
 const kSideMenuTracker = 'Burning Tracker';
 const kSideMenuCharts = 'Charts & Swaps';
 const kSideMenuPortfolio = 'Portfolio';
+const kSideMenuReserves = 'TBC Reserves';

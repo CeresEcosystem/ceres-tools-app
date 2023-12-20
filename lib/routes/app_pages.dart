@@ -12,6 +12,8 @@ import 'package:ceres_tools_app/presentation/portfolio/portfolio_binding.dart';
 import 'package:ceres_tools_app/presentation/portfolio/portfolio_view.dart';
 import 'package:ceres_tools_app/presentation/supply/supply_binding.dart';
 import 'package:ceres_tools_app/presentation/supply/supply_view.dart';
+import 'package:ceres_tools_app/presentation/tbc_reserves/tbc_reserves_binding.dart';
+import 'package:ceres_tools_app/presentation/tbc_reserves/tbc_reserves_view.dart';
 import 'package:ceres_tools_app/presentation/tokens/tokens_binding.dart';
 import 'package:ceres_tools_app/presentation/tokens/tokens_view.dart';
 import 'package:ceres_tools_app/presentation/tracker/tracker_binding.dart';
@@ -66,6 +68,11 @@ class AppPages {
       name: Routes.PAIRS_LIQUIDITY,
       page: () => const PairsLiquidityView(),
       binding: PairsLiquidityBinding(),
+    ),
+    GetPage(
+      name: Routes.TBC_RESERVES,
+      page: () => TBCReservesView(),
+      binding: TBCReservesBinding(),
     ),
   ];
 }

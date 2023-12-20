@@ -3,16 +3,17 @@ import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
+import 'package:ceres_tools_app/core/widgets/empty_widget.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class TrackerChart extends StatelessWidget {
+class Chart extends StatelessWidget {
   final Function getTooltipData;
-  final Map<String, dynamic> graphData;
+  final Map<String, dynamic>? graphData;
   final bool showFullValue;
 
-  const TrackerChart({
+  const Chart({
     Key? key,
     required this.getTooltipData,
     required this.graphData,
@@ -21,6 +22,10 @@ class TrackerChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (graphData == null) {
+      return const EmptyWidget();
+    }
+
     return Responsive(
       builder: (context, sizingInformation) {
         return AspectRatio(
@@ -46,6 +51,7 @@ class TrackerChart extends StatelessWidget {
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
           getTooltipItems: defaultTooltipItem,
+          fitInsideVertically: true,
           tooltipBgColor: backgroundColorLight,
           maxContentWidth: sizingInformation.screenSize.width -
               Dimensions.DEFAULT_MARGIN_LARGE,
@@ -63,7 +69,7 @@ class TrackerChart extends StatelessWidget {
         topTitles: SideTitles(showTitles: false),
         bottomTitles: SideTitles(
           showTitles: true,
-          interval: graphData['intervalX'],
+          interval: graphData!['intervalX'],
           getTextStyles: (context, value) => graphTitleTextStyle(),
           getTitles: (value) => formatDate(value, showDay: showFullValue),
           reservedSize: 10,
@@ -71,7 +77,7 @@ class TrackerChart extends StatelessWidget {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          interval: graphData['intervalY'],
+          interval: graphData!['intervalY'],
           getTextStyles: (context, value) => graphTitleTextStyle(),
           getTitles: (value) => showFullValue
               ? formatToCurrency(value, decimalDigits: 3)
@@ -93,13 +99,13 @@ class TrackerChart extends StatelessWidget {
           ),
         ),
       ),
-      minX: graphData['minX'] ?? 0,
-      maxX: graphData['maxX'],
-      minY: graphData['minY'] ?? 0,
-      maxY: graphData['maxY'],
+      minX: graphData!['minX'] ?? 0,
+      maxX: graphData!['maxX'],
+      minY: graphData!['minY'] ?? 0,
+      maxY: graphData!['maxY'],
       lineBarsData: [
         LineChartBarData(
-          spots: List.from(graphData['data']).map((spot) {
+          spots: List.from(graphData!['data']).map((spot) {
             return FlSpot(spot['x'], spot['y']);
           }).toList(),
           isCurved: false,

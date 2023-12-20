@@ -22,6 +22,7 @@ class _$Injector extends Injector {
       ..registerFactory(
           (c) => PairsLiquidityDatasource(client: c<RestClient>()))
       ..registerFactory((c) => PriceAlertDatasource(client: c<RestClient>()))
+      ..registerFactory((c) => TBCReservesDatasource(client: c<RestClient>()))
       ..registerFactory((c) => GetTokens(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetPairs(repository: c<PairsRepository>()))
       ..registerFactory((c) => GetFarming(repository: c<FarmingRepository>()))
@@ -43,6 +44,8 @@ class _$Injector extends Injector {
       ..registerFactory((c) => GetSwaps(repository: c<SwapsRepository>()))
       ..registerFactory(
           (c) => GetPairsLiquidity(repository: c<PairsLiquidityRepository>()))
+      ..registerFactory(
+          (c) => GetTBCReserves(repository: c<TBCReservesRepository>()))
       ..registerFactory<TokensRepository>(
           (c) => TokensRepositoryImpl(datasource: c<TokensDatasource>()))
       ..registerFactory<PairsRepository>(
@@ -59,6 +62,8 @@ class _$Injector extends Injector {
           (c) => SwapsRepositoryImpl(datasource: c<SwapsDatasource>()))
       ..registerFactory<PairsLiquidityRepository>((c) =>
           PairsLiquidityRepositoryImpl(
-              datasource: c<PairsLiquidityDatasource>()));
+              datasource: c<PairsLiquidityDatasource>()))
+      ..registerFactory<TBCReservesRepository>((c) =>
+          TBCReservesRepositoryImpl(datasource: c<TBCReservesDatasource>()));
   }
 }

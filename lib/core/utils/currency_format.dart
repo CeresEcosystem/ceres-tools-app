@@ -86,6 +86,24 @@ String formatDate(dynamic value,
   return '';
 }
 
+String formatDateAndTime(dynamic value) {
+  if (value != null && value.toString().length >= 8) {
+    var dd =
+        DateTime.fromMicrosecondsSinceEpoch(getDefaultIntValue(value)! * 1000);
+
+    final month = dd.month;
+    final day = dd.day;
+
+    if (month > 12 || day > 31) {
+      return '';
+    }
+
+    return DateFormat('yyyy-MM-dd HH:mm').format(dd);
+  }
+
+  return '';
+}
+
 bool checkNumberValue(dynamic number) {
   if (number != null && number != 0 && number != double.infinity) {
     return true;

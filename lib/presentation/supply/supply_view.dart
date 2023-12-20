@@ -9,11 +9,11 @@ import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/center_loading.dart';
 import 'package:ceres_tools_app/core/widgets/error_text.dart';
 import 'package:ceres_tools_app/core/widgets/item_container.dart';
+import 'package:ceres_tools_app/core/widgets/line_chart.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
 import 'package:ceres_tools_app/domain/models/token.dart';
 import 'package:ceres_tools_app/presentation/supply/supply_controller.dart';
-import 'package:ceres_tools_app/presentation/tracker/widgets/tracker_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,7 +43,7 @@ class SupplyView extends GetView<SupplyController> {
 
             if (controller.loadingStatus == LoadingStatus.ERROR) {
               return ErrorText(
-                onButtonPress: () => controller.fetchTracker(),
+                onButtonPress: () => controller.fetchSupply(),
               );
             }
 
@@ -58,11 +58,11 @@ class SupplyView extends GetView<SupplyController> {
                   ),
                 ),
                 UIHelper.verticalSpaceMedium(),
-                if (controller.pswapSupplyGraphData != null)
+                if (controller.supplyGraphData != null)
                   (ItemContainer(
                     sizingInformation: sizingInformation,
-                    child: TrackerChart(
-                      graphData: controller.pswapSupplyGraphData!,
+                    child: Chart(
+                      graphData: controller.supplyGraphData!,
                       getTooltipData: controller.getSupplyTooltipData,
                       showFullValue: true,
                     ),

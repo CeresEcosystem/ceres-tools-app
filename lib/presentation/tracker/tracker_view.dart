@@ -11,6 +11,7 @@ import 'package:ceres_tools_app/core/widgets/ceres_banner.dart';
 import 'package:ceres_tools_app/core/widgets/ceres_header.dart';
 import 'package:ceres_tools_app/core/widgets/error_text.dart';
 import 'package:ceres_tools_app/core/widgets/item_container.dart';
+import 'package:ceres_tools_app/core/widgets/line_chart.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
 import 'package:ceres_tools_app/core/widgets/side_menu/side_menu.dart';
@@ -19,7 +20,6 @@ import 'package:ceres_tools_app/domain/models/block.dart';
 import 'package:ceres_tools_app/presentation/tracker/tracker_controller.dart';
 import 'package:ceres_tools_app/presentation/tracker/widgets/faqs_item.dart';
 import 'package:ceres_tools_app/presentation/tracker/widgets/token_tab.dart';
-import 'package:ceres_tools_app/presentation/tracker/widgets/tracker_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -490,7 +490,7 @@ class TrackerView extends GetView<TrackerController> {
         UIHelper.verticalSpaceMedium(),
         ItemContainer(
           sizingInformation: sizingInformation,
-          child: TrackerChart(
+          child: Chart(
             graphData: controller.pswapBurningGraphData!,
             getTooltipData: controller.getTooltipData,
           ),
@@ -509,7 +509,7 @@ class TrackerView extends GetView<TrackerController> {
         UIHelper.verticalSpaceMedium(),
         ItemContainer(
           sizingInformation: sizingInformation,
-          child: TrackerChart(
+          child: Chart(
             graphData: controller.pswapSupplyGraphData!,
             getTooltipData: controller.getSupplyTooltipData,
             showFullValue: true,

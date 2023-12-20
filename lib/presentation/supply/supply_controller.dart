@@ -11,35 +11,35 @@ class SupplyController extends GetxController {
   final getTracker = Injector.resolve!<GetTracker>();
 
   final _loadingStatus = LoadingStatus.READY.obs;
-  List? _pswapSupplyGraph;
-  Map<String, dynamic>? _pswapSupplyGraphData;
+  List? _supplyGraph;
+  Map<String, dynamic>? _supplyGraphData;
   double _currentSupply = 0;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
-  Map<String, dynamic>? get pswapSupplyGraphData => _pswapSupplyGraphData;
+  Map<String, dynamic>? get supplyGraphData => _supplyGraphData;
   double get currentSupply => _currentSupply;
 
   @override
   void onInit() {
-    fetchTracker();
+    fetchSupply();
     super.onInit();
   }
 
-  void _setPswapSupplyGraphData() {
-    if (_pswapSupplyGraph != null && _pswapSupplyGraph!.isNotEmpty) {
+  void _setSupplyGraphData() {
+    if (_supplyGraph != null && _supplyGraph!.isNotEmpty) {
       double maxY = 0;
       double minY = 0;
       double maxX = 0;
       double minX = 0;
       List<Map<String, dynamic>> data = [];
 
-      for (var i = 0; i < _pswapSupplyGraph!.length; i++) {
-        final value = _pswapSupplyGraph![i];
+      for (var i = 0; i < _supplyGraph!.length; i++) {
+        final value = _supplyGraph![i];
         if (value is Map<String, dynamic>) {
           double x = dateStringToDouble(value['x']);
           double y = getDefaultDoubleValue(value['y'])!;
 
-          if (i == _pswapSupplyGraph!.length - 1) {
+          if (i == _supplyGraph!.length - 1) {
             _currentSupply = y;
           }
 
@@ -54,7 +54,7 @@ class SupplyController extends GetxController {
             if (y < minY) {
               minY = y;
             }
-            if (i == _pswapSupplyGraph!.length - 1 && value['x'] != null) {
+            if (i == _supplyGraph!.length - 1 && value['x'] != null) {
               maxX = x;
             }
             data.add({...value, 'y': y, 'x': x});
@@ -65,7 +65,7 @@ class SupplyController extends GetxController {
       final intervalY = (maxY - minY) / 4;
       final intervalX = (maxX - minX) / 2;
 
-      _pswapSupplyGraphData = {
+      _supplyGraphData = {
         'maxY': maxY,
         'minY': minY,
         'maxX': maxX,
@@ -75,18 +75,17 @@ class SupplyController extends GetxController {
         'data': data
       };
     } else {
-      _pswapSupplyGraphData = null;
+      _supplyGraphData = null;
     }
   }
 
   String getSupplyTooltipData(LineBarSpot touchedSpot) {
-    Map<String, dynamic> item = List.from(pswapSupplyGraphData!['data'])
-        .firstWhere(
-            (spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
+    Map<String, dynamic> item = List.from(supplyGraphData!['data']).firstWhere(
+        (spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
     return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y, decimalDigits: 4)}';
   }
 
-  void fetchTracker() async {
+  void fetchSupply() async {
     final args = Get.arguments;
     Token token = args['token'];
 
@@ -96,8 +95,8 @@ class SupplyController extends GetxController {
 
     if (response != null) {
       if (response['graphSupply'] != null && response['graphSupply'] is List) {
-        _pswapSupplyGraph = response['graphSupply'];
-        _setPswapSupplyGraphData();
+        _supplyGraph = response['graphSupply'];
+        _setSupplyGraphData();
       }
 
       _loadingStatus.value = LoadingStatus.READY;

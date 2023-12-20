@@ -25,4 +25,5 @@ class ApiConstants {
   static const ADD_TOKEN_TO_FAVORITES_PERMALINK = '/device/add-token';
   static const REMOVE_TOKEN_FROM_FAVORITES_PERMALINK =
       '/device/remove-token/{deviceId}/{token}';
+  static const TBC_RESERVES_PERMALINK = '/reserves/TBCD';
 }

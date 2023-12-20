@@ -72,4 +72,7 @@ abstract class RestClient {
       '${ApiConstants.NEW_BASE_URL}${ApiConstants.REMOVE_TOKEN_FROM_FAVORITES_PERMALINK}')
   Future removeTokenFromFavorites(
       @Path() String deviceId, @Path() String token);
+
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TBC_RESERVES_PERMALINK}')
+  Future getTBCReserves();
 }
