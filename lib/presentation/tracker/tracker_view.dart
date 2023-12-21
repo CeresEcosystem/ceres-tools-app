@@ -11,6 +11,7 @@ import 'package:ceres_tools_app/core/widgets/center_loading.dart';
 import 'package:ceres_tools_app/core/widgets/ceres_banner.dart';
 import 'package:ceres_tools_app/core/widgets/ceres_header.dart';
 import 'package:ceres_tools_app/core/widgets/error_text.dart';
+import 'package:ceres_tools_app/core/widgets/horizontal_tab.dart';
 import 'package:ceres_tools_app/core/widgets/item_container.dart';
 import 'package:ceres_tools_app/core/widgets/line_chart.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
@@ -20,7 +21,6 @@ import 'package:ceres_tools_app/core/widgets/status_bar.dart';
 import 'package:ceres_tools_app/domain/models/block.dart';
 import 'package:ceres_tools_app/presentation/tracker/tracker_controller.dart';
 import 'package:ceres_tools_app/presentation/tracker/widgets/faqs_item.dart';
-import 'package:ceres_tools_app/presentation/tracker/widgets/token_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -78,10 +78,10 @@ class TrackerView extends GetView<TrackerController> {
                     padding: const EdgeInsets.all(Dimensions.DEFAULT_MARGIN),
                     child: Column(
                       children: [
-                        TokenTab(
+                        HorizontalTab(
                           tabs: controller.tabs,
-                          selectedToken: controller.selectedToken,
-                          changeToken: controller.changeToken,
+                          selectedTab: controller.selectedToken,
+                          changeTab: controller.changeToken,
                         ),
                         Text(
                           'Track ${controller.selectedToken}',

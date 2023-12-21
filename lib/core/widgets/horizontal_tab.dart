@@ -3,16 +3,18 @@ import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:flutter/material.dart';
 
-class TokenTab extends StatelessWidget {
+class HorizontalTab extends StatelessWidget {
   final List<String> tabs;
-  final String selectedToken;
-  final Function changeToken;
+  final String selectedTab;
+  final Function changeTab;
+  final bool bottomMargin;
 
-  const TokenTab({
+  const HorizontalTab({
     Key? key,
     required this.tabs,
-    required this.selectedToken,
-    required this.changeToken,
+    required this.selectedTab,
+    required this.changeTab,
+    this.bottomMargin = true,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,11 @@ class TokenTab extends StatelessWidget {
     return Center(
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.only(bottom: Dimensions.DEFAULT_MARGIN_LARGE),
+        margin: EdgeInsets.only(
+          bottom: bottomMargin
+              ? Dimensions.DEFAULT_MARGIN_LARGE
+              : Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+        ),
         padding: const EdgeInsets.symmetric(
           vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
           horizontal: Dimensions.DEFAULT_MARGIN,
@@ -34,11 +40,11 @@ class TokenTab extends StatelessWidget {
         ),
         child: Row(
           children: tabs.map((tab) {
-            final selected = selectedToken == tab;
+            final selected = selectedTab == tab;
 
             return Expanded(
               child: GestureDetector(
-                onTap: () => changeToken(tab),
+                onTap: () => changeTab(tab),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,

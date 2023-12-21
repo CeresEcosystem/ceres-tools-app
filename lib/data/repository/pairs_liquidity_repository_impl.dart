@@ -13,4 +13,11 @@ class PairsLiquidityRepositoryImpl implements PairsLiquidityRepository {
       return await datasource.getPairsLiquidity(baseAsset, tokenAsset, page);
     } on Exception catch (_) {}
   }
+
+  @override
+  Future getPairsLiquidityChart(String baseToken, String token) async {
+    try {
+      return await datasource.getPairsLiquidityChart(baseToken, token);
+    } on Exception catch (_) {}
+  }
 }

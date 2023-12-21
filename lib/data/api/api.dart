@@ -20,6 +20,10 @@ abstract class RestClient {
   Future getPairsLiquidity(@Path("baseAsset") String baseAsset,
       @Path("tokenAsset") String tokenAsset, @Query("page") int page);
 
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIRS_LIQUIDITY_CHART}')
+  Future getPairsLiquidityChart(
+      @Path("baseToken") String baseToken, @Path("token") String token);
+
   @GET('${ApiConstants.DEMETER_URL}${ApiConstants.TOKEN_INFOS_PERMALINK}')
   Future getTokenInfos();
 

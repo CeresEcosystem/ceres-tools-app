@@ -12,4 +12,10 @@ class PairsLiquidityDatasource {
       return await client.getPairsLiquidity(baseAsset, tokenAsset, page);
     } on DioException catch (_) {}
   }
+
+  Future getPairsLiquidityChart(String baseToken, String token) async {
+    try {
+      return await client.getPairsLiquidityChart(baseToken, token);
+    } on DioException catch (_) {}
+  }
 }

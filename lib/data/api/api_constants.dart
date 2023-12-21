@@ -13,6 +13,8 @@ class ApiConstants {
   static const TOKENS_PERMALINK = '/prices';
   static const PAIRS_PERMALINK = '/pairs';
   static const PAIRS_LIQUIDITY = '/pairs-liquidity/{baseAsset}/{tokenAsset}';
+  static const PAIRS_LIQUIDITY_CHART =
+      '/pairs-liquidity/history/{baseToken}/{token}';
   static const FARMING_PERMALINK = '/rewards';
   static const TRACKER_PERMALINK = '/tracker/{token}';
   static const BANNERS_PERMALINK = '/banners/mobile';

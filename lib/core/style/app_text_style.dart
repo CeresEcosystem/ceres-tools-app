@@ -385,7 +385,7 @@ TextStyle gridItemTitleTextStyle() {
 
 TextStyle tokenTabTextStyle() {
   return const TextStyle(
-    fontSize: subtitle1,
+    fontSize: subtitle2,
     fontWeight: FontWeight.w500,
     color: Colors.white,
   );
