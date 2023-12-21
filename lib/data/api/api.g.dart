@@ -480,6 +480,32 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<dynamic> getSwapsForAllTokens(int page) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'page': page};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'https://data.cerestoken.io/api/swaps/all',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
   Future<dynamic> postInitialFavs(InitialFavs initialFavs) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

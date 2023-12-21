@@ -65,6 +65,10 @@ abstract class RestClient {
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
   Future getSwaps(@Query("token") List<String> tokens, @Query("page") int page);
 
+  @GET(
+      '${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_FOR_ALL_TOKENS_PERMALINK}')
+  Future getSwapsForAllTokens(@Query("page") int page);
+
   @POST('${ApiConstants.NEW_BASE_URL}${ApiConstants.INITIAL_FAVS_PERMALINK}')
   Future postInitialFavs(@Body() InitialFavs initialFavs);
 

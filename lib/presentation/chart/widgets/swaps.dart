@@ -52,7 +52,6 @@ class _SwapsState extends State<Swaps>
             icon: Icons.trending_up,
             buttonLabel: 'Chart',
             bottomPadding: false,
-            showFavorites: controller.showFavoriteTokens,
           ),
           (() {
             if (controller.swapLoadingStatus == LoadingStatus.LOADING) {
@@ -78,7 +77,8 @@ class _SwapsState extends State<Swaps>
                           return SwapItem(
                             sizingInformation: widget.sizingInformation,
                             swap: swap,
-                            showType: !controller.showFavoriteTokens,
+                            showType: controller.token != kFavoriteTokens &&
+                                controller.token != kAllTokens,
                           );
                         },
                         separatorBuilder: (context, index) =>

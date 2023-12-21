@@ -1,3 +1,4 @@
+import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
@@ -68,51 +69,31 @@ class TokensDialog extends StatelessWidget {
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           if (chartController.favoriteTokens.isNotEmpty) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  tileColor: backgroundColorDark,
-                                  visualDensity: VisualDensity.compact,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal:
-                                        Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                                  ),
-                                  horizontalTitleGap:
-                                      Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                                  leading: Container(
-                                    height: Dimensions.ICON_SIZE,
-                                    width: Dimensions.ICON_SIZE,
-                                    decoration: const BoxDecoration(
-                                      color: backgroundPink,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.favorite,
-                                        size: Dimensions.ICON_SIZE_SMALL,
-                                      ),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    'Favorite tokens',
-                                    style: tokensTitleStyle(sizingInformation)
-                                        .copyWith(fontSize: subtitle2),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  onTap: () {
-                                    chartController.switchFavoriteTokens();
-                                    chartController.closeDialog();
-                                  },
-                                ),
-                                UIHelper.verticalSpaceSmall(),
-                              ],
+                            return tokenOptionItem(
+                              backgroundPink,
+                              Icons.favorite,
+                              'Favorite tokens',
+                              () {
+                                chartController.changeToken(kFavoriteTokens);
+                                chartController.closeDialog();
+                              },
                             );
                           } else {
                             return const EmptyWidget();
                           }
+                        } else if (index == 1) {
+                          return tokenOptionItem(
+                            Colors.white.withOpacity(.2),
+                            Flaticon.token,
+                            'All tokens',
+                            () {
+                              chartController.changeToken(kAllTokens);
+                              chartController.closeDialog();
+                            },
+                            backgroundOrange,
+                          );
                         } else {
-                          final token = chartController.tokens[index - 1];
+                          final token = chartController.tokens[index - 2];
 
                           return Container(
                             margin: const EdgeInsets.only(
@@ -173,7 +154,7 @@ class TokensDialog extends StatelessWidget {
                       },
                       separatorBuilder: (_, __) =>
                           UIHelper.verticalSpaceExtraSmall(),
-                      itemCount: chartController.tokens.length + 1,
+                      itemCount: chartController.tokens.length + 2,
                     ),
                   ),
                   Container(
@@ -202,6 +183,46 @@ class TokensDialog extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Widget tokenOptionItem(Color bg, IconData icon, String title, Function onTap,
+      [Color iconColor = Colors.white]) {
+    return Column(
+      children: [
+        ListTile(
+          tileColor: backgroundColorDark,
+          visualDensity: VisualDensity.compact,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+          ),
+          horizontalTitleGap: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+          leading: Container(
+            height: Dimensions.ICON_SIZE,
+            width: Dimensions.ICON_SIZE,
+            decoration: BoxDecoration(
+              color: bg,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Icon(
+                icon,
+                size: Dimensions.ICON_SIZE_SMALL,
+                color: iconColor,
+              ),
+            ),
+          ),
+          title: Text(
+            title,
+            style: tokensTitleStyle(sizingInformation)
+                .copyWith(fontSize: subtitle2),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          onTap: () => onTap(),
+        ),
+        UIHelper.verticalSpaceSmall(),
+      ],
     );
   }
 }

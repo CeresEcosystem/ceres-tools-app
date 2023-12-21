@@ -39,6 +39,7 @@ import 'package:ceres_tools_app/domain/usecase/get_pairs_liquidity.dart';
 import 'package:ceres_tools_app/domain/usecase/get_pairs_liquidity_chart.dart';
 import 'package:ceres_tools_app/domain/usecase/get_portfolio_items.dart';
 import 'package:ceres_tools_app/domain/usecase/get_swaps.dart';
+import 'package:ceres_tools_app/domain/usecase/get_swaps_for_all_tokens.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tbc_reserves.dart';
 import 'package:ceres_tools_app/domain/usecase/get_token_infos.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
@@ -95,6 +96,7 @@ abstract class Injector {
   @Register.factory(GetLockedPairs)
   @Register.factory(GetPortfolioItems)
   @Register.factory(GetSwaps)
+  @Register.factory(GetSwapsForAllTokens)
   @Register.factory(GetPairsLiquidity)
   @Register.factory(GetPairsLiquidityChart)
   @Register.factory(GetTBCReserves)

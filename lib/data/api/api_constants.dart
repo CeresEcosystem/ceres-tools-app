@@ -23,6 +23,7 @@ class ApiConstants {
   static const TOKEN_INFOS_PERMALINK = '/tokens-infos';
   static const PORTFOLIO_PERMALINK = '/portfolio/{address}';
   static const SWAPS_PERMALINK = '/swaps';
+  static const SWAPS_FOR_ALL_TOKENS_PERMALINK = '/swaps/all';
   static const INITIAL_FAVS_PERMALINK = '/device/initial-favs';
   static const ADD_TOKEN_TO_FAVORITES_PERMALINK = '/device/add-token';
   static const REMOVE_TOKEN_FROM_FAVORITES_PERMALINK =

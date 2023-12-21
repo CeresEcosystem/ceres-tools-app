@@ -2,6 +2,7 @@ import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/utils/default_value.dart';
 
 class Swap {
+  final int id;
   String swappedAt;
   final String accountId;
   final String inputAssetId;
@@ -16,6 +17,7 @@ class Swap {
   String outputImageExtension = kImageExtension;
 
   Swap(
+    this.id,
     this.swappedAt,
     this.accountId,
     this.inputAssetId,
@@ -25,6 +27,7 @@ class Swap {
   );
 
   factory Swap.fromJson(Map<String, dynamic> json) => Swap(
+        json['id'],
         json['swappedAt'],
         json['accountId'],
         json['inputAssetId'],

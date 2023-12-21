@@ -41,7 +41,6 @@ class _ChartState extends State<Chart>
             goToSwapPage: controller.goToSwapPage,
             icon: Icons.swap_horiz,
             buttonLabel: 'Swaps',
-            showFavorites: controller.showFavoriteTokens,
           ),
           Expanded(
             child: InAppWebView(

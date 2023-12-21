@@ -1,3 +1,4 @@
+import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
@@ -6,6 +7,7 @@ import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
+import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
 import 'package:ceres_tools_app/presentation/chart/widgets/tokens_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +18,6 @@ class CurrentToken extends StatelessWidget {
   final IconData icon;
   final String buttonLabel;
   final bool bottomPadding;
-  final bool showFavorites;
 
   const CurrentToken({
     Key? key,
@@ -25,7 +26,6 @@ class CurrentToken extends StatelessWidget {
     required this.icon,
     required this.buttonLabel,
     this.bottomPadding = true,
-    required this.showFavorites,
   }) : super(key: key);
 
   @override
@@ -60,16 +60,25 @@ class CurrentToken extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     (() {
-                      if (showFavorites) {
+                      if (token == kFavoriteTokens || token == kAllTokens) {
                         return Container(
                           height: Dimensions.TOKEN_ICONS_SIZE,
                           width: Dimensions.TOKEN_ICONS_SIZE,
-                          decoration: const BoxDecoration(
-                            color: backgroundPink,
+                          decoration: BoxDecoration(
+                            color: token == kFavoriteTokens
+                                ? backgroundPink
+                                : Colors.white.withOpacity(.2),
                             shape: BoxShape.circle,
                           ),
-                          child: const Center(
-                            child: Icon(Icons.favorite),
+                          child: Center(
+                            child: Icon(
+                              token == kFavoriteTokens
+                                  ? Icons.favorite
+                                  : Flaticon.token,
+                              color: token == kFavoriteTokens
+                                  ? Colors.white
+                                  : backgroundOrange,
+                            ),
                           ),
                         );
                       } else {
@@ -85,17 +94,21 @@ class CurrentToken extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          showFavorites ? 'Favorite tokens' : token,
+                          token == kFavoriteTokens
+                              ? 'Favorite tokens'
+                              : token == kAllTokens
+                                  ? 'All tokens'
+                                  : token,
                           style: chartCurrentTokenTitleTextStyle(),
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
                         Text(
-                          'Show all tokens',
+                          'Show menu',
                           style: chartCurrentTokenSubtitleTextStyle(),
                         ),
                       ],
                     ),
-                    if (!showFavorites)
+                    if (token != kFavoriteTokens && token != kAllTokens)
                       (Row(
                         children: [
                           UIHelper.horizontalSpaceMedium(),

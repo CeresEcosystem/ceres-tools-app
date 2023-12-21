@@ -11,4 +11,10 @@ class SwapsDatasource {
       return await client.getSwaps(tokens, page);
     } on DioException catch (_) {}
   }
+
+  Future getSwapsForAllTokens(int page) async {
+    try {
+      return await client.getSwapsForAllTokens(page);
+    } on DioException catch (_) {}
+  }
 }

@@ -16,6 +16,7 @@ import 'package:ceres_tools_app/domain/models/token.dart';
 import 'package:ceres_tools_app/domain/models/token_list.dart';
 import 'package:ceres_tools_app/domain/models/wallet.dart';
 import 'package:ceres_tools_app/domain/usecase/get_swaps.dart';
+import 'package:ceres_tools_app/domain/usecase/get_swaps_for_all_tokens.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -24,11 +25,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 const kChartToken = 'CHART_TOKEN';
+const kFavoriteTokens = 'FAVORITE_TOKENS';
+const kAllTokens = 'ALL_TOKENS';
 
 class ChartController extends GetxController {
   final GlobalService _globalService = Get.find<GlobalService>();
   final getTokens = Injector.resolve!<GetTokens>();
   final getSwaps = Injector.resolve!<GetSwaps>();
+  final getSwapsForAllTokens = Injector.resolve!<GetSwapsForAllTokens>();
 
   final PageController _pageController = PageController();
 
@@ -36,7 +40,6 @@ class ChartController extends GetxController {
   final _swapLoadingStatus = LoadingStatus.LOADING.obs;
   final _token = ''.obs;
   final _searchQuery = ''.obs;
-  final _showFavoriteTokens = false.obs;
 
   Timer? _timer;
   io.Socket? _socket;
@@ -45,6 +48,7 @@ class ChartController extends GetxController {
 
   List<Token> _tokens = [];
   List<String> _addresses = [];
+  bool _swapForAllTokens = false;
 
   final _swaps = <Swap>[].obs;
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
@@ -54,7 +58,6 @@ class ChartController extends GetxController {
   LoadingStatus get loadingStatus => _loadingStatus.value;
   LoadingStatus get swapLoadingStatus => _swapLoadingStatus.value;
   String get token => _token.value;
-  bool get showFavoriteTokens => _showFavoriteTokens.value;
   List<FavoriteToken> get favoriteTokens => _globalService.favoriteTokens;
   InAppWebViewController? get webViewController => _webViewController;
   List<Token> get tokens {
@@ -108,48 +111,44 @@ class ChartController extends GetxController {
     }
   }
 
-  switchFavoriteTokens() {
-    if (!_showFavoriteTokens.value) {
-      offSocketForAddresses();
-
-      _token.value = '';
-      _showFavoriteTokens.value = true;
-
-      _addresses =
-          _globalService.favoriteTokens.map((ft) => ft.assetId).toList();
-
-      if (pageController.page == 0) {
-        goToSwapPage();
-      }
-
-      _swapLoadingStatus.value = LoadingStatus.LOADING;
-      _fetchSwaps();
-    }
-  }
-
   Future changeToken(String t, [bool reloadWebView = false]) async {
     if (t != _token.value) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      if (reloadWebView) {
-        _webViewController?.loadUrl(
-            urlRequest: URLRequest(
-          url: Uri.parse('$kChartURL$t'),
-        ));
-      }
-
-      _token.value = t;
-      prefs.setString(kChartToken, t);
-
       offSocketForAddresses();
+      _token.value = t;
 
-      if (_showFavoriteTokens.value) {
-        _showFavoriteTokens.value = false;
+      _swapForAllTokens = false;
+
+      if (t == kFavoriteTokens) {
+        _addresses =
+            _globalService.favoriteTokens.map((ft) => ft.assetId).toList();
+
+        if (pageController.page == 0) {
+          goToSwapPage();
+        }
+      } else if (t == kAllTokens) {
+        _addresses = _tokens.map((ft) => ft.assetId!).toList();
+
+        if (pageController.page == 0) {
+          goToSwapPage();
+        }
+
+        _swapForAllTokens = true;
+      } else {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        if (reloadWebView) {
+          _webViewController?.loadUrl(
+              urlRequest: URLRequest(
+            url: Uri.parse('$kChartURL$t'),
+          ));
+        }
+
+        prefs.setString(kChartToken, t);
+
+        _addresses = [
+          _tokens.firstWhere((token) => token.shortName == t).assetId ?? ''
+        ];
       }
-
-      _addresses = [
-        _tokens.firstWhere((token) => token.shortName == t).assetId ?? ''
-      ];
 
       _swapLoadingStatus.value = LoadingStatus.LOADING;
       _fetchSwaps();
@@ -183,30 +182,32 @@ class ChartController extends GetxController {
         _socket?.on(address, (data) {
           Swap s = Swap.fromJson(data);
 
-          s.inputAsset = _tokens
-                  .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
-                  ?.shortName ??
-              '';
-          s.outputAsset = _tokens
-                  .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
-                  ?.shortName ??
-              '';
-          s.type = address == s.inputAssetId ? 'Sell' : 'Buy';
-          s.inputImageExtension = imageExtension(s.inputAsset);
-          s.outputImageExtension = imageExtension(s.outputAsset);
-          s.swappedAt = formatDateToLocalTime(s.swappedAt);
-          s.formattedAccountId = _wallets
-                  .firstWhereOrNull((w) => w.address == s.accountId)
-                  ?.name ??
-              formatAddress(s.accountId);
+          if (_swaps.firstWhereOrNull((sw) => sw.id == s.id) == null) {
+            s.inputAsset = _tokens
+                    .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
+                    ?.shortName ??
+                '';
+            s.outputAsset = _tokens
+                    .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
+                    ?.shortName ??
+                '';
+            s.type = address == s.inputAssetId ? 'Sell' : 'Buy';
+            s.inputImageExtension = imageExtension(s.inputAsset);
+            s.outputImageExtension = imageExtension(s.outputAsset);
+            s.swappedAt = formatDateToLocalTime(s.swappedAt);
+            s.formattedAccountId = _wallets
+                    .firstWhereOrNull((w) => w.address == s.accountId)
+                    ?.name ??
+                formatAddress(s.accountId);
 
-          if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
-            pageMeta.hasNextPage = true;
+            if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
+              pageMeta.hasNextPage = true;
+            }
+
+            pageMeta.totalCount++;
+
+            _swaps.value = [s, ..._swaps].take(10).toList();
           }
-
-          pageMeta.totalCount++;
-
-          _swaps.value = [s, ..._swaps].take(10).toList();
         });
       }
     }
@@ -258,7 +259,13 @@ class ChartController extends GetxController {
 
   void _fetchSwaps([int page = 1]) async {
     if (_addresses.isNotEmpty) {
-      final response = await getSwaps.execute(_addresses, page);
+      final dynamic response;
+
+      if (_swapForAllTokens) {
+        response = await getSwapsForAllTokens.execute(page);
+      } else {
+        response = await getSwaps.execute(_addresses, page);
+      }
 
       if (response != null) {
         SwapList swapList = SwapList.fromJson(response['data']);

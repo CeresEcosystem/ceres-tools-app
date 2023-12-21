@@ -43,6 +43,8 @@ class _$Injector extends Injector {
           (c) => GetPortfolioItems(repository: c<PortfolioRepository>()))
       ..registerFactory((c) => GetSwaps(repository: c<SwapsRepository>()))
       ..registerFactory(
+          (c) => GetSwapsForAllTokens(repository: c<SwapsRepository>()))
+      ..registerFactory(
           (c) => GetPairsLiquidity(repository: c<PairsLiquidityRepository>()))
       ..registerFactory((c) =>
           GetPairsLiquidityChart(repository: c<PairsLiquidityRepository>()))

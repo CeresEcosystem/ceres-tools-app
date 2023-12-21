@@ -12,4 +12,11 @@ class SwapsRepositoryImpl implements SwapsRepository {
       return await datasource.getSwaps(tokens, page);
     } on Exception catch (_) {}
   }
+
+  @override
+  Future getSwapsForAllTokens(int page) async {
+    try {
+      return await datasource.getSwapsForAllTokens(page);
+    } on Exception catch (_) {}
+  }
 }
