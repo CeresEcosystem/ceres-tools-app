@@ -1,3 +1,4 @@
+import 'package:ceres_tools_app/domain/models/swap_filter.dart';
 import 'package:ceres_tools_app/domain/repository/swaps_repository.dart';
 
 class GetSwaps {
@@ -5,7 +6,15 @@ class GetSwaps {
 
   GetSwaps({required this.repository});
 
-  Future execute(List<String> tokens, int page) async {
-    return repository.getSwaps(tokens, page);
+  Future execute(
+    List<String> tokens,
+    int page,
+    SwapFilter swapFilter,
+  ) async {
+    return repository.getSwaps(
+      tokens,
+      page,
+      swapFilter,
+    );
   }
 }

@@ -10,6 +10,7 @@ import 'package:ceres_tools_app/core/widgets/swap_item.dart';
 import 'package:ceres_tools_app/domain/models/swap.dart';
 import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
 import 'package:ceres_tools_app/presentation/chart/widgets/current_token.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/swap_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,6 +54,7 @@ class _SwapsState extends State<Swaps>
             buttonLabel: 'Chart',
             bottomPadding: false,
           ),
+          const SwapFilters(),
           (() {
             if (controller.swapLoadingStatus == LoadingStatus.LOADING) {
               return const Expanded(child: CenterLoading());

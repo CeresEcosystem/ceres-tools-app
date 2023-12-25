@@ -1,4 +1,5 @@
 import 'package:ceres_tools_app/data/datasource/swaps_datasource.dart';
+import 'package:ceres_tools_app/domain/models/swap_filter.dart';
 import 'package:ceres_tools_app/domain/repository/swaps_repository.dart';
 
 class SwapsRepositoryImpl implements SwapsRepository {
@@ -7,16 +8,30 @@ class SwapsRepositoryImpl implements SwapsRepository {
   SwapsRepositoryImpl({required this.datasource});
 
   @override
-  Future getSwaps(List<String> tokens, int page) async {
+  Future getSwaps(
+    List<String> tokens,
+    int page,
+    SwapFilter swapFilter,
+  ) async {
     try {
-      return await datasource.getSwaps(tokens, page);
+      return await datasource.getSwaps(
+        tokens,
+        page,
+        swapFilter,
+      );
     } on Exception catch (_) {}
   }
 
   @override
-  Future getSwapsForAllTokens(int page) async {
+  Future getSwapsForAllTokens(
+    int page,
+    SwapFilter swapFilter,
+  ) async {
     try {
-      return await datasource.getSwapsForAllTokens(page);
+      return await datasource.getSwapsForAllTokens(
+        page,
+        swapFilter,
+      );
     } on Exception catch (_) {}
   }
 }

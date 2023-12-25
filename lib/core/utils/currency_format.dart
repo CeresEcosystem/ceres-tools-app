@@ -40,6 +40,38 @@ String formatDateToLocalTime(String date) {
   return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
 }
 
+String formatDateTimeToString(DateTime dateTime) {
+  return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+}
+
+String formatDateToString(DateTime? date) {
+  return date != null ? DateFormat('yyyy-MM-dd').format(date) : '';
+}
+
+String formatTimeToString(DateTime? time) {
+  return time != null ? DateFormat('HH:mm').format(time) : '';
+}
+
+DateTime getDateFromString(String date) {
+  return DateFormat('yyyy-MM-dd HH:mm').parse(date);
+}
+
+DateTime? combineDateAndTime(String date, String time) {
+  if (date.isNotEmpty) {
+    DateTime d = DateFormat('yyyy-MM-dd').parse(date);
+
+    if (time.isNotEmpty) {
+      DateTime t = DateFormat('HH:mm').parse(time);
+
+      return DateTime(d.year, d.month, d.day, t.hour, t.minute);
+    } else {
+      return DateTime(d.year, d.month, d.day);
+    }
+  }
+
+  return null;
+}
+
 String formatCurrencyGraph(dynamic value) {
   if (value != null) {
     final formatCurrency = NumberFormat.compactCurrency(symbol: '');

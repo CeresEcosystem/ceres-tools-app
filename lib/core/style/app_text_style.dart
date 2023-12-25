@@ -121,6 +121,14 @@ TextStyle searchTextFieldTextStyle(SizingInformation sizingInformation) {
   );
 }
 
+TextStyle dateTimeFieldTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+}
+
 TextStyle pairsLabelStyle(SizingInformation sizingInformation) {
   return TextStyle(
     fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
@@ -511,6 +519,21 @@ TextStyle bridgeTransferTextStyle() {
   return const TextStyle(
     fontSize: overline,
     fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
+TextStyle swapFiltersTextStyle() {
+  return TextStyle(
+    fontSize: overline,
+    fontWeight: FontWeight.w600,
+    color: Colors.white.withOpacity(.6),
+  );
+}
+
+TextStyle inputLabelTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle2,
     color: Colors.white,
   );
 }

@@ -23,6 +23,12 @@ ThemeData darkThemeData() {
         size: Dimensions.ICON_SIZE,
       ),
     ),
+    datePickerTheme: const DatePickerThemeData(
+      headerBackgroundColor: backgroundColor,
+    ),
+    timePickerTheme: const TimePickerThemeData(
+      backgroundColor: backgroundColor,
+    ),
     dialogTheme: DialogTheme(
       backgroundColor: backgroundColor,
       shape: RoundedRectangleBorder(

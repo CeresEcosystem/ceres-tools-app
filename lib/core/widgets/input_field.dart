@@ -9,6 +9,7 @@ class InputField extends StatelessWidget {
   final TextEditingController controller;
   final bool enabledValidation;
   final bool enabled;
+  final TextInputType textInputType;
 
   const InputField({
     Key? key,
@@ -16,6 +17,7 @@ class InputField extends StatelessWidget {
     required this.controller,
     this.enabledValidation = false,
     this.enabled = true,
+    this.textInputType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class InputField extends StatelessWidget {
             hintStyle: searchTextFieldHintStyle(sizingInformation),
             fillColor: backgroundColorDark,
           ),
+          keyboardType: textInputType,
           autocorrect: false,
           autofocus: false,
           style: searchTextFieldTextStyle(sizingInformation),

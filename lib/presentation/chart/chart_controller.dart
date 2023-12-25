@@ -11,6 +11,7 @@ import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/favorite_token.dart';
 import 'package:ceres_tools_app/domain/models/page_meta.dart';
 import 'package:ceres_tools_app/domain/models/swap.dart';
+import 'package:ceres_tools_app/domain/models/swap_filter.dart';
 import 'package:ceres_tools_app/domain/models/swap_list.dart';
 import 'package:ceres_tools_app/domain/models/token.dart';
 import 'package:ceres_tools_app/domain/models/token_list.dart';
@@ -40,6 +41,8 @@ class ChartController extends GetxController {
   final _swapLoadingStatus = LoadingStatus.LOADING.obs;
   final _token = ''.obs;
   final _searchQuery = ''.obs;
+
+  final Rx<SwapFilter> _swapFilter = SwapFilter().obs;
 
   Timer? _timer;
   io.Socket? _socket;
@@ -75,6 +78,12 @@ class ChartController extends GetxController {
       return false;
     }).toList();
   }
+
+  List<String> get filterTokens => _tokens
+      .where((t) => t.shortName! != _token.value)
+      .map((tok) => tok.shortName!)
+      .toList();
+  SwapFilter get swapFilter => _swapFilter.value;
 
   PageMeta get pageMeta => _pageMeta;
   List<Swap> get swaps => _swaps;
@@ -113,6 +122,7 @@ class ChartController extends GetxController {
 
   Future changeToken(String t, [bool reloadWebView = false]) async {
     if (t != _token.value) {
+      _swapFilter.value = SwapFilter();
       offSocketForAddresses();
       _token.value = t;
 
@@ -174,6 +184,41 @@ class ChartController extends GetxController {
     _socket?.connect();
   }
 
+  bool validateSwapFilters(Swap s) {
+    if (_swapFilter.value.isSet()) {
+      if (_swapFilter.value.dateFrom != null &&
+          getDateFromString(s.swappedAt)
+              .isBefore(_swapFilter.value.dateFrom!)) {
+        return false;
+      }
+
+      if (_swapFilter.value.dateTo != null &&
+          getDateFromString(s.swappedAt).isAfter(_swapFilter.value.dateTo!)) {
+        return false;
+      }
+
+      if (_swapFilter.value.minAmount != null &&
+          s.assetInputAmount < double.parse(_swapFilter.value.minAmount!) &&
+          s.assetOutputAmount < double.parse(_swapFilter.value.minAmount!)) {
+        return false;
+      }
+
+      if (_swapFilter.value.maxAmount != null &&
+          s.assetInputAmount > double.parse(_swapFilter.value.maxAmount!) &&
+          s.assetOutputAmount > double.parse(_swapFilter.value.maxAmount!)) {
+        return false;
+      }
+
+      if (_swapFilter.value.assetIdAddress != null &&
+          s.inputAssetId != _swapFilter.value.assetIdAddress &&
+          s.outputAssetId != _swapFilter.value.assetIdAddress) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   connectToASocketEvent() {
     if (_addresses.isNotEmpty) {
       _socket?.connect();
@@ -182,31 +227,33 @@ class ChartController extends GetxController {
         _socket?.on(address, (data) {
           Swap s = Swap.fromJson(data);
 
-          if (_swaps.firstWhereOrNull((sw) => sw.id == s.id) == null) {
-            s.inputAsset = _tokens
-                    .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
-                    ?.shortName ??
-                '';
-            s.outputAsset = _tokens
-                    .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
-                    ?.shortName ??
-                '';
-            s.type = address == s.inputAssetId ? 'Sell' : 'Buy';
-            s.inputImageExtension = imageExtension(s.inputAsset);
-            s.outputImageExtension = imageExtension(s.outputAsset);
-            s.swappedAt = formatDateToLocalTime(s.swappedAt);
-            s.formattedAccountId = _wallets
-                    .firstWhereOrNull((w) => w.address == s.accountId)
-                    ?.name ??
-                formatAddress(s.accountId);
+          if (validateSwapFilters(s)) {
+            if (_swaps.firstWhereOrNull((sw) => sw.id == s.id) == null) {
+              s.inputAsset = _tokens
+                      .firstWhereOrNull((t) => t.assetId == s.inputAssetId)
+                      ?.shortName ??
+                  '';
+              s.outputAsset = _tokens
+                      .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
+                      ?.shortName ??
+                  '';
+              s.type = address == s.inputAssetId ? 'Sell' : 'Buy';
+              s.inputImageExtension = imageExtension(s.inputAsset);
+              s.outputImageExtension = imageExtension(s.outputAsset);
+              s.swappedAt = formatDateToLocalTime(s.swappedAt);
+              s.formattedAccountId = _wallets
+                      .firstWhereOrNull((w) => w.address == s.accountId)
+                      ?.name ??
+                  formatAddress(s.accountId);
 
-            if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
-              pageMeta.hasNextPage = true;
+              if (_swaps.length == pageMeta.pageSize && !pageMeta.hasNextPage) {
+                pageMeta.hasNextPage = true;
+              }
+
+              pageMeta.totalCount++;
+
+              _swaps.value = [s, ..._swaps].take(10).toList();
             }
-
-            pageMeta.totalCount++;
-
-            _swaps.value = [s, ..._swaps].take(10).toList();
           }
         });
       }
@@ -257,14 +304,21 @@ class ChartController extends GetxController {
     super.onClose();
   }
 
-  void _fetchSwaps([int page = 1]) async {
+  Future _fetchSwaps([int page = 1]) async {
     if (_addresses.isNotEmpty) {
       final dynamic response;
 
       if (_swapForAllTokens) {
-        response = await getSwapsForAllTokens.execute(page);
+        response = await getSwapsForAllTokens.execute(
+          page,
+          _swapFilter.value,
+        );
       } else {
-        response = await getSwaps.execute(_addresses, page);
+        response = await getSwaps.execute(
+          _addresses,
+          page,
+          _swapFilter.value,
+        );
       }
 
       if (response != null) {
@@ -300,7 +354,7 @@ class ChartController extends GetxController {
           _swaps.value = [];
         }
 
-        if (page > 1) {
+        if (page > 1 || _swapFilter.value.dateTo != null) {
           disconnectSocket();
         } else {
           connectToASocketEvent();
@@ -403,6 +457,46 @@ class ChartController extends GetxController {
       _loadingStatus.value = LoadingStatus.READY;
     } else {
       _loadingStatus.value = LoadingStatus.ERROR;
+    }
+  }
+
+  Future filterSwaps(
+    String dateFrom,
+    String timeFrom,
+    String dateTo,
+    String timeTo,
+    String minAmount,
+    String maxAmount,
+    String assetId,
+  ) async {
+    String? assetIdAddress = assetId == 'Show all tokens'
+        ? null
+        : _tokens.firstWhere((t) => t.shortName == assetId).assetId;
+    DateTime? dateTimeFrom = combineDateAndTime(dateFrom, timeFrom);
+    DateTime? dateTimeTo = combineDateAndTime(dateTo, timeTo);
+
+    SwapFilter sf = SwapFilter.arguments(
+      dateTimeFrom,
+      dateTimeTo,
+      minAmount.isEmpty ? null : minAmount,
+      maxAmount.isEmpty ? null : maxAmount,
+      assetId == 'Show all tokens' ? null : assetId,
+      assetIdAddress,
+    );
+
+    if (sf != _swapFilter.value) {
+      Get.back();
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
+      _swapFilter.value = sf;
+      _fetchSwaps();
+    }
+  }
+
+  Future clearFilters() async {
+    if (_swapFilter.value.isSet()) {
+      _swapFilter.value = SwapFilter();
+      _swapLoadingStatus.value = LoadingStatus.LOADING;
+      _fetchSwaps();
     }
   }
 }

@@ -63,11 +63,26 @@ abstract class RestClient {
       @Path("address") String address, @Query("page") int page);
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_PERMALINK}')
-  Future getSwaps(@Query("token") List<String> tokens, @Query("page") int page);
+  Future getSwaps(
+    @Query("token") List<String> tokens,
+    @Query("page") int page,
+    @Query('dateFrom') String? dateFrom,
+    @Query('dateTo') String? dateTo,
+    @Query('minAmount') String? minAmount,
+    @Query('maxAmount') String? maxAmount,
+    @Query('assetId') String? assetId,
+  );
 
   @GET(
       '${ApiConstants.NEW_BASE_URL}${ApiConstants.SWAPS_FOR_ALL_TOKENS_PERMALINK}')
-  Future getSwapsForAllTokens(@Query("page") int page);
+  Future getSwapsForAllTokens(
+    @Query("page") int page,
+    @Query('dateFrom') String? dateFrom,
+    @Query('dateTo') String? dateTo,
+    @Query('minAmount') String? minAmount,
+    @Query('maxAmount') String? maxAmount,
+    @Query('assetId') String? assetId,
+  );
 
   @POST('${ApiConstants.NEW_BASE_URL}${ApiConstants.INITIAL_FAVS_PERMALINK}')
   Future postInitialFavs(@Body() InitialFavs initialFavs);

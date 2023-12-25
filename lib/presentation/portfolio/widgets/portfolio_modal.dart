@@ -1,4 +1,6 @@
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/address_format.dart';
+import 'package:ceres_tools_app/core/utils/toast.dart';
 import 'package:ceres_tools_app/core/widgets/input_field.dart';
 import 'package:ceres_tools_app/domain/models/wallet.dart';
 import 'package:flutter/material.dart';
@@ -106,11 +108,21 @@ class _PortfolioModalState extends State<PortfolioModal> {
                     onPressed: () {
                       if (_formKey.currentState != null &&
                           _formKey.currentState!.validate()) {
-                        widget.addEditWallet(
-                            Wallet(nameController.text, addressController.text,
-                                nameController.text.isEmpty),
-                            widget.wallet);
-                        Navigator.pop(context);
+                        if (validWalletAddress(addressController.text)) {
+                          widget.addEditWallet(
+                              Wallet(
+                                  nameController.text,
+                                  addressController.text,
+                                  nameController.text.isEmpty),
+                              widget.wallet);
+                          Navigator.pop(context);
+                        } else {
+                          showToastAndCopy(
+                            'Invalid wallet address!',
+                            'Please, enter a valid wallet address.',
+                            shouldCopy: false,
+                          );
+                        }
                       }
                     },
                     child: const Text(

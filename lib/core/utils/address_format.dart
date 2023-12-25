@@ -5,3 +5,11 @@ String formatAddress(dynamic value, [int lenght = 7]) {
 
   return '';
 }
+
+bool validWalletAddress(String address) {
+  if (address.isNotEmpty && address.length == 49 && address.startsWith('cn')) {
+    return true;
+  }
+
+  return false;
+}

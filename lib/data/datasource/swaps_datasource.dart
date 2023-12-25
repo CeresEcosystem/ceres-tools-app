@@ -1,4 +1,5 @@
 import 'package:ceres_tools_app/data/api/api.dart';
+import 'package:ceres_tools_app/domain/models/swap_filter.dart';
 import 'package:dio/dio.dart';
 
 class SwapsDatasource {
@@ -6,15 +7,37 @@ class SwapsDatasource {
 
   SwapsDatasource({required this.client});
 
-  Future getSwaps(List<String> tokens, int page) async {
+  Future getSwaps(
+    List<String> tokens,
+    int page,
+    SwapFilter swapFilter,
+  ) async {
     try {
-      return await client.getSwaps(tokens, page);
+      return await client.getSwaps(
+        tokens,
+        page,
+        swapFilter.dateFrom?.toIso8601String(),
+        swapFilter.dateTo?.toIso8601String(),
+        swapFilter.minAmount,
+        swapFilter.maxAmount,
+        swapFilter.assetIdAddress,
+      );
     } on DioException catch (_) {}
   }
 
-  Future getSwapsForAllTokens(int page) async {
+  Future getSwapsForAllTokens(
+    int page,
+    SwapFilter swapFilter,
+  ) async {
     try {
-      return await client.getSwapsForAllTokens(page);
+      return await client.getSwapsForAllTokens(
+        page,
+        swapFilter.dateFrom?.toIso8601String(),
+        swapFilter.dateTo?.toIso8601String(),
+        swapFilter.minAmount,
+        swapFilter.maxAmount,
+        swapFilter.assetIdAddress,
+      );
     } on DioException catch (_) {}
   }
 }

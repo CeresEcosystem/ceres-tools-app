@@ -451,12 +451,23 @@ class _RestClient implements RestClient {
   Future<dynamic> getSwaps(
     List<String> tokens,
     int page,
+    String? dateFrom,
+    String? dateTo,
+    String? minAmount,
+    String? maxAmount,
+    String? assetId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'token': tokens,
       r'page': page,
+      r'dateFrom': dateFrom,
+      r'dateTo': dateTo,
+      r'minAmount': minAmount,
+      r'maxAmount': maxAmount,
+      r'assetId': assetId,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
@@ -480,9 +491,24 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> getSwapsForAllTokens(int page) async {
+  Future<dynamic> getSwapsForAllTokens(
+    int page,
+    String? dateFrom,
+    String? dateTo,
+    String? minAmount,
+    String? maxAmount,
+    String? assetId,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'page': page};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'dateFrom': dateFrom,
+      r'dateTo': dateTo,
+      r'minAmount': minAmount,
+      r'maxAmount': maxAmount,
+      r'assetId': assetId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
