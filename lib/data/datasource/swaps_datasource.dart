@@ -1,5 +1,6 @@
 import 'package:ceres_tools_app/data/api/api.dart';
 import 'package:ceres_tools_app/domain/models/swap_filter.dart';
+import 'package:ceres_tools_app/domain/models/swap_tokens_json.dart';
 import 'package:dio/dio.dart';
 
 class SwapsDatasource {
@@ -8,13 +9,13 @@ class SwapsDatasource {
   SwapsDatasource({required this.client});
 
   Future getSwaps(
-    List<String> tokens,
+    SwapTokensJSON swapTokensJSON,
     int page,
     SwapFilter swapFilter,
   ) async {
     try {
       return await client.getSwaps(
-        tokens,
+        swapTokensJSON,
         page,
         swapFilter.dateFrom?.toIso8601String(),
         swapFilter.dateTo?.toIso8601String(),

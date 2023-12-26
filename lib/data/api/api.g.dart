@@ -449,7 +449,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<dynamic> getSwaps(
-    List<String> tokens,
+    SwapTokensJSON swapTokensJSON,
     int page,
     String? dateFrom,
     String? dateTo,
@@ -459,7 +459,6 @@ class _RestClient implements RestClient {
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'token': tokens,
       r'page': page,
       r'dateFrom': dateFrom,
       r'dateTo': dateTo,
@@ -469,9 +468,10 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(swapTokensJSON.toJson());
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'GET',
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )

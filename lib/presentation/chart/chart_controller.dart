@@ -13,6 +13,7 @@ import 'package:ceres_tools_app/domain/models/page_meta.dart';
 import 'package:ceres_tools_app/domain/models/swap.dart';
 import 'package:ceres_tools_app/domain/models/swap_filter.dart';
 import 'package:ceres_tools_app/domain/models/swap_list.dart';
+import 'package:ceres_tools_app/domain/models/swap_tokens_json.dart';
 import 'package:ceres_tools_app/domain/models/token.dart';
 import 'package:ceres_tools_app/domain/models/token_list.dart';
 import 'package:ceres_tools_app/domain/models/wallet.dart';
@@ -315,7 +316,7 @@ class ChartController extends GetxController {
         );
       } else {
         response = await getSwaps.execute(
-          _addresses,
+          SwapTokensJSON(_addresses),
           page,
           _swapFilter.value,
         );
