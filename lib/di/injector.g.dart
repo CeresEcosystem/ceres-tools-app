@@ -50,6 +50,8 @@ class _$Injector extends Injector {
           GetPairsLiquidityChart(repository: c<PairsLiquidityRepository>()))
       ..registerFactory(
           (c) => GetTBCReserves(repository: c<TBCReservesRepository>()))
+      ..registerFactory(
+          (c) => GetTokenHolders(repository: c<TokensRepository>()))
       ..registerFactory<TokensRepository>(
           (c) => TokensRepositoryImpl(datasource: c<TokensDatasource>()))
       ..registerFactory<PairsRepository>(

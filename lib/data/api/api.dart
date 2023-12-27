@@ -14,6 +14,10 @@ abstract class RestClient {
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TOKENS_PERMALINK}')
   Future getTokens();
 
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TOKEN_HOLDERS_PERMALINK}')
+  Future getTokenHolders(
+      @Query('assetId') String assetId, @Query('page') int page);
+
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIRS_PERMALINK}')
   Future getPairs();
 

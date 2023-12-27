@@ -537,3 +537,23 @@ TextStyle inputLabelTextStyle() {
     color: Colors.white,
   );
 }
+
+TextStyle tokenHolderLabelTextStyle(SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : subtitle1,
+    fontWeight: FontWeight.w500,
+    color: Colors.white.withOpacity(.5),
+  );
+}
+
+TextStyle tokenHolderTitleTextStyle(SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : subtitle1,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}

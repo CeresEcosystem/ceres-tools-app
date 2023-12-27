@@ -11,4 +11,10 @@ class TokensDatasource {
       return await client.getTokens();
     } on DioException catch (_) {}
   }
+
+  Future getTokenHolders(String assetId, int page) async {
+    try {
+      return await client.getTokenHolders(assetId, page);
+    } on DioException catch (_) {}
+  }
 }

@@ -25,6 +25,7 @@ import 'package:ceres_tools_app/presentation/tokens/tokens_controller.dart';
 import 'package:ceres_tools_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 
 class TokensView extends GetView<TokensController> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -254,14 +255,24 @@ class TokensView extends GetView<TokensController> {
         Row(
           children: [
             actionButton(
+                () => Get.toNamed(Routes.TOKEN_HOLDERS,
+                    arguments: {'token': token}),
+                HeroIcon(
+                  HeroIcons.userGroup,
+                  color: Colors.white.withOpacity(0.5),
+                ),
+                'Holders',
+                sizingInformation),
+            UIHelper.horizontalSpaceExtraSmall(),
+            actionButton(
                 () => Get.toNamed(Routes.SUPPLY, arguments: {'token': token}),
-                Icon(
-                  Icons.bar_chart_outlined,
+                HeroIcon(
+                  HeroIcons.chartBar,
                   color: Colors.white.withOpacity(0.5),
                 ),
                 kShowSupply,
                 sizingInformation),
-            UIHelper.horizontalSpaceMedium(),
+            UIHelper.horizontalSpaceExtraSmall(),
             actionButton(
                 () => Get.toNamed(Routes.LOCKER,
                     arguments: {'isPair': false, 'lockerItem': token}),

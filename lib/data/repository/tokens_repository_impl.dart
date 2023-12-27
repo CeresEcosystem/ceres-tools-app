@@ -12,4 +12,11 @@ class TokensRepositoryImpl implements TokensRepository {
       return await datasource.getTokens();
     } on Exception catch (_) {}
   }
+
+  @override
+  Future getTokenHolders(String assetId, int page) async {
+    try {
+      return await datasource.getTokenHolders(assetId, page);
+    } on Exception catch (_) {}
+  }
 }
