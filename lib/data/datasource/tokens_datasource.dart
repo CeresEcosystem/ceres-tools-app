@@ -1,4 +1,5 @@
 import 'package:ceres_tools_app/data/api/api.dart';
+import 'package:ceres_tools_app/domain/models/xor_holder_json.dart';
 import 'package:dio/dio.dart';
 
 class TokensDatasource {
@@ -15,6 +16,12 @@ class TokensDatasource {
   Future getTokenHolders(String assetId, int page) async {
     try {
       return await client.getTokenHolders(assetId, page);
+    } on DioException catch (_) {}
+  }
+
+  Future getXorHolders(int page) async {
+    try {
+      return await client.getXorHolders(XorHolderJSON(page: page - 1));
     } on DioException catch (_) {}
   }
 }

@@ -45,6 +45,7 @@ import 'package:ceres_tools_app/domain/usecase/get_token_holders.dart';
 import 'package:ceres_tools_app/domain/usecase/get_token_infos.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tracker.dart';
+import 'package:ceres_tools_app/domain/usecase/get_xor_holders.dart';
 import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
 
@@ -70,8 +71,10 @@ abstract class Injector {
   }
 
   void _configureRestClient() {
-    container?.registerInstance(
-        RestClient(Dio(BaseOptions(contentType: 'application/json'))));
+    container?.registerInstance(RestClient(Dio(BaseOptions(
+      contentType: 'application/json',
+      headers: {'User-Agent': 'CeresTools'},
+    ))));
   }
 
   @Register.factory(TokensDatasource)
@@ -102,6 +105,7 @@ abstract class Injector {
   @Register.factory(GetPairsLiquidityChart)
   @Register.factory(GetTBCReserves)
   @Register.factory(GetTokenHolders)
+  @Register.factory(GetXorHolders)
   @Register.factory(TokensRepository, from: TokensRepositoryImpl)
   @Register.factory(PairsRepository, from: PairsRepositoryImpl)
   @Register.factory(FarmingRepository, from: FarmingRepositoryImpl)

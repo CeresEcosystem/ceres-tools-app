@@ -57,6 +57,7 @@ const kHMXAddress =
 const kTBCReservesAddress = 'cnTQ1kbv7PBNNQrEb1tZpmK7eE2hQTwktcdewhc55bpkDrYBX';
 const kSyntheticsAddress = '0x0300';
 const kWallets = 'WALLETS';
+const kPageSize = 10;
 
 const kChartIcon = 'https://tools.cerestoken.io/chart.svg';
 

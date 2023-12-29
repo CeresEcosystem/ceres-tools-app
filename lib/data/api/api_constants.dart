@@ -6,6 +6,7 @@ class ApiConstants {
   static const DEMETER_URL = 'https://api.deotoken.com/api/demeter';
   static const HERMES_TVL_URL =
       'https://api.hermes-dao.io/api/supply/supply-data';
+  static const SORA_SUBSCAN_URL = 'https://sora.webapi.subscan.io/api/v2/scan';
   static const DEMETER_TVL_PERMALINK = '/supply-data';
   static const DEMETER_FARMS_PERMALINK = '/farms';
   static const DEMETER_POOLS_PERMALINK = '/stakings';
@@ -30,4 +31,5 @@ class ApiConstants {
       '/device/remove-token/{deviceId}/{token}';
   static const TBC_RESERVES_PERMALINK = '/reserves/TBCD';
   static const TOKEN_HOLDERS_PERMALINK = '/holders';
+  static const SORA_SUBSCAN_HOLDERS_PERMALINK = '/accounts';
 }

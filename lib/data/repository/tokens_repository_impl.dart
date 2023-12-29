@@ -19,4 +19,11 @@ class TokensRepositoryImpl implements TokensRepository {
       return await datasource.getTokenHolders(assetId, page);
     } on Exception catch (_) {}
   }
+
+  @override
+  Future getXorHolders(int page) async {
+    try {
+      return await datasource.getXorHolders(page);
+    } on Exception catch (_) {}
+  }
 }

@@ -52,6 +52,7 @@ class _$Injector extends Injector {
           (c) => GetTBCReserves(repository: c<TBCReservesRepository>()))
       ..registerFactory(
           (c) => GetTokenHolders(repository: c<TokensRepository>()))
+      ..registerFactory((c) => GetXorHolders(repository: c<TokensRepository>()))
       ..registerFactory<TokensRepository>(
           (c) => TokensRepositoryImpl(datasource: c<TokensDatasource>()))
       ..registerFactory<PairsRepository>(

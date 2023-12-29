@@ -55,7 +55,7 @@ class TokenHoldersView extends GetView<TokenHoldersController> {
 
                   if (controller.loadingStatus == LoadingStatus.ERROR) {
                     return ErrorText(
-                      onButtonPress: () => controller.fetchHolders(),
+                      onButtonPress: () {},
                     );
                   }
 

@@ -2,6 +2,7 @@ import 'package:ceres_tools_app/data/api/api_constants.dart';
 import 'package:ceres_tools_app/domain/models/favorite_token_json.dart';
 import 'package:ceres_tools_app/domain/models/initial_favs.dart';
 import 'package:ceres_tools_app/domain/models/swap_tokens_json.dart';
+import 'package:ceres_tools_app/domain/models/xor_holder_json.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -103,4 +104,8 @@ abstract class RestClient {
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TBC_RESERVES_PERMALINK}')
   Future getTBCReserves();
+
+  @POST(
+      '${ApiConstants.SORA_SUBSCAN_URL}${ApiConstants.SORA_SUBSCAN_HOLDERS_PERMALINK}')
+  Future getXorHolders(@Body() XorHolderJSON xorHolderJSON);
 }
