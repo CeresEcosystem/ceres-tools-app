@@ -80,10 +80,26 @@ class ChartController extends GetxController {
     }).toList();
   }
 
-  List<String> get filterTokens => _tokens
-      .where((t) => t.shortName! != _token.value)
-      .map((tok) => tok.shortName!)
-      .toList();
+  List<String> get filterTokens {
+    if (_token.value == kAllTokens) {
+      return _tokens.map((tok) => tok.shortName!).toList();
+    }
+
+    if (_token.value == kFavoriteTokens) {
+      List<String> favTokens = favoriteTokens.map((ft) => ft.assetId).toList();
+
+      return _tokens
+          .where((t) => !favTokens.contains(t.assetId))
+          .map((tok) => tok.shortName!)
+          .toList();
+    }
+
+    return _tokens
+        .where((t) => t.shortName! != _token.value)
+        .map((tok) => tok.shortName!)
+        .toList();
+  }
+
   SwapFilter get swapFilter => _swapFilter.value;
 
   PageMeta get pageMeta => _pageMeta;

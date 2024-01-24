@@ -48,12 +48,17 @@ class PairsLiquidityView extends GetView<PairsLiquidityController> {
                   return Expanded(
                     child: Column(
                       children: [
-                        HorizontalTab(
-                          tabs: controller.tabs,
-                          selectedTab: controller.selectedTab,
-                          changeTab: (String tab) =>
-                              controller.changeSelectedTab(tab),
-                          bottomMargin: false,
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: UIHelper.pagePadding(sizingInformation),
+                          ),
+                          child: HorizontalTab(
+                            tabs: controller.tabs,
+                            selectedTab: controller.selectedTab,
+                            changeTab: (String tab) =>
+                                controller.changeSelectedTab(tab),
+                            bottomMargin: false,
+                          ),
                         ),
                         (() {
                           if (controller.loadingStatus ==

@@ -56,7 +56,7 @@ class TBCReservesController extends GetxController {
       }
 
       final intervalY = (maxY - minY) / 4;
-      final intervalX = (maxX - minX) / 2;
+      final intervalX = (maxX - minX) / 6;
 
       return {
         'maxY': maxY,

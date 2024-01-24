@@ -11,13 +11,15 @@ import 'package:flutter/material.dart';
 class Chart extends StatelessWidget {
   final Function getTooltipData;
   final Map<String, dynamic>? graphData;
-  final bool showFullValue;
+  final bool showFullValueY;
+  final bool showFullValueX;
 
   const Chart({
     Key? key,
     required this.getTooltipData,
     required this.graphData,
-    this.showFullValue = false,
+    this.showFullValueY = false,
+    this.showFullValueX = false,
   }) : super(key: key);
 
   @override
@@ -59,30 +61,29 @@ class Chart extends StatelessWidget {
         ),
       ),
       gridData: FlGridData(
-        show: false,
-        drawVerticalLine: false,
-        drawHorizontalLine: false,
+        show: true,
       ),
       titlesData: FlTitlesData(
         show: true,
         rightTitles: SideTitles(showTitles: false),
         topTitles: SideTitles(showTitles: false),
         bottomTitles: SideTitles(
+          rotateAngle: -45,
           showTitles: true,
           interval: graphData!['intervalX'],
           getTextStyles: (context, value) => graphTitleTextStyle(),
-          getTitles: (value) => formatDate(value, showDay: showFullValue),
-          reservedSize: 10,
-          margin: 10,
+          getTitles: (value) =>
+              formatDate(value, formatFullDate: showFullValueX),
+          reservedSize: 30,
         ),
         leftTitles: SideTitles(
           showTitles: true,
           interval: graphData!['intervalY'],
           getTextStyles: (context, value) => graphTitleTextStyle(),
-          getTitles: (value) => showFullValue
+          getTitles: (value) => showFullValueY
               ? formatToCurrency(value, decimalDigits: 3)
               : formatCurrencyGraph(value),
-          reservedSize: showFullValue ? 80 : 30,
+          reservedSize: showFullValueY ? 80 : 30,
           margin: 10,
         ),
       ),

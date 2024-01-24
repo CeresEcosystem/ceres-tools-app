@@ -493,6 +493,7 @@ class TrackerView extends GetView<TrackerController> {
           child: Chart(
             graphData: controller.pswapBurningGraphData!,
             getTooltipData: controller.getTooltipData,
+            showFullValueY: true,
           ),
         ),
       ],
@@ -512,7 +513,7 @@ class TrackerView extends GetView<TrackerController> {
           child: Chart(
             graphData: controller.pswapSupplyGraphData!,
             getTooltipData: controller.getSupplyTooltipData,
-            showFullValue: true,
+            showFullValueY: true,
           ),
         ),
       ],

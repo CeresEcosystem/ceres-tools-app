@@ -557,3 +557,14 @@ TextStyle tokenHolderTitleTextStyle(SizingInformation sizingInformation) {
     color: Colors.white,
   );
 }
+
+TextStyle pairLiquidityChartTitleTextStyle(
+    SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? subtitle2
+        : subtitle1,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}

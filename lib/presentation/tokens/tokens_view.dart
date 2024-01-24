@@ -216,7 +216,7 @@ class TokensView extends GetView<TokensController> {
                             clipboardText: token.assetId,
                           ),
                           child: Text(
-                            'AssetID: ${formatAddress(token.assetId)}',
+                            'AssetID: ${formatAddress(token.assetId, 8)}',
                             style: tokensAssetIdStyle(sizingInformation),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

@@ -124,7 +124,8 @@ class TBCReservesView extends GetView<TBCReservesController> {
                             child: Chart(
                               graphData: controller.graphData,
                               getTooltipData: controller.getSupplyTooltipData,
-                              showFullValue: true,
+                              showFullValueX: true,
+                              showFullValueY: true,
                             ),
                           ),
                         ]),

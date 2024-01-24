@@ -64,7 +64,7 @@ class SupplyView extends GetView<SupplyController> {
                     child: Chart(
                       graphData: controller.supplyGraphData!,
                       getTooltipData: controller.getSupplyTooltipData,
-                      showFullValue: true,
+                      showFullValueY: true,
                     ),
                   )),
               ],

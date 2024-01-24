@@ -71,7 +71,7 @@ class TrackerController extends GetxController {
         'maxX': maxX,
         'minX': minX,
         'intervalY': maxY / 4,
-        'intervalX': (maxX - minX) / 2,
+        'intervalX': (maxX - minX) / 6,
         'data': data
       };
     } else {
@@ -118,7 +118,7 @@ class TrackerController extends GetxController {
         'maxX': maxX,
         'minX': minX,
         'intervalY': (maxY - minY) / 4,
-        'intervalX': (maxX - minX) / 2,
+        'intervalX': (maxX - minX) / 6,
         'data': data
       };
     } else {

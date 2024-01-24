@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/enums/pair_liquidity_chart_type.dart';
 import 'package:ceres_tools_app/core/utils/address_format.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/default_value.dart';
@@ -135,7 +136,7 @@ class PairsLiquidityController extends GetxController {
     }
   }
 
-  Map<String, dynamic>? get graphData {
+  Map<String, dynamic>? getGraphData(PairLiquidityChartType chartType) {
     if (_pairLiquidityChartData.isNotEmpty) {
       double maxY = 0;
       double minY = 0;
@@ -147,9 +148,21 @@ class PairsLiquidityController extends GetxController {
         Map<String, dynamic> item = _pairLiquidityChartData[i];
 
         double x = dateStringToDouble(item['updatedAt']);
-        double y = getDefaultDoubleValueNotNullable(item['liquidity']);
+        double y = 0;
 
-        if (x > 0 && y > 0) {
+        switch (chartType) {
+          case PairLiquidityChartType.PairLiquidity:
+            y = getDefaultDoubleValueNotNullable(item['liquidity']);
+            break;
+          case PairLiquidityChartType.BaseAssetLiquidity:
+            y = getDefaultDoubleValueNotNullable(item['baseAssetLiq']);
+            break;
+          case PairLiquidityChartType.TokenAssetLiquidity:
+            y = getDefaultDoubleValueNotNullable(item['tokenAssetLiq']);
+            break;
+        }
+
+        if (x > 0 || y > 0) {
           if (i == 0) {
             minY = y;
             minX = x;
@@ -167,8 +180,12 @@ class PairsLiquidityController extends GetxController {
         }
       }
 
-      final intervalY = (maxY - minY) / 4;
-      final intervalX = (maxX - minX) / 2;
+      if (maxY - minY <= 0 || maxX - minX <= 0) {
+        return null;
+      }
+
+      final intervalY = (maxY - minY) > 0 ? (maxY - minY) / 4 : 0;
+      final intervalX = (maxX - minX) > 0 ? (maxX - minX) / 6 : 0;
 
       return {
         'maxY': maxY,
@@ -184,9 +201,10 @@ class PairsLiquidityController extends GetxController {
     }
   }
 
-  String getSupplyTooltipData(LineBarSpot touchedSpot) {
+  String getSupplyTooltipData(
+      LineBarSpot touchedSpot, Map<String, dynamic>? graphData) {
     if (graphData != null) {
-      Map<String, dynamic> item = List.from(graphData!['data']).firstWhere(
+      Map<String, dynamic> item = List.from(graphData['data']).firstWhere(
           (spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
       return 'DATE: ${formatDateAndTime(item['x'])}\nLiquidity: ${formatToCurrency(item['y'])}';
     }
