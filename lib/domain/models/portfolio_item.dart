@@ -16,6 +16,8 @@ class PortfolioItem {
   final double? oneWeekValueDifference;
   final double? oneMonth;
   final double? oneMonthValueDifference;
+  final double? baseAssetLiqHolding;
+  final double? tokenLiqHolding;
   String imageExtension = kImageExtension;
 
   PortfolioItem({
@@ -33,6 +35,8 @@ class PortfolioItem {
     this.oneWeekValueDifference,
     this.oneMonth,
     this.oneMonthValueDifference,
+    this.baseAssetLiqHolding,
+    this.tokenLiqHolding,
   });
 
   factory PortfolioItem.fromJson(Map<String, dynamic> json) => PortfolioItem(
@@ -54,5 +58,7 @@ class PortfolioItem {
         oneMonth: getDefaultDoubleValue(json['oneMonth']),
         oneMonthValueDifference:
             getDefaultDoubleValue(json['oneMonthValueDifference']),
+        baseAssetLiqHolding: getDefaultDoubleValue(json['baseAssetLiqHolding']),
+        tokenLiqHolding: getDefaultDoubleValue(json['tokenLiqHolding']),
       );
 }

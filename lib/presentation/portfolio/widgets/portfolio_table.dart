@@ -164,7 +164,7 @@ class PortfolioItemWidget extends StatelessWidget {
                 ),
               ],
             ),
-            if (selectedTab != 3) (UIHelper.verticalSpaceExtraSmall()),
+            UIHelper.verticalSpaceExtraSmall(),
             if (selectedTab != 3)
               (Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,7 +225,47 @@ class PortfolioItemWidget extends StatelessWidget {
                                   .copyWith(color: Colors.redAccent),
                     ))
                 ],
-              ))
+              )),
+            if (selectedTab == 3) ...[
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Base asset',
+                        style: dataTableLabelTextStyle(),
+                      ),
+                      Text(
+                        '${formatToCurrency(portfolioItem.baseAssetLiqHolding, decimalDigits: 3)} ${portfolioItem.baseAsset}',
+                        style: dataTableTextStyle(sizingInformation),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 25,
+                    child: VerticalDivider(
+                      color: Colors.white.withOpacity(.1),
+                      thickness: 2,
+                      width: Dimensions.DEFAULT_MARGIN,
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Target asset',
+                        style: dataTableLabelTextStyle(),
+                      ),
+                      Text(
+                        '${formatToCurrency(portfolioItem.tokenLiqHolding, decimalDigits: 3)} ${portfolioItem.token}',
+                        style: dataTableTextStyle(sizingInformation),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
           ],
         ),
       ),
