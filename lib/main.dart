@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ceres_tools_app/core/services/currency_service.dart';
 import 'package:ceres_tools_app/core/services/global_service.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/theme/theme.dart';
@@ -30,6 +31,7 @@ void main() async {
   OneSignal.Debug.setLogLevel(OSLogLevel.error);
 
   await Get.putAsync(() => GlobalService().init());
+  await Get.putAsync(() => CurrencyService().init());
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarBrightness: Brightness.dark,

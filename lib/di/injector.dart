@@ -1,5 +1,6 @@
 import 'package:ceres_tools_app/data/api/api.dart';
 import 'package:ceres_tools_app/data/datasource/banner_datasource.dart';
+import 'package:ceres_tools_app/data/datasource/currency_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/farming_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/locker_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/pairs_datasource.dart';
@@ -88,6 +89,7 @@ abstract class Injector {
   @Register.factory(PairsLiquidityDatasource)
   @Register.factory(PriceAlertDatasource)
   @Register.factory(TBCReservesDatasource)
+  @Register.factory(CurrencyDatasource)
   @Register.factory(GetTokens)
   @Register.factory(GetPairs)
   @Register.factory(GetFarming)

@@ -143,3 +143,16 @@ bool checkNumberValue(dynamic number) {
 
   return false;
 }
+
+String removeTrailingZeros(String inputString) {
+  if (inputString.contains('.')) {
+    List<String> splitInput = inputString.split('.');
+    String decimals = splitInput[1];
+    decimals = decimals.replaceAll(RegExp(r'0*$'), '');
+    decimals = decimals.replaceAll(RegExp(r'\.$'), '');
+
+    return '${splitInput[0]}.$decimals';
+  }
+
+  return inputString;
+}

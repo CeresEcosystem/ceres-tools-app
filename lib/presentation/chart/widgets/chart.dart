@@ -37,8 +37,7 @@ class _ChartState extends State<Chart>
       return Column(
         children: [
           CurrentToken(
-            token: controller.token,
-            goToSwapPage: controller.goToSwapPage,
+            switchPage: controller.goToSwapPage,
             icon: Icons.swap_horiz,
             buttonLabel: 'Swaps',
           ),

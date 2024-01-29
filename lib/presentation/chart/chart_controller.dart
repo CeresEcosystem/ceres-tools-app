@@ -41,7 +41,6 @@ class ChartController extends GetxController {
   final _loadingStatus = LoadingStatus.LOADING.obs;
   final _swapLoadingStatus = LoadingStatus.LOADING.obs;
   final _token = ''.obs;
-  final _searchQuery = ''.obs;
 
   final Rx<SwapFilter> _swapFilter = SwapFilter().obs;
 
@@ -64,21 +63,7 @@ class ChartController extends GetxController {
   String get token => _token.value;
   List<FavoriteToken> get favoriteTokens => _globalService.favoriteTokens;
   InAppWebViewController? get webViewController => _webViewController;
-  List<Token> get tokens {
-    return _tokens.where((token) {
-      if (token.price != null && token.price! <= 0) return false;
-      if (token.fullName != null && token.assetId != null) {
-        return (token.fullName!
-                .toUpperCase()
-                .contains(_searchQuery.value.toUpperCase()) ||
-            token.assetId!
-                .toUpperCase()
-                .contains(_searchQuery.value.toUpperCase()));
-      }
-
-      return false;
-    }).toList();
-  }
+  List<Token> get tokens => _tokens;
 
   List<String> get filterTokens {
     if (_token.value == kAllTokens) {
@@ -113,16 +98,6 @@ class ChartController extends GetxController {
   void goToChartPage() {
     _pageController.animateToPage(0,
         duration: const Duration(milliseconds: 350), curve: Curves.ease);
-  }
-
-  void closeDialog() {
-    Get.back();
-
-    if (_searchQuery.value.isNotEmpty) {
-      Future.delayed(const Duration(seconds: 1), () {
-        _searchQuery.value = '';
-      });
-    }
   }
 
   setInAppWebViewController(InAppWebViewController contrl) {
@@ -180,10 +155,6 @@ class ChartController extends GetxController {
       _swapLoadingStatus.value = LoadingStatus.LOADING;
       _fetchSwaps();
     }
-  }
-
-  onSearch(String text) {
-    _searchQuery.value = text;
   }
 
   bool checkIfFavorite(Token t) {

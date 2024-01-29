@@ -7,22 +7,20 @@ import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
+import 'package:ceres_tools_app/core/widgets/tokens_dialog.dart';
 import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
-import 'package:ceres_tools_app/presentation/chart/widgets/tokens_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CurrentToken extends StatelessWidget {
-  final String token;
-  final Function goToSwapPage;
+  final Function switchPage;
   final IconData icon;
   final String buttonLabel;
   final bool bottomPadding;
 
   const CurrentToken({
     Key? key,
-    required this.token,
-    required this.goToSwapPage,
+    required this.switchPage,
     required this.icon,
     required this.buttonLabel,
     this.bottomPadding = true,
@@ -30,7 +28,8 @@ class CurrentToken extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String imgExtension = imageExtension(token);
+    final ChartController controller = Get.find<ChartController>();
+    final String imgExtension = imageExtension(controller.token);
 
     return Responsive(
       builder: (_, sizingInformation) {
@@ -45,6 +44,9 @@ class CurrentToken extends StatelessWidget {
             child: GestureDetector(
               onTap: () => Get.dialog(
                 TokensDialog(
+                  tokens: controller.tokens,
+                  favoriteTokens: controller.favoriteTokens,
+                  changeToken: controller.changeToken,
                   sizingInformation: sizingInformation,
                 ),
                 barrierDismissible: false,
@@ -60,22 +62,23 @@ class CurrentToken extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     (() {
-                      if (token == kFavoriteTokens || token == kAllTokens) {
+                      if (controller.token == kFavoriteTokens ||
+                          controller.token == kAllTokens) {
                         return Container(
                           height: Dimensions.TOKEN_ICONS_SIZE,
                           width: Dimensions.TOKEN_ICONS_SIZE,
                           decoration: BoxDecoration(
-                            color: token == kFavoriteTokens
+                            color: controller.token == kFavoriteTokens
                                 ? backgroundPink
                                 : Colors.white.withOpacity(.2),
                             shape: BoxShape.circle,
                           ),
                           child: Center(
                             child: Icon(
-                              token == kFavoriteTokens
+                              controller.token == kFavoriteTokens
                                   ? Icons.favorite
                                   : Flaticon.token,
-                              color: token == kFavoriteTokens
+                              color: controller.token == kFavoriteTokens
                                   ? Colors.white
                                   : backgroundOrange,
                             ),
@@ -83,7 +86,8 @@ class CurrentToken extends StatelessWidget {
                         );
                       } else {
                         return RoundImage(
-                          image: '$kImageStorage$token$imgExtension',
+                          image:
+                              '$kImageStorage${controller.token}$imgExtension',
                           extension: imgExtension,
                           size: Dimensions.TOKEN_ICONS_SIZE,
                         );
@@ -94,11 +98,11 @@ class CurrentToken extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          token == kFavoriteTokens
+                          controller.token == kFavoriteTokens
                               ? 'Favorite tokens'
-                              : token == kAllTokens
+                              : controller.token == kAllTokens
                                   ? 'All tokens'
-                                  : token,
+                                  : controller.token,
                           style: chartCurrentTokenTitleTextStyle(),
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
@@ -108,12 +112,13 @@ class CurrentToken extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (token != kFavoriteTokens && token != kAllTokens)
+                    if (controller.token != kFavoriteTokens &&
+                        controller.token != kAllTokens)
                       (Row(
                         children: [
                           UIHelper.horizontalSpaceMedium(),
                           GestureDetector(
-                            onTap: () => goToSwapPage(),
+                            onTap: () => switchPage(),
                             child: Container(
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(

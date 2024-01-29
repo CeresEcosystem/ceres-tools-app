@@ -568,3 +568,27 @@ TextStyle pairLiquidityChartTitleTextStyle(
     color: Colors.white,
   );
 }
+
+TextStyle tokenPriceConverterTitleTextStyle() {
+  return const TextStyle(
+    fontSize: subtitle1,
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+  );
+}
+
+TextStyle tokenPriceConverterTokenTextStyle() {
+  return const TextStyle(
+    fontSize: caption,
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+  );
+}
+
+TextStyle tokenPriceConverterPriceTextStyle() {
+  return const TextStyle(
+    fontSize: headline6,
+    color: backgroundPink,
+    fontWeight: FontWeight.w700,
+  );
+}

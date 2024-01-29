@@ -14,7 +14,7 @@ class TokensController extends GetxController {
   final getTokens = Injector.resolve!<GetTokens>();
 
   final _loadingStatus = LoadingStatus.READY.obs;
-  List<Token>? _tokens;
+  List<Token> _tokens = [];
   final searchQueary = ''.obs;
 
   final List<String> filters = ['All', 'Favorites', 'Synthetics'];
@@ -23,9 +23,31 @@ class TokensController extends GetxController {
   String get selectedFilter => _selectedFilter.value;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
+  List<Token> get allTokens {
+    List<Token> favoriteTokens = [];
+    List<Token> otherTokens = [];
+
+    for (final t in _tokens) {
+      bool isFavorite = checkIfFavorite(t);
+
+      if (pngIcons.contains(t.shortName)) {
+        t.imageExtension = kImagePNGExtension;
+      }
+
+      if (isFavorite) {
+        t.isFavorite = true;
+        favoriteTokens.add(t);
+      } else {
+        otherTokens.add(t);
+      }
+    }
+
+    return [...favoriteTokens, ...otherTokens];
+  }
+
   List<Token> get tokens {
-    if (_tokens != null && _tokens!.isNotEmpty) {
-      List<Token> filterTokens = _tokens!.where((token) {
+    if (_tokens.isNotEmpty) {
+      List<Token> filterTokens = _tokens.where((token) {
         token.isFavorite = checkIfFavorite(token);
         if (token.price != null && token.price! <= 0) return false;
         if (token.fullName != null && token.assetId != null) {
@@ -85,6 +107,12 @@ class TokensController extends GetxController {
     searchQueary.value = text;
   }
 
+  void clearSearch() {
+    if (searchQueary.value.isNotEmpty) {
+      searchQueary.value = '';
+    }
+  }
+
   void fetchTokens([bool refresh = false]) async {
     _loadingStatus.value = refresh ? LoadingStatus.IDLE : LoadingStatus.LOADING;
 
@@ -99,7 +127,7 @@ class TokensController extends GetxController {
             t.imageExtension = kImagePNGExtension;
           }
         }
-        _tokens = tokenList.tokens;
+        _tokens = tokenList.tokens ?? [];
       }
 
       if (_globalService.favoriteTokens.isNotEmpty) {

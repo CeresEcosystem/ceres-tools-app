@@ -48,8 +48,7 @@ class _SwapsState extends State<Swaps>
       return Column(
         children: [
           CurrentToken(
-            token: controller.token,
-            goToSwapPage: controller.goToChartPage,
+            switchPage: controller.goToChartPage,
             icon: Icons.trending_up,
             buttonLabel: 'Chart',
             bottomPadding: false,

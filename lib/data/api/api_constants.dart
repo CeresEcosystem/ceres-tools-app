@@ -32,4 +32,5 @@ class ApiConstants {
   static const TBC_RESERVES_PERMALINK = '/reserves/TBCD';
   static const TOKEN_HOLDERS_PERMALINK = '/holders';
   static const SORA_SUBSCAN_HOLDERS_PERMALINK = '/accounts';
+  static const CURRENCY_PERMALINK = '/currency-rate/{currency}';
 }

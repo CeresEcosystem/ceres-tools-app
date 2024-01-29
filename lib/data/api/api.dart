@@ -108,4 +108,7 @@ abstract class RestClient {
   @POST(
       '${ApiConstants.SORA_SUBSCAN_URL}${ApiConstants.SORA_SUBSCAN_HOLDERS_PERMALINK}')
   Future getXorHolders(@Body() XorHolderJSON xorHolderJSON);
+
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.CURRENCY_PERMALINK}')
+  Future getCurrencyRates(@Path("currency") String currency);
 }

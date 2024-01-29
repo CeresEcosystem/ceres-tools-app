@@ -3,21 +3,26 @@ import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class InputField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
+  final Function(String)? onChanged;
   final bool enabledValidation;
   final bool enabled;
   final TextInputType textInputType;
+  final List<TextInputFormatter>? inputFormatters;
 
   const InputField({
     Key? key,
     required this.hint,
     required this.controller,
+    this.onChanged,
     this.enabledValidation = false,
     this.enabled = true,
     this.textInputType = TextInputType.text,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -27,8 +32,15 @@ class InputField extends StatelessWidget {
         return TextFormField(
           controller: controller,
           enabled: enabled,
+          inputFormatters: inputFormatters,
+          onChanged: onChanged,
           decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Dimensions.DEFAULT_MARGIN_SMALL)),
+              borderSide: BorderSide(color: backgroundColorDark, width: 1.0),
+            ),
+            disabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(
                   Radius.circular(Dimensions.DEFAULT_MARGIN_SMALL)),
               borderSide: BorderSide(color: backgroundColorDark, width: 1.0),
@@ -38,8 +50,8 @@ class InputField extends StatelessWidget {
                   Radius.circular(Dimensions.DEFAULT_MARGIN_SMALL)),
               borderSide: BorderSide(color: backgroundPink, width: 1.0),
             ),
-            contentPadding: const EdgeInsets.all(
-              Dimensions.DEFAULT_MARGIN_SMALL,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.DEFAULT_MARGIN_SMALL,
             ),
             filled: true,
             hintText: hint,
