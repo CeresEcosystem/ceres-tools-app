@@ -96,7 +96,6 @@ class TokenListContainer extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        UIHelper.verticalSpaceExtraSmall(),
                         GestureDetector(
                           onTap: () => showToastAndCopy(
                             'Copied assetID:',
@@ -104,10 +103,28 @@ class TokenListContainer extends StatelessWidget {
                             clipboardText: token.assetId,
                           ),
                           child: Text(
-                            'AssetID: ${formatAddress(token.assetId, 8)}',
+                            formatAddress(token.assetId, 8),
                             style: tokensAssetIdStyle(sizingInformation),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        UIHelper.verticalSpaceSmall(),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Market Cap: ',
+                            style: tokensAssetIdStyle(sizingInformation),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: formatToCurrency(
+                                  token.marketCap,
+                                  showSymbol: true,
+                                  decimalDigits: 0,
+                                ),
+                                style: tokensAssetIdStyle(sizingInformation)
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ],
                           ),
                         ),
                         UIHelper.verticalSpaceExtraSmall(),

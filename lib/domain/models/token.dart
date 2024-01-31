@@ -7,6 +7,7 @@ class Token {
   final String? priceString;
   final double? price;
   final String? assetId;
+  final int? marketCap;
   bool isFavorite = false;
   String imageExtension = kImageExtension;
 
@@ -16,6 +17,7 @@ class Token {
     this.priceString,
     this.price,
     this.assetId,
+    this.marketCap,
   });
 
   factory Token.fromJson(Map<String, dynamic> json) => Token(
@@ -24,6 +26,7 @@ class Token {
         priceString: getDefaultStringValue(json['price']),
         price: getDefaultDoubleValue(json['price']),
         assetId: getDefaultStringValue(json['assetId']),
+        marketCap: getDefaultIntValue(json['marketCap']),
       );
 
   @override
@@ -35,6 +38,7 @@ class Token {
           priceString == other.priceString &&
           price == other.price &&
           assetId == other.assetId &&
+          marketCap == other.marketCap &&
           isFavorite == other.isFavorite &&
           imageExtension == other.imageExtension;
 
@@ -45,6 +49,7 @@ class Token {
       priceString.hashCode ^
       price.hashCode ^
       assetId.hashCode ^
+      marketCap.hashCode ^
       isFavorite.hashCode ^
       imageExtension.hashCode;
 }
