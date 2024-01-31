@@ -12,4 +12,11 @@ class TrackerRepositoryImpl implements TrackerRepository {
       return await datasource.getTracker(token);
     } on Exception catch (_) {}
   }
+
+  @override
+  Future getTrackerBlocks(String token, String type, int page) async {
+    try {
+      return await datasource.getTrackerBlocks(token, type, page);
+    } on Exception catch (_) {}
+  }
 }

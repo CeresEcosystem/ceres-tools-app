@@ -46,6 +46,7 @@ import 'package:ceres_tools_app/domain/usecase/get_token_holders.dart';
 import 'package:ceres_tools_app/domain/usecase/get_token_infos.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tracker.dart';
+import 'package:ceres_tools_app/domain/usecase/get_tracker_blocks.dart';
 import 'package:ceres_tools_app/domain/usecase/get_xor_holders.dart';
 import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
@@ -98,6 +99,7 @@ abstract class Injector {
   @Register.factory(GetDemeterFarms)
   @Register.factory(GetDemeterPools)
   @Register.factory(GetTracker)
+  @Register.factory(GetTrackerBlocks)
   @Register.factory(GetLockedTokens)
   @Register.factory(GetLockedPairs)
   @Register.factory(GetPortfolioItems)

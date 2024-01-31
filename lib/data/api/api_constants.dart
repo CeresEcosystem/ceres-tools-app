@@ -17,7 +17,8 @@ class ApiConstants {
   static const PAIRS_LIQUIDITY_CHART =
       '/pairs-liquidity/history/{baseToken}/{token}';
   static const FARMING_PERMALINK = '/rewards';
-  static const TRACKER_PERMALINK = '/tracker/{token}';
+  static const TRACKER_PERMALINK = '/tracker/v2/{token}';
+  static const TRACKER_BLOCKS_PERMALINK = '/tracker/{token}/blocks/{type}';
   static const BANNERS_PERMALINK = '/banners/mobile';
   static const LOCK_TOKEN_PERMALINK = '/lock/tokens/{token}';
   static const LOCK_PAIR_PERMALINK = '/lock/pairs/{baseAsset}/{token}';

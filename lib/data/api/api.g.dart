@@ -226,7 +226,41 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'https://data.cerestoken.io/api/tracker/${token}',
+          'https://data.cerestoken.io/api/tracker/v2/${token}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> getTrackerBlocks(
+    String token,
+    String type,
+    int page,
+    int size,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'size': size,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'https://data.cerestoken.io/api/tracker/${token}/blocks/${type}',
           queryParameters: queryParameters,
           data: _data,
         )
