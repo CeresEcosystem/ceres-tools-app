@@ -3,12 +3,12 @@ import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/default_value.dart';
 import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/token.dart';
-import 'package:ceres_tools_app/domain/usecase/get_tracker.dart';
+import 'package:ceres_tools_app/domain/usecase/get_tracker_supply.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
 class SupplyController extends GetxController {
-  final getTracker = Injector.resolve!<GetTracker>();
+  final getTrackerSupply = Injector.resolve!<GetTrackerSupply>();
 
   final _loadingStatus = LoadingStatus.READY.obs;
   List? _supplyGraph;
@@ -91,13 +91,11 @@ class SupplyController extends GetxController {
 
     _loadingStatus.value = LoadingStatus.LOADING;
 
-    final response = await getTracker.execute(token.shortName!);
+    final response = await getTrackerSupply.execute(token.shortName!);
 
     if (response != null) {
-      if (response['graphSupply'] != null && response['graphSupply'] is List) {
-        _supplyGraph = response['graphSupply'];
-        _setSupplyGraphData();
-      }
+      _supplyGraph = response;
+      _setSupplyGraphData();
 
       _loadingStatus.value = LoadingStatus.READY;
     } else {

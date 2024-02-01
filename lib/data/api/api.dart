@@ -39,6 +39,9 @@ abstract class RestClient {
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TRACKER_PERMALINK}')
   Future getTracker(@Path("token") String token);
 
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TRACKER_SUPPLY_PERMALINK}')
+  Future getTrackerSupply(@Path("token") String token);
+
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.TRACKER_BLOCKS_PERMALINK}')
   Future getTrackerBlocks(
     @Path("token") String token,

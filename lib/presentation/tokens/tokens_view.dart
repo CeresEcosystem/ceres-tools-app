@@ -34,42 +34,45 @@ class _TokensViewBodyState extends State<TokensViewBody> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: CustomScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate([
-              const CeresBanner(),
-              UIHelper.verticalSpaceMediumLarge(),
-              CeresHeader(
-                scaffoldKey: widget.scaffoldKey,
-              ),
-              UIHelper.verticalSpaceMediumLarge(),
-            ]),
-          ),
-          (() {
-            if (!showTokenPriceCalculator) {
-              return TokenListContainer(
+      child: RefreshIndicator(
+        onRefresh: () async => controller.fetchTokens(true),
+        child: CustomScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                const CeresBanner(),
+                UIHelper.verticalSpaceMediumLarge(),
+                CeresHeader(
+                  scaffoldKey: widget.scaffoldKey,
+                ),
+                UIHelper.verticalSpaceMediumLarge(),
+              ]),
+            ),
+            (() {
+              if (!showTokenPriceCalculator) {
+                return TokenListContainer(
+                  sizingInformation: widget.sizingInformation,
+                  setShowTokenPriceCalculator: () {
+                    setState(() {
+                      showTokenPriceCalculator = true;
+                    });
+                  },
+                );
+              }
+
+              return TokenPriceCalculator(
                 sizingInformation: widget.sizingInformation,
                 setShowTokenPriceCalculator: () {
+                  controller.clearSearch();
                   setState(() {
-                    showTokenPriceCalculator = true;
+                    showTokenPriceCalculator = false;
                   });
                 },
               );
-            }
-
-            return TokenPriceCalculator(
-              sizingInformation: widget.sizingInformation,
-              setShowTokenPriceCalculator: () {
-                controller.clearSearch();
-                setState(() {
-                  showTokenPriceCalculator = false;
-                });
-              },
-            );
-          })(),
-        ],
+            })(),
+          ],
+        ),
       ),
     );
   }

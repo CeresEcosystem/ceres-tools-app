@@ -14,6 +14,13 @@ class TrackerRepositoryImpl implements TrackerRepository {
   }
 
   @override
+  Future getTrackerSupply(String token) async {
+    try {
+      return await datasource.getTrackerSupply(token);
+    } on Exception catch (_) {}
+  }
+
+  @override
   Future getTrackerBlocks(String token, String type, int page) async {
     try {
       return await datasource.getTrackerBlocks(token, type, page);

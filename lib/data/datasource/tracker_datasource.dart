@@ -12,6 +12,12 @@ class TrackerDatasource {
     } on DioException catch (_) {}
   }
 
+  Future getTrackerSupply(String token) async {
+    try {
+      return await client.getTrackerSupply(token);
+    } on DioException catch (_) {}
+  }
+
   Future getTrackerBlocks(String token, String type, int page,
       [int size = 5]) async {
     try {
