@@ -241,6 +241,7 @@ class _TokenPriceCalculatorState extends State<TokenPriceCalculator> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: backgroundPink,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                           Dimensions.DEFAULT_MARGIN_SMALL,

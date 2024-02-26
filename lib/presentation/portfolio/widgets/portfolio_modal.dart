@@ -1,3 +1,4 @@
+import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/address_format.dart';
 import 'package:ceres_tools_app/core/utils/toast.dart';
@@ -105,6 +106,9 @@ class _PortfolioModalState extends State<PortfolioModal> {
                     )),
                   const SizedBox(width: Dimensions.DEFAULT_MARGIN),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: backgroundPink,
+                    ),
                     onPressed: () {
                       if (_formKey.currentState != null &&
                           _formKey.currentState!.validate()) {

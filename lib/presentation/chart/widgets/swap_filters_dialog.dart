@@ -221,6 +221,7 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
               color: backgroundColor,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: backgroundPink,
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),

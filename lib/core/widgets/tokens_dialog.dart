@@ -76,7 +76,6 @@ class _TokensDialogState extends State<TokensDialog> {
           children: [
             Container(
               padding: const EdgeInsets.only(top: Dimensions.DEFAULT_MARGIN),
-              color: backgroundColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -198,6 +197,7 @@ class _TokensDialogState extends State<TokensDialog> {
               color: backgroundColor,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: backgroundPink,
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),

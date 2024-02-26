@@ -16,6 +16,7 @@ ThemeData darkThemeData() {
     colorScheme: const ColorScheme.dark(
       primary: backgroundPink,
       secondary: backgroundColorLight,
+      surfaceTint: backgroundColor,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: backgroundColorDark,
@@ -25,9 +26,13 @@ ThemeData darkThemeData() {
     ),
     datePickerTheme: const DatePickerThemeData(
       headerBackgroundColor: backgroundColor,
+      backgroundColor: backgroundColor,
     ),
     timePickerTheme: const TimePickerThemeData(
       backgroundColor: backgroundColor,
+      dialBackgroundColor: backgroundColorLight,
+      hourMinuteColor: backgroundColorLight,
+      hourMinuteTextColor: Colors.white,
     ),
     dialogTheme: DialogTheme(
       backgroundColor: backgroundColor,
@@ -35,6 +40,9 @@ ThemeData darkThemeData() {
         borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
       ),
       contentTextStyle: const TextStyle(color: Colors.white),
+    ),
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: backgroundColorDark,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: backgroundPink,
