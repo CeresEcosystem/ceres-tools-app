@@ -2,6 +2,7 @@ import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
+import 'package:ceres_tools_app/core/utils/address_format.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
@@ -28,6 +29,8 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
   final ChartController chartController = Get.find<ChartController>();
 
   String assetId = 'Show all tokens';
+  List<String> excludedAccounts = [];
+  String errorAddress = '';
 
   TextEditingController dateFromController = TextEditingController();
   TextEditingController timeFromController = TextEditingController();
@@ -35,6 +38,7 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
   TextEditingController timeToController = TextEditingController();
   TextEditingController minAmount = TextEditingController();
   TextEditingController maxAmount = TextEditingController();
+  TextEditingController excludedAccount = TextEditingController();
 
   @override
   void initState() {
@@ -50,6 +54,11 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
       assetId = chartController.swapFilter.assetId ?? 'Show all tokens';
       minAmount.text = chartController.swapFilter.minAmount ?? '';
       maxAmount.text = chartController.swapFilter.maxAmount ?? '';
+
+      if (chartController.swapFilter.excludedAccounts != null &&
+          chartController.swapFilter.excludedAccounts!.isNotEmpty) {
+        excludedAccounts = chartController.swapFilter.excludedAccounts!;
+      }
     });
 
     dateFromController.addListener(() {
@@ -76,6 +85,33 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
     minAmount.dispose();
     maxAmount.dispose();
     super.dispose();
+  }
+
+  void addExcludedAccount() {
+    if (validWalletAddress(excludedAccount.text)) {
+      if (!excludedAccounts.contains(excludedAccount.text)) {
+        setState(() {
+          errorAddress = '';
+          excludedAccounts = [...excludedAccounts, excludedAccount.text];
+        });
+        excludedAccount.text = '';
+      } else {
+        setState(() {
+          errorAddress = 'This account address is already added.';
+        });
+      }
+    } else {
+      setState(() {
+        errorAddress = 'Invalid account address.';
+      });
+    }
+  }
+
+  void removeExcludedAccount(String accToRemove) {
+    setState(() {
+      excludedAccounts =
+          excludedAccounts.where((acc) => acc != accToRemove).toList();
+    });
   }
 
   @override
@@ -207,10 +243,83 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
                       });
                     },
                     bg: backgroundColorDark,
-                    padding: const EdgeInsets.all(
-                      Dimensions.DEFAULT_MARGIN_SMALL,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                      horizontal: Dimensions.DEFAULT_MARGIN,
                     ),
                     showAllValue: 'Show all tokens',
+                  ),
+                  UIHelper.verticalSpaceMedium(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Exclude accounts',
+                        style: inputLabelTextStyle(),
+                      ),
+                      UIHelper.verticalSpaceExtraSmall(),
+                      Wrap(
+                        spacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                        children: excludedAccounts.map((acc) {
+                          return ActionChip(
+                            labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                            ),
+                            visualDensity: VisualDensity.compact,
+                            label: Text(formatAddress(acc, 5)),
+                            labelStyle: const TextStyle(
+                              fontSize: overline2,
+                            ),
+                            avatar: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                            backgroundColor: backgroundColorLight,
+                            side: BorderSide.none,
+                            onPressed: () => removeExcludedAccount(acc),
+                          );
+                        }).toList(),
+                      ),
+                      if (errorAddress.isNotEmpty) ...[
+                        Text(
+                          errorAddress,
+                          style: TextStyle(
+                            fontSize: overline,
+                            color: Colors.red[500],
+                          ),
+                        )
+                      ],
+                      UIHelper.verticalSpaceExtraSmall(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InputField(
+                              hint: 'Enter account id',
+                              controller: excludedAccount,
+                            ),
+                          ),
+                          UIHelper.horizontalSpaceSmall(),
+                          Container(
+                            padding: const EdgeInsetsDirectional.all(
+                              Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                            ),
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                    Dimensions.DEFAULT_MARGIN_SMALL),
+                              ),
+                              color: backgroundPink,
+                            ),
+                            child: GestureDetector(
+                              onTap: () => addExcludedAccount(),
+                              child: const Icon(
+                                Icons.person_add_alt,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -239,6 +348,7 @@ class _SwapFiltersDialogState extends State<SwapFiltersDialog> {
                   minAmount.text,
                   maxAmount.text,
                   assetId,
+                  excludedAccounts,
                 ),
               ),
             ),

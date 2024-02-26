@@ -22,6 +22,7 @@ class SwapsDatasource {
         swapFilter.minAmount,
         swapFilter.maxAmount,
         swapFilter.assetIdAddress,
+        swapFilter.excludedAccounts,
       );
     } on DioException catch (_) {}
   }
@@ -38,6 +39,7 @@ class SwapsDatasource {
         swapFilter.minAmount,
         swapFilter.maxAmount,
         swapFilter.assetIdAddress,
+        swapFilter.excludedAccounts,
       );
     } on DioException catch (_) {}
   }

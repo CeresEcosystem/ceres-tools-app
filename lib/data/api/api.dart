@@ -88,6 +88,7 @@ abstract class RestClient {
     @Query('minAmount') String? minAmount,
     @Query('maxAmount') String? maxAmount,
     @Query('assetId') String? assetId,
+    @Query('excludedAccIds') List<String>? excludedAccIds,
   );
 
   @GET(
@@ -99,6 +100,7 @@ abstract class RestClient {
     @Query('minAmount') String? minAmount,
     @Query('maxAmount') String? maxAmount,
     @Query('assetId') String? assetId,
+    @Query('excludedAccIds') List<String>? excludedAccIds,
   );
 
   @POST('${ApiConstants.NEW_BASE_URL}${ApiConstants.INITIAL_FAVS_PERMALINK}')

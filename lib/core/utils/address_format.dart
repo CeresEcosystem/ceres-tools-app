@@ -6,8 +6,16 @@ String formatAddress(dynamic value, [int lenght = 7]) {
   return '';
 }
 
+bool containsOnlyAlphaNumeric(String str) {
+  RegExp alphaNumeric = RegExp(r'^[a-zA-Z0-9]+$');
+  return alphaNumeric.hasMatch(str);
+}
+
 bool validWalletAddress(String address) {
-  if (address.isNotEmpty && address.length == 49 && address.startsWith('cn')) {
+  if (address.isNotEmpty &&
+      address.length == 49 &&
+      address.startsWith('cn') &&
+      containsOnlyAlphaNumeric(address)) {
     return true;
   }
 

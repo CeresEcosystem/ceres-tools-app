@@ -7,6 +7,7 @@ class SwapFilter {
   String? _maxAmount;
   String? _assetId;
   String? _assetIdAddress;
+  List<String>? _excludedAccounts;
 
   SwapFilter();
 
@@ -17,6 +18,7 @@ class SwapFilter {
     this._maxAmount,
     this._assetId,
     this._assetIdAddress,
+    this._excludedAccounts,
   );
 
   DateTime? get dateFrom => _dateFrom;
@@ -25,6 +27,7 @@ class SwapFilter {
   String? get maxAmount => _maxAmount;
   String? get assetId => _assetId;
   String? get assetIdAddress => _assetIdAddress;
+  List<String>? get excludedAccounts => _excludedAccounts;
 
   List<Map<String, String>> getActiveFilters() {
     List<Map<String, String>> activeFilters = [];
@@ -64,6 +67,13 @@ class SwapFilter {
       });
     }
 
+    if (_excludedAccounts != null && _excludedAccounts!.isNotEmpty) {
+      activeFilters.add({
+        'label': 'Exclude accounts: ',
+        'filter': '${_excludedAccounts!.length} accounts excluded',
+      });
+    }
+
     return activeFilters;
   }
 
@@ -72,7 +82,8 @@ class SwapFilter {
         _dateTo != null ||
         _minAmount != null ||
         _maxAmount != null ||
-        _assetId != null;
+        _assetId != null ||
+        _excludedAccounts != null;
   }
 
   @override
@@ -84,7 +95,8 @@ class SwapFilter {
         other._dateTo == _dateTo &&
         other._minAmount == _minAmount &&
         other._maxAmount == _maxAmount &&
-        other._assetId == _assetId;
+        other._assetId == _assetId &&
+        other._excludedAccounts == _excludedAccounts;
   }
 
   @override
@@ -93,6 +105,7 @@ class SwapFilter {
         _dateTo.hashCode ^
         _minAmount.hashCode ^
         _maxAmount.hashCode ^
-        _assetId.hashCode;
+        _assetId.hashCode ^
+        _excludedAccounts.hashCode;
   }
 }

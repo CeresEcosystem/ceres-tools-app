@@ -202,6 +202,11 @@ class ChartController extends GetxController {
           s.outputAssetId != _swapFilter.value.assetIdAddress) {
         return false;
       }
+
+      if (_swapFilter.value.excludedAccounts != null &&
+          _swapFilter.value.excludedAccounts!.contains(s.accountId)) {
+        return false;
+      }
     }
 
     return true;
@@ -456,6 +461,7 @@ class ChartController extends GetxController {
     String minAmount,
     String maxAmount,
     String assetId,
+    List<String> excludedAccounts,
   ) async {
     String? assetIdAddress = assetId == 'Show all tokens'
         ? null
@@ -470,6 +476,7 @@ class ChartController extends GetxController {
       maxAmount.isEmpty ? null : maxAmount,
       assetId == 'Show all tokens' ? null : assetId,
       assetIdAddress,
+      excludedAccounts,
     );
 
     if (sf != _swapFilter.value) {

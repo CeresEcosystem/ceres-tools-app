@@ -548,6 +548,7 @@ class _RestClient implements RestClient {
     String? minAmount,
     String? maxAmount,
     String? assetId,
+    List<String>? excludedAccIds,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -557,6 +558,7 @@ class _RestClient implements RestClient {
       r'minAmount': minAmount,
       r'maxAmount': maxAmount,
       r'assetId': assetId,
+      r'excludedAccIds': excludedAccIds,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -590,6 +592,7 @@ class _RestClient implements RestClient {
     String? minAmount,
     String? maxAmount,
     String? assetId,
+    List<String>? excludedAccIds,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -599,6 +602,7 @@ class _RestClient implements RestClient {
       r'minAmount': minAmount,
       r'maxAmount': maxAmount,
       r'assetId': assetId,
+      r'excludedAccIds': excludedAccIds,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
