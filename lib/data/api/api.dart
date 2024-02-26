@@ -122,4 +122,12 @@ abstract class RestClient {
 
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.CURRENCY_PERMALINK}')
   Future getCurrencyRates(@Path("currency") String currency);
+
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.KENSETSU_PERMALINK}')
+  Future getKensetsuBurns(
+    @Query("page") int page,
+    @Query('dateFrom') String? dateFrom,
+    @Query('dateTo') String? dateTo,
+    @Query('accountId') String? accountId,
+  );
 }

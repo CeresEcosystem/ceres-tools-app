@@ -6,6 +6,7 @@ import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_tools_app/core/widgets/status_bar.dart';
 import 'package:ceres_tools_app/presentation/tokens/tokens_controller.dart';
+import 'package:ceres_tools_app/presentation/tokens/widgets/kensetsu_info.dart';
 import 'package:ceres_tools_app/presentation/tokens/widgets/token_list_container.dart';
 import 'package:ceres_tools_app/presentation/tokens/widgets/token_price_calculator.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,10 @@ class _TokensViewBodyState extends State<TokensViewBody> {
                 UIHelper.verticalSpaceMediumLarge(),
                 CeresHeader(
                   scaffoldKey: widget.scaffoldKey,
+                ),
+                UIHelper.verticalSpaceMediumLarge(),
+                KensetsuInfo(
+                  sizingInformation: widget.sizingInformation,
                 ),
                 UIHelper.verticalSpaceMediumLarge(),
               ]),

@@ -515,6 +515,9 @@ class PortfolioTable extends StatelessWidget {
                           onSelected: (value) =>
                               controller.changeSelectedTimeFrame(timeFrame),
                           selectedColor: backgroundPink,
+                          side: BorderSide.none,
+                          checkmarkColor: Colors.white,
+                          backgroundColor: Colors.white.withOpacity(.1),
                         ),
                       );
                     }).toList(),

@@ -592,3 +592,13 @@ TextStyle tokenPriceConverterPriceTextStyle() {
     fontWeight: FontWeight.w700,
   );
 }
+
+TextStyle kensetsuInfoTextStyle(SizingInformation sizingInformation) {
+  return TextStyle(
+    fontSize: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+        ? caption
+        : subtitle1,
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+  );
+}

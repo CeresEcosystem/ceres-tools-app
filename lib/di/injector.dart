@@ -2,6 +2,7 @@ import 'package:ceres_tools_app/data/api/api.dart';
 import 'package:ceres_tools_app/data/datasource/banner_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/currency_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/farming_datasource.dart';
+import 'package:ceres_tools_app/data/datasource/kensetsu_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/locker_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/pairs_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/pairs_liquidity_datasource.dart';
@@ -12,6 +13,7 @@ import 'package:ceres_tools_app/data/datasource/tbc_reserves_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/tokens_datasource.dart';
 import 'package:ceres_tools_app/data/datasource/tracker_datasource.dart';
 import 'package:ceres_tools_app/data/repository/farming_repository_impl.dart';
+import 'package:ceres_tools_app/data/repository/kensetsu_repository_impl.dart';
 import 'package:ceres_tools_app/data/repository/locker_repository_impl.dart';
 import 'package:ceres_tools_app/data/repository/pairs_liquidity_repository_impl.dart';
 import 'package:ceres_tools_app/data/repository/pairs_repository_impl.dart';
@@ -21,6 +23,7 @@ import 'package:ceres_tools_app/data/repository/tbc_reserves_repository_impl.dar
 import 'package:ceres_tools_app/data/repository/tokens_repository_impl.dart';
 import 'package:ceres_tools_app/data/repository/tracker_repository_impl.dart';
 import 'package:ceres_tools_app/domain/repository/farming_repository.dart';
+import 'package:ceres_tools_app/domain/repository/kensetsu_repository.dart';
 import 'package:ceres_tools_app/domain/repository/locker_repository.dart';
 import 'package:ceres_tools_app/domain/repository/pairs_liquidity_repository.dart';
 import 'package:ceres_tools_app/domain/repository/pairs_repository.dart';
@@ -33,6 +36,7 @@ import 'package:ceres_tools_app/domain/usecase/get_demeter_farms.dart';
 import 'package:ceres_tools_app/domain/usecase/get_demeter_pools.dart';
 import 'package:ceres_tools_app/domain/usecase/get_farming.dart';
 import 'package:ceres_tools_app/domain/usecase/get_farming_tvl.dart';
+import 'package:ceres_tools_app/domain/usecase/get_kensetsu_burns.dart';
 import 'package:ceres_tools_app/domain/usecase/get_locked_pairs.dart';
 import 'package:ceres_tools_app/domain/usecase/get_locked_tokens.dart';
 import 'package:ceres_tools_app/domain/usecase/get_pairs.dart';
@@ -92,6 +96,7 @@ abstract class Injector {
   @Register.factory(PriceAlertDatasource)
   @Register.factory(TBCReservesDatasource)
   @Register.factory(CurrencyDatasource)
+  @Register.factory(KensetsuDatasource)
   @Register.factory(GetTokens)
   @Register.factory(GetPairs)
   @Register.factory(GetFarming)
@@ -112,6 +117,7 @@ abstract class Injector {
   @Register.factory(GetTBCReserves)
   @Register.factory(GetTokenHolders)
   @Register.factory(GetXorHolders)
+  @Register.factory(GetKensetsuBurns)
   @Register.factory(TokensRepository, from: TokensRepositoryImpl)
   @Register.factory(PairsRepository, from: PairsRepositoryImpl)
   @Register.factory(FarmingRepository, from: FarmingRepositoryImpl)
@@ -122,5 +128,6 @@ abstract class Injector {
   @Register.factory(PairsLiquidityRepository,
       from: PairsLiquidityRepositoryImpl)
   @Register.factory(TBCReservesRepository, from: TBCReservesRepositoryImpl)
+  @Register.factory(KensetsuRepository, from: KensetsuRepositoryImpl)
   void _configureTokensModuleFactories();
 }
