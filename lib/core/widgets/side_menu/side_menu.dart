@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
@@ -166,8 +168,9 @@ class SideMenu extends StatelessWidget {
       ),
       child: Column(
         children: [
-          if (sizingInformation.screenSize.height > 600.0)
-            (GestureDetector(
+          if (Platform.isAndroid &&
+              sizingInformation.screenSize.height > 600.0) ...[
+            GestureDetector(
               onTap: () => launchURL(kPolkaswapWebsite),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
@@ -175,7 +178,8 @@ class SideMenu extends StatelessWidget {
                 ),
                 child: Image.asset('lib/core/assets/images/polkaswap_logo.png'),
               ),
-            )),
+            )
+          ],
           Divider(
             height: Dimensions.DEFAULT_MARGIN * 2,
             thickness: Dimensions.DIVIDER_THICKNESS_SIZE,

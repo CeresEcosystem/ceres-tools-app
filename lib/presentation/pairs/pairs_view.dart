@@ -107,8 +107,10 @@ class PairsView extends GetView<PairsController> {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: Dimensions.DEFAULT_MARGIN_SMALL),
+                  margin: const EdgeInsets.only(
+                    top: Dimensions.DEFAULT_MARGIN_SMALL,
+                    bottom: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                  ),
                   padding: EdgeInsets.symmetric(
                     horizontal: UIHelper.pagePadding(sizingInformation),
                   ),
@@ -174,6 +176,47 @@ class PairsView extends GetView<PairsController> {
                         UIHelper.horizontalSpaceExtraSmall(),
                     itemCount: controller.baseAssets.length,
                     scrollDirection: Axis.horizontal,
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: UIHelper.pagePadding(sizingInformation),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Volume interval',
+                          style: pairsInfoStyle(sizingInformation),
+                        ),
+                        UIHelper.horizontalSpaceSmall(),
+                        Wrap(
+                          spacing: 4.0,
+                          children: controller.volumeIntervals.map((timeFrame) {
+                            return ChoiceChip(
+                              label: Text(
+                                timeFrame,
+                                style: timeFrameChipTextStyle(),
+                              ),
+                              visualDensity: VisualDensity.compact,
+                              padding: const EdgeInsets.all(4.0),
+                              showCheckmark: false,
+                              selected: timeFrame == controller.volumeInterval,
+                              onSelected: (_) =>
+                                  controller.setVolumeInterval(timeFrame),
+                              selectedColor: backgroundPink,
+                              side: BorderSide.none,
+                              backgroundColor: Colors.white.withOpacity(.1),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -303,15 +346,18 @@ class PairsView extends GetView<PairsController> {
                     style: pairsLiquidityStyle(sizingInformation),
                   ),
                   UIHelper.verticalSpaceSmall(),
-                  Text(
-                    kPairVolume,
-                    style: pairsInfoStyle(sizingInformation),
-                  ),
-                  Text(
-                    formatToCurrency(pair.volume, showSymbol: true),
-                    style: pairsLiquidityStyle(sizingInformation),
-                  ),
-                  UIHelper.verticalSpaceSmall(),
+                  if (pair.volumes != null) ...[
+                    Text(
+                      kPairVolume,
+                      style: pairsInfoStyle(sizingInformation),
+                    ),
+                    Text(
+                      formatToCurrency(pair.volumes![controller.volumeInterval],
+                          showSymbol: true),
+                      style: pairsLiquidityStyle(sizingInformation),
+                    ),
+                    UIHelper.verticalSpaceSmall(),
+                  ],
                   Text(
                     kPairLockedLiquidity,
                     style: pairsInfoStyle(sizingInformation),
@@ -329,6 +375,18 @@ class PairsView extends GetView<PairsController> {
         Row(
           children: [
             actionButton(
+              () => Get.toNamed(Routes.LOCKER,
+                  arguments: {'isPair': true, 'lockerItem': pair}),
+              Icon(
+                Icons.lock_outline_sharp,
+                color: Colors.white.withOpacity(0.5),
+                size: 22,
+              ),
+              kShowLocks,
+              sizingInformation,
+            ),
+            UIHelper.horizontalSpaceExtraSmall(),
+            actionButton(
               () => Get.toNamed(
                 Routes.PAIRS_LIQUIDITY,
                 arguments: pair,
@@ -336,19 +394,23 @@ class PairsView extends GetView<PairsController> {
               HeroIcon(
                 HeroIcons.circleStack,
                 color: Colors.white.withOpacity(0.5),
+                size: 22,
               ),
               kShowLiquidity,
               sizingInformation,
             ),
-            UIHelper.horizontalSpaceMedium(),
+            UIHelper.horizontalSpaceExtraSmall(),
             actionButton(
-              () => Get.toNamed(Routes.LOCKER,
-                  arguments: {'isPair': true, 'lockerItem': pair}),
-              Icon(
-                Icons.lock_outline_sharp,
-                color: Colors.white.withOpacity(0.5),
+              () => Get.toNamed(
+                Routes.PAIRS_PROVIDERS,
+                arguments: pair,
               ),
-              kShowLocks,
+              HeroIcon(
+                HeroIcons.userGroup,
+                color: Colors.white.withOpacity(0.5),
+                size: 22,
+              ),
+              kShowProviders,
               sizingInformation,
             ),
           ],

@@ -10,6 +10,8 @@ import 'package:ceres_tools_app/presentation/pairs/pairs_binding.dart';
 import 'package:ceres_tools_app/presentation/pairs/pairs_view.dart';
 import 'package:ceres_tools_app/presentation/pairs_liquidity/pairs_liquidity_binding.dart';
 import 'package:ceres_tools_app/presentation/pairs_liquidity/pairs_liquidity_view.dart';
+import 'package:ceres_tools_app/presentation/pairs_providers/pairs_providers_binding.dart';
+import 'package:ceres_tools_app/presentation/pairs_providers/pairs_providers_view.dart';
 import 'package:ceres_tools_app/presentation/portfolio/portfolio_binding.dart';
 import 'package:ceres_tools_app/presentation/portfolio/portfolio_view.dart';
 import 'package:ceres_tools_app/presentation/supply/supply_binding.dart';
@@ -87,6 +89,11 @@ class AppPages {
       name: Routes.KENSETSU,
       page: () => const KensetsuView(),
       binding: KensetsuBinding(),
+    ),
+    GetPage(
+      name: Routes.PAIRS_PROVIDERS,
+      page: () => const PairsProvidersView(),
+      binding: PairsProvidersBinding(),
     ),
   ];
 }

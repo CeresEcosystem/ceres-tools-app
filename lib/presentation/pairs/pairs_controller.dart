@@ -11,11 +11,16 @@ import 'package:get/get.dart';
 class PairsController extends GetxController {
   final getPairs = Injector.resolve!<GetPairs>();
 
+  final List<String> _volumeIntervals = ['24h', '7d', '1M', '3M'];
+
   final _loadingStatus = LoadingStatus.READY.obs;
   var searchQueary = ''.obs;
   final _baseAsset = 'All'.obs;
   final _syntheticsFilter = false.obs;
+  final _volumeInterval = '24h'.obs;
 
+  List<String> get volumeIntervals => _volumeIntervals;
+  String get volumeInterval => _volumeInterval.value;
   LoadingStatus get loadingStatus => _loadingStatus.value;
 
   List<Pair>? _pairs;
@@ -23,6 +28,12 @@ class PairsController extends GetxController {
 
   String? _totalLiquidity;
   String? _totalVolume;
+
+  void setVolumeInterval(String vi) {
+    if (vi != _volumeInterval.value) {
+      _volumeInterval.value = vi;
+    }
+  }
 
   List<Pair> get pairs {
     if (_pairs != null && _pairs!.isNotEmpty) {

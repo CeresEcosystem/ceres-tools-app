@@ -53,6 +53,8 @@ class _$Injector extends Injector {
       ..registerFactory(
           (c) => GetPairsLiquidity(repository: c<PairsLiquidityRepository>()))
       ..registerFactory((c) =>
+          GetPairsLiquidityProviders(repository: c<PairsLiquidityRepository>()))
+      ..registerFactory((c) =>
           GetPairsLiquidityChart(repository: c<PairsLiquidityRepository>()))
       ..registerFactory(
           (c) => GetTBCReserves(repository: c<TBCReservesRepository>()))

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
@@ -109,7 +111,8 @@ class TransferItem extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (transfer.sender != null &&
+                          if (Platform.isAndroid &&
+                              transfer.sender != null &&
                               transfer.sender!.startsWith('0x')) {
                             launchURL('$kEthScan${transfer.sender}');
                           }
@@ -152,7 +155,8 @@ class TransferItem extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (transfer.receiver != null &&
+                          if (Platform.isAndroid &&
+                              transfer.receiver != null &&
                               transfer.receiver!.startsWith('0x')) {
                             launchURL('$kEthScan${transfer.receiver}');
                           }

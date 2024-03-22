@@ -26,6 +26,10 @@ abstract class RestClient {
   Future getPairsLiquidity(@Path("baseAsset") String baseAsset,
       @Path("tokenAsset") String tokenAsset, @Query("page") int page);
 
+  @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIR_LIQUIDITY_PROVIDERS}')
+  Future getPairsLiquidityProviders(@Path("baseAsset") String baseAsset,
+      @Path("tokenAsset") String tokenAsset);
+
   @GET('${ApiConstants.NEW_BASE_URL}${ApiConstants.PAIRS_LIQUIDITY_CHART}')
   Future getPairsLiquidityChart(
       @Path("baseToken") String baseToken, @Path("token") String token);

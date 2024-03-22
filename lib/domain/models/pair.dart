@@ -9,6 +9,7 @@ class Pair {
   final double? baseAssetLiquidity;
   final double? targetAssetLiquidity;
   final double? volume;
+  final Map<String, dynamic>? volumes;
   final double? lockedLiquidity;
   final String? tokenAssetId;
   final String? baseAssetId;
@@ -22,6 +23,7 @@ class Pair {
     this.baseAssetLiquidity,
     this.targetAssetLiquidity,
     this.volume,
+    this.volumes,
     this.lockedLiquidity,
     this.tokenAssetId,
     this.baseAssetId,
@@ -35,6 +37,7 @@ class Pair {
         baseAssetLiquidity: getDefaultDoubleValue(json['baseAssetLiq']),
         targetAssetLiquidity: getDefaultDoubleValue(json['targetAssetLiq']),
         volume: getDefaultDoubleValue(json['volume']),
+        volumes: json['volumePeriods'],
         lockedLiquidity: getDefaultDoubleValue(json['lockedLiquidity']),
         tokenAssetId: getDefaultStringValue(json['tokenAssetId']),
         baseAssetId: getDefaultStringValue(json['baseAssetId']),
