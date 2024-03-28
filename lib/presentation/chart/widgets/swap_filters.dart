@@ -17,88 +17,83 @@ class SwapFilters extends StatelessWidget {
 
     return Responsive(
       builder: (context, sizingInformation) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: UIHelper.pagePadding(sizingInformation),
-          ),
-          child: Obx(() {
-            return Column(
-              children: [
-                UIHelper.verticalSpaceSmall(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Swaps',
-                            style: pageTitleStyle(sizingInformation),
-                          ),
-                          (() {
-                            if (controller.swapFilter
-                                .getActiveFilters()
-                                .isNotEmpty) {
-                              return Wrap(
-                                spacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                                children: controller.swapFilter
-                                    .getActiveFilters()
-                                    .map((activeFilter) {
-                                  return RichText(
-                                    text: TextSpan(
-                                      text: activeFilter['label'],
-                                      style: swapFiltersTextStyle(),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: activeFilter['filter'],
-                                          style: swapFiltersTextStyle()
-                                              .copyWith(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              );
-                            }
-
-                            return Text(
-                              'No active filters',
-                              style: swapFiltersTextStyle()
-                                  .copyWith(fontSize: caption),
-                            );
-                          })(),
-                        ],
-                      ),
-                    ),
-                    UIHelper.horizontalSpaceExtraSmall(),
-                    Row(
+        return Obx(() {
+          return Column(
+            children: [
+              UIHelper.verticalSpaceSmall(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        filterButton(
-                          'Filter swaps',
-                          backgroundPink,
-                          () => Get.dialog(
-                            SwapFiltersDialog(
-                              sizingInformation: sizingInformation,
-                            ),
-                            barrierDismissible: false,
-                          ),
+                        Text(
+                          'Swaps',
+                          style: pageTitleStyle(sizingInformation),
                         ),
-                        UIHelper.horizontalSpaceExtraSmall(),
-                        filterButton(
-                          'Clear filters',
-                          Colors.white.withOpacity(.1),
-                          () => controller.clearFilters(),
-                        ),
+                        (() {
+                          if (controller.swapFilter
+                              .getActiveFilters()
+                              .isNotEmpty) {
+                            return Wrap(
+                              spacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+                              children: controller.swapFilter
+                                  .getActiveFilters()
+                                  .map((activeFilter) {
+                                return RichText(
+                                  text: TextSpan(
+                                    text: activeFilter['label'],
+                                    style: swapFiltersTextStyle(),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: activeFilter['filter'],
+                                        style: swapFiltersTextStyle()
+                                            .copyWith(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          }
+
+                          return Text(
+                            'No active filters',
+                            style: swapFiltersTextStyle()
+                                .copyWith(fontSize: caption),
+                          );
+                        })(),
                       ],
                     ),
-                  ],
-                ),
-                UIHelper.verticalSpaceSmall(),
-              ],
-            );
-          }),
-        );
+                  ),
+                  UIHelper.horizontalSpaceExtraSmall(),
+                  Row(
+                    children: [
+                      filterButton(
+                        'Filter swaps',
+                        backgroundPink,
+                        () => Get.dialog(
+                          SwapFiltersDialog(
+                            sizingInformation: sizingInformation,
+                          ),
+                          barrierDismissible: false,
+                        ),
+                      ),
+                      UIHelper.horizontalSpaceExtraSmall(),
+                      filterButton(
+                        'Clear filters',
+                        Colors.white.withOpacity(.1),
+                        () => controller.clearFilters(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              UIHelper.verticalSpaceSmall(),
+            ],
+          );
+        });
       },
     );
   }

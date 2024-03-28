@@ -602,3 +602,19 @@ TextStyle kensetsuInfoTextStyle(SizingInformation sizingInformation) {
     fontWeight: FontWeight.w500,
   );
 }
+
+TextStyle swapsStatsLabel() {
+  return TextStyle(
+    fontSize: overline,
+    color: Colors.white.withOpacity(.5),
+    fontWeight: FontWeight.w500,
+  );
+}
+
+TextStyle swapsStatsInfo() {
+  return const TextStyle(
+    fontSize: caption,
+    color: Colors.white,
+    fontWeight: FontWeight.w700,
+  );
+}

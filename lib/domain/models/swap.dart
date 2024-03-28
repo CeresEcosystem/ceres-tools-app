@@ -7,8 +7,8 @@ class Swap {
   final String accountId;
   final String inputAssetId;
   final String outputAssetId;
-  final double assetInputAmount;
-  final double assetOutputAmount;
+  double assetInputAmount;
+  double assetOutputAmount;
   String? inputAsset;
   String? outputAsset;
   String? type;

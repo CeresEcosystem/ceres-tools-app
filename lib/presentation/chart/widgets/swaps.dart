@@ -11,6 +11,7 @@ import 'package:ceres_tools_app/domain/models/swap.dart';
 import 'package:ceres_tools_app/presentation/chart/chart_controller.dart';
 import 'package:ceres_tools_app/presentation/chart/widgets/current_token.dart';
 import 'package:ceres_tools_app/presentation/chart/widgets/swap_filters.dart';
+import 'package:ceres_tools_app/presentation/chart/widgets/swaps_stats_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,42 +54,65 @@ class _SwapsState extends State<Swaps>
             buttonLabel: 'Chart',
             bottomPadding: false,
           ),
-          const SwapFilters(),
-          (() {
-            if (controller.swapLoadingStatus == LoadingStatus.LOADING) {
-              return const Expanded(child: CenterLoading());
-            } else {
-              return controller.swaps.isEmpty
-                  ? Padding(
-                      padding:
-                          const EdgeInsets.only(top: Dimensions.DEFAULT_MARGIN),
-                      child: Text(
-                        'No swaps for selected token',
-                        style: chartCurrentTokenTitleTextStyle(),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: UIHelper.pagePadding(widget.sizingInformation),
+              ),
+              child: CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      const SwapFilters(),
+                      UIHelper.verticalSpaceSmall(),
+                      SwapsStatsInfo(
+                        sizingInformation: widget.sizingInformation,
                       ),
-                    )
-                  : Expanded(
-                      child: ListView.separated(
-                        padding: EdgeInsets.all(
-                          UIHelper.pagePadding(widget.sizingInformation),
-                        ),
-                        itemBuilder: (context, index) {
-                          final Swap swap = controller.swaps[index];
+                      UIHelper.verticalSpaceSmallMedium(),
+                    ]),
+                  ),
+                  (() {
+                    if (controller.swapLoadingStatus == LoadingStatus.LOADING) {
+                      return const SliverFillRemaining(child: CenterLoading());
+                    } else {
+                      return controller.swaps.isEmpty
+                          ? SliverFillRemaining(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: Dimensions.DEFAULT_MARGIN),
+                                child: Text(
+                                  'No swaps for selected token',
+                                  style: chartCurrentTokenTitleTextStyle(),
+                                ),
+                              ),
+                            )
+                          : SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final Swap swap = controller.swaps[index];
 
-                          return SwapItem(
-                            sizingInformation: widget.sizingInformation,
-                            swap: swap,
-                            showType: controller.token != kFavoriteTokens &&
-                                controller.token != kAllTokens,
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            UIHelper.verticalSpaceExtraSmall(),
-                        itemCount: controller.swaps.length,
-                      ),
-                    );
-            }
-          }()),
+                                  return SwapItem(
+                                    sizingInformation: widget.sizingInformation,
+                                    swap: swap,
+                                    showType:
+                                        controller.token != kFavoriteTokens &&
+                                            controller.token != kAllTokens,
+                                  );
+                                },
+                                childCount: controller.swaps.length,
+                              ),
+                            );
+                    }
+                  }()),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      UIHelper.verticalSpaceSmall(),
+                    ]),
+                  ),
+                ],
+              ),
+            ),
+          ),
           if (controller.swapLoadingStatus == LoadingStatus.READY &&
               controller.pageMeta.pageCount > 1)
             (Pagination(

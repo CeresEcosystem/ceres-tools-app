@@ -122,7 +122,9 @@ class SwapItem extends StatelessWidget {
               ],
             )),
           UIHelper.verticalSpaceSmall(),
-          Row(
+          Wrap(
+            spacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+            runSpacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,14 +139,6 @@ class SwapItem extends StatelessWidget {
                     style: dataTableTextStyle(sizingInformation),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 25,
-                child: VerticalDivider(
-                  color: Colors.white.withOpacity(.1),
-                  thickness: 2,
-                  width: Dimensions.DEFAULT_MARGIN,
-                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,32 +155,20 @@ class SwapItem extends StatelessWidget {
                 ],
               ),
               if (showType)
-                (Row(
+                (Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 25,
-                      child: VerticalDivider(
-                        color: Colors.white.withOpacity(.1),
-                        thickness: 2,
-                        width: Dimensions.DEFAULT_MARGIN,
-                      ),
+                    Text(
+                      'Type',
+                      style: dataTableLabelTextStyle(),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Type',
-                          style: dataTableLabelTextStyle(),
-                        ),
-                        Text(
-                          swap.type ?? '/',
-                          style: dataTableTextStyle(sizingInformation).copyWith(
-                            color: swap.type == 'Buy'
-                                ? Colors.greenAccent
-                                : Colors.redAccent,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      swap.type ?? '/',
+                      style: dataTableTextStyle(sizingInformation).copyWith(
+                        color: swap.type == 'Buy'
+                            ? Colors.greenAccent
+                            : Colors.redAccent,
+                      ),
                     ),
                   ],
                 )),
