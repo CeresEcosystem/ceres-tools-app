@@ -3,22 +3,24 @@ import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/kensetsu_controller.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/widgets/filter_dialog.dart';
+import 'package:ceres_tools_app/presentation/burning/burning_controller.dart';
+import 'package:ceres_tools_app/presentation/burning/widgets/filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FilterKensetsu extends StatelessWidget {
+class BurningFilter extends StatelessWidget {
   final SizingInformation sizingInformation;
+  final Map<String, String> token;
 
-  const FilterKensetsu({
+  const BurningFilter({
     Key? key,
     required this.sizingInformation,
+    required this.token,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final KensetsuController controller = Get.find<KensetsuController>();
+    final BurningController controller = Get.find<BurningController>();
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -30,7 +32,7 @@ class FilterKensetsu extends StatelessWidget {
           children: [
             UIHelper.verticalSpaceSmallMedium(),
             Text(
-              'Kensetsu Burning',
+              '${token['tokenFullName']} Burning',
               style: pageTitleStyle(sizingInformation),
             ),
             Wrap(
@@ -52,11 +54,11 @@ class FilterKensetsu extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: 'Total KEN Allocated: ',
+                    text: 'Total ${token['tokenShortName']} Allocated: ',
                     style: swapFiltersTextStyle().copyWith(fontSize: caption),
                     children: <TextSpan>[
                       TextSpan(
-                        text: controller.summary['kenAllocated'],
+                        text: controller.summary['tokenAllocated'],
                         style: swapFiltersTextStyle()
                             .copyWith(color: Colors.white, fontSize: caption),
                       ),
@@ -70,11 +72,11 @@ class FilterKensetsu extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 (() {
-                  if (controller.kensetsuFilter.getActiveFilters().isNotEmpty) {
+                  if (controller.burnFilter.getActiveFilters().isNotEmpty) {
                     return Expanded(
                       child: Wrap(
                         spacing: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                        children: controller.kensetsuFilter
+                        children: controller.burnFilter
                             .getActiveFilters()
                             .map((activeFilter) {
                           return RichText(
@@ -107,7 +109,7 @@ class FilterKensetsu extends StatelessWidget {
                       'Filter burns',
                       backgroundPink,
                       () => Get.dialog(
-                        KensetsuFilterDialog(
+                        BurningFilterDialog(
                           sizingInformation: sizingInformation,
                         ),
                         barrierDismissible: false,

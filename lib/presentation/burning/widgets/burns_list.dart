@@ -9,21 +9,23 @@ import 'package:ceres_tools_app/core/utils/toast.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/center_loading.dart';
 import 'package:ceres_tools_app/core/widgets/pagination.dart';
-import 'package:ceres_tools_app/domain/models/kensetsu_burn.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/kensetsu_controller.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/widgets/filter.dart';
+import 'package:ceres_tools_app/domain/models/burn.dart';
+import 'package:ceres_tools_app/presentation/burning/burning_controller.dart';
+import 'package:ceres_tools_app/presentation/burning/widgets/filter.dart';
 import 'package:ceres_tools_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class KensetsuBurnItem extends StatelessWidget {
+class BurnItem extends StatelessWidget {
   final SizingInformation sizingInformation;
-  final KensetsuBurn burn;
+  final Burn burn;
+  final Map<String, String> token;
 
-  const KensetsuBurnItem({
+  const BurnItem({
     Key? key,
     required this.sizingInformation,
     required this.burn,
+    required this.token,
   }) : super(key: key);
 
   @override
@@ -107,12 +109,12 @@ class KensetsuBurnItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'KEN Allocated',
+                    '${token['tokenShortName']} Allocated',
                     style: dataTableLabelTextStyle(),
                   ),
                   Text(
                     formatToCurrency(
-                      burn.kenAllocated,
+                      burn.tokenAllocated,
                       showSymbol: false,
                       formatOnlyFirstPart: true,
                     ),
@@ -128,17 +130,18 @@ class KensetsuBurnItem extends StatelessWidget {
   }
 }
 
-class KensetsuBurns extends StatelessWidget {
+class BurnsList extends StatelessWidget {
   final SizingInformation sizingInformation;
 
-  const KensetsuBurns({
+  const BurnsList({
     Key? key,
     required this.sizingInformation,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final KensetsuController controller = Get.find();
+    final BurningController controller = Get.find();
+    final Map<String, String> token = Get.arguments;
 
     return Obx(() {
       if (controller.loadingStatus == LoadingStatus.LOADING) {
@@ -147,14 +150,15 @@ class KensetsuBurns extends StatelessWidget {
 
       return Column(
         children: [
-          FilterKensetsu(
+          BurningFilter(
             sizingInformation: sizingInformation,
+            token: token,
           ),
           (() {
             if (controller.pageLoadingStatus == LoadingStatus.LOADING) {
               return const Expanded(child: CenterLoading());
             } else {
-              return controller.kensetsuBurns.isEmpty
+              return controller.burns.isEmpty
                   ? Padding(
                       padding:
                           const EdgeInsets.only(top: Dimensions.DEFAULT_MARGIN),
@@ -169,17 +173,17 @@ class KensetsuBurns extends StatelessWidget {
                           UIHelper.pagePadding(sizingInformation),
                         ),
                         itemBuilder: (context, index) {
-                          final KensetsuBurn burn =
-                              controller.kensetsuBurns[index];
+                          final Burn burn = controller.burns[index];
 
-                          return KensetsuBurnItem(
+                          return BurnItem(
                             sizingInformation: sizingInformation,
                             burn: burn,
+                            token: token,
                           );
                         },
                         separatorBuilder: (context, index) =>
                             UIHelper.verticalSpaceExtraSmall(),
-                        itemCount: controller.kensetsuBurns.length,
+                        itemCount: controller.burns.length,
                       ),
                     );
             }

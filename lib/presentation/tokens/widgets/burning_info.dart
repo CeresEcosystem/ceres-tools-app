@@ -9,18 +9,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 
-class KensetsuInfo extends StatelessWidget {
+class BurningInfo extends StatelessWidget {
   final SizingInformation sizingInformation;
+  final String info;
+  final String tokenFullName;
+  final String tokenShortName;
 
-  const KensetsuInfo({
+  const BurningInfo({
     Key? key,
     required this.sizingInformation,
+    required this.info,
+    required this.tokenFullName,
+    required this.tokenShortName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed(Routes.KENSETSU),
+      onTap: () => Get.toNamed(
+        Routes.BURNING,
+        arguments: {
+          'tokenFullName': tokenFullName,
+          'tokenShortName': tokenShortName,
+        },
+      ),
       child: ItemContainer(
         sizingInformation: sizingInformation,
         smallMargin: true,
@@ -31,19 +43,18 @@ class KensetsuInfo extends StatelessWidget {
               HeroIcons.fire,
               style: HeroIconStyle.solid,
               color: backgroundOrange,
-              size: Dimensions.CHIP_SIZE,
+              size: Dimensions.ICON_SIZE,
             ),
             UIHelper.horizontalSpaceSmall(),
             Expanded(
               child: RichText(
                 text: TextSpan(
-                  text:
-                      'KEN (Kensetsu) will be allocated to accounts on the SORA network that burned at least 1 million XOR before block 14,939,200, at a rate of 1 KEN per 1 million XOR burned. Click',
-                  style: kensetsuInfoTextStyle(sizingInformation),
+                  text: info,
+                  style: burningInfoTextStyle(sizingInformation),
                   children: <TextSpan>[
                     TextSpan(
                       text: ' here ',
-                      style: kensetsuInfoTextStyle(sizingInformation).copyWith(
+                      style: burningInfoTextStyle(sizingInformation).copyWith(
                         color: backgroundPink,
                       ),
                     ),

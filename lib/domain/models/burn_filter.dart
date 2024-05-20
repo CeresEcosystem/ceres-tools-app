@@ -1,13 +1,13 @@
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
 
-class KensetsuFilter {
+class BurnFilter {
   DateTime? _dateFrom;
   DateTime? _dateTo;
   String? _accountId;
 
-  KensetsuFilter();
+  BurnFilter();
 
-  KensetsuFilter.arguments(
+  BurnFilter.arguments(
     this._dateFrom,
     this._dateTo,
     this._accountId,
@@ -52,7 +52,7 @@ class KensetsuFilter {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is KensetsuFilter &&
+    return other is BurnFilter &&
         other._dateFrom == _dateFrom &&
         other._dateTo == _dateTo &&
         other._accountId == _accountId;

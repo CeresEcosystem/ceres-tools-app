@@ -819,7 +819,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> getKensetsuBurns(
+  Future<dynamic> getBurns(
+    String token,
     int page,
     String? dateFrom,
     String? dateTo,
@@ -842,7 +843,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'https://data.cerestoken.io/api/kensetsu/burns',
+          'https://data.cerestoken.io/api/burns/${token}',
           queryParameters: queryParameters,
           data: _data,
         )

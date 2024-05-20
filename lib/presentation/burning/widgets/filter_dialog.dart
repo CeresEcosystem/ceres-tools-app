@@ -7,24 +7,24 @@ import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/datepicker/date_input.dart';
 import 'package:ceres_tools_app/core/widgets/input_field.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/kensetsu_controller.dart';
+import 'package:ceres_tools_app/presentation/burning/burning_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class KensetsuFilterDialog extends StatefulWidget {
+class BurningFilterDialog extends StatefulWidget {
   final SizingInformation sizingInformation;
 
-  const KensetsuFilterDialog({
+  const BurningFilterDialog({
     Key? key,
     required this.sizingInformation,
   }) : super(key: key);
 
   @override
-  State<KensetsuFilterDialog> createState() => _KensetsuFilterDialogState();
+  State<BurningFilterDialog> createState() => _BurningFilterDialogState();
 }
 
-class _KensetsuFilterDialogState extends State<KensetsuFilterDialog> {
-  final KensetsuController kensetsuController = Get.find<KensetsuController>();
+class _BurningFilterDialogState extends State<BurningFilterDialog> {
+  final BurningController controller = Get.find<BurningController>();
 
   TextEditingController dateFromController = TextEditingController();
   TextEditingController timeFromController = TextEditingController();
@@ -36,14 +36,12 @@ class _KensetsuFilterDialogState extends State<KensetsuFilterDialog> {
   void initState() {
     setState(() {
       dateFromController.text =
-          formatDateToString(kensetsuController.kensetsuFilter.dateFrom);
+          formatDateToString(controller.burnFilter.dateFrom);
       timeFromController.text =
-          formatTimeToString(kensetsuController.kensetsuFilter.dateFrom);
-      dateToController.text =
-          formatDateToString(kensetsuController.kensetsuFilter.dateTo);
-      timeToController.text =
-          formatTimeToString(kensetsuController.kensetsuFilter.dateTo);
-      accountId.text = kensetsuController.kensetsuFilter.accountId ?? '';
+          formatTimeToString(controller.burnFilter.dateFrom);
+      dateToController.text = formatDateToString(controller.burnFilter.dateTo);
+      timeToController.text = formatTimeToString(controller.burnFilter.dateTo);
+      accountId.text = controller.burnFilter.accountId ?? '';
     });
 
     dateFromController.addListener(() {
@@ -188,7 +186,7 @@ class _KensetsuFilterDialogState extends State<KensetsuFilterDialog> {
                   'Filter',
                   style: buttonLightTextStyle(widget.sizingInformation),
                 ),
-                onPressed: () => kensetsuController.filterKensetsuBurns(
+                onPressed: () => controller.filterBurns(
                   dateFromController.text,
                   timeFromController.text,
                   dateToController.text,

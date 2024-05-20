@@ -1,9 +1,9 @@
+import 'package:ceres_tools_app/presentation/burning/burning_binding.dart';
+import 'package:ceres_tools_app/presentation/burning/burning_view.dart';
 import 'package:ceres_tools_app/presentation/chart/chart_binding.dart';
 import 'package:ceres_tools_app/presentation/chart/chart_view.dart';
 import 'package:ceres_tools_app/presentation/farming/farming_binding.dart';
 import 'package:ceres_tools_app/presentation/farming/farming_view.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/kensetsu_binding.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/kensetsu_view.dart';
 import 'package:ceres_tools_app/presentation/locker/locker_binding.dart';
 import 'package:ceres_tools_app/presentation/locker/locker_view.dart';
 import 'package:ceres_tools_app/presentation/pairs/pairs_binding.dart';
@@ -86,9 +86,9 @@ class AppPages {
       binding: TokenHoldersBinding(),
     ),
     GetPage(
-      name: Routes.KENSETSU,
-      page: () => const KensetsuView(),
-      binding: KensetsuBinding(),
+      name: Routes.BURNING,
+      page: () => const BurningView(),
+      binding: BurningBinding(),
     ),
     GetPage(
       name: Routes.PAIRS_PROVIDERS,

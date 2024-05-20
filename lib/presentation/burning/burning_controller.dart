@@ -6,44 +6,49 @@ import 'package:ceres_tools_app/core/utils/address_format.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/default_value.dart';
 import 'package:ceres_tools_app/di/injector.dart';
-import 'package:ceres_tools_app/domain/models/kensetsu_burn.dart';
-import 'package:ceres_tools_app/domain/models/kensetsu_burn_list.dart';
-import 'package:ceres_tools_app/domain/models/kensetsu_filter.dart';
+import 'package:ceres_tools_app/domain/models/burn.dart';
+import 'package:ceres_tools_app/domain/models/burn_filter.dart';
+import 'package:ceres_tools_app/domain/models/burn_list.dart';
 import 'package:ceres_tools_app/domain/models/page_meta.dart';
 import 'package:ceres_tools_app/domain/models/wallet.dart';
-import 'package:ceres_tools_app/domain/usecase/get_kensetsu_burns.dart';
+import 'package:ceres_tools_app/domain/usecase/get_burns.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KensetsuController extends GetxController {
-  final getKensetsuBurns = Injector.resolve!<GetKensetsuBurns>();
+class BurningController extends GetxController {
+  final getBurns = Injector.resolve!<GetBurns>();
 
   final _loadingStatus = LoadingStatus.LOADING.obs;
   final _pageLoadingStatus = LoadingStatus.LOADING.obs;
 
-  final _kensetsuBurns = <KensetsuBurn>[].obs;
+  final Map<String, String> _token = Get.arguments;
+
+  final _burns = <Burn>[].obs;
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
-  Map<String, String> _summary = {'xorBurned': '0', 'kenAllocated': '0'};
+  Map<String, String> _summary = {'xorBurned': '0', 'tokenAllocated': '0'};
   final List<Wallet> _wallets = [];
-  final Rx<KensetsuFilter> _kensetsuFilter = KensetsuFilter().obs;
+  final Rx<BurnFilter> _burnFilter = BurnFilter().obs;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
   LoadingStatus get pageLoadingStatus => _pageLoadingStatus.value;
-  KensetsuFilter get kensetsuFilter => _kensetsuFilter.value;
+  BurnFilter get burnFilter => _burnFilter.value;
 
   PageMeta get pageMeta => _pageMeta;
   Map<String, String> get summary => _summary;
-  List<KensetsuBurn> get kensetsuBurns => _kensetsuBurns;
+  List<Burn> get burns => _burns;
 
-  Future _fetchKensetsuBurns([int page = 1]) async {
-    final response = await getKensetsuBurns.execute(
+  Future _fetchBurns([int page = 1]) async {
+    final response = await getBurns.execute(
+      _token['tokenFullName']!.toLowerCase(),
       page,
-      _kensetsuFilter.value,
+      _burnFilter.value,
     );
 
+    final int divider =
+        _token['tokenFullName'] == 'Karma' ? 100000000 : 1000000;
+
     if (response != null) {
-      KensetsuBurnList kensetsuBurnList =
-          KensetsuBurnList.fromJson(response['data']);
+      BurnList burnList = BurnList.fromJson(response['data']);
 
       if (response['summary'] != null) {
         double amountBurnedTotal = getDefaultDoubleValueNotNullable(
@@ -54,8 +59,8 @@ class KensetsuController extends GetxController {
             amountBurnedTotal,
             showSymbol: false,
           ),
-          'kenAllocated': formatToCurrency(
-            amountBurnedTotal / 1000000,
+          'tokenAllocated': formatToCurrency(
+            amountBurnedTotal / divider,
             showSymbol: false,
           ),
         };
@@ -63,30 +68,30 @@ class KensetsuController extends GetxController {
 
       _pageMeta = PageMeta.fromJson(response['meta']);
 
-      if (kensetsuBurnList.kensetsuBurns.isNotEmpty) {
-        List<KensetsuBurn> kensetsuBurnsFormatted = [];
+      if (burnList.burns.isNotEmpty) {
+        List<Burn> burnsFormatted = [];
 
-        for (final burn in kensetsuBurnList.kensetsuBurns) {
-          KensetsuBurn kb = burn;
-          kb.createdAt = formatDateToLocalTime(kb.createdAt);
-          kb.formattedAccountId = _wallets
-                  .firstWhereOrNull((w) => w.address == kb.accountId)
+        for (final burn in burnList.burns) {
+          Burn b = burn;
+          b.createdAt = formatDateToLocalTime(b.createdAt);
+          b.formattedAccountId = _wallets
+                  .firstWhereOrNull((w) => w.address == b.accountId)
                   ?.name ??
-              formatAddress(kb.accountId);
-          kb.kenAllocated = kb.amountBurned / 1000000;
-          kensetsuBurnsFormatted.add(kb);
+              formatAddress(b.accountId);
+          b.tokenAllocated = b.amountBurned / divider;
+          burnsFormatted.add(b);
         }
 
-        _kensetsuBurns.value = kensetsuBurnsFormatted;
+        _burns.value = burnsFormatted;
       } else {
-        _kensetsuBurns.value = [];
+        _burns.value = [];
       }
 
       _loadingStatus.value = LoadingStatus.READY;
       _pageLoadingStatus.value = LoadingStatus.READY;
     } else {
       _pageMeta = PageMeta(0, 0, 0, 0, false, false);
-      _kensetsuBurns.value = [];
+      _burns.value = [];
       _loadingStatus.value = LoadingStatus.READY;
       _pageLoadingStatus.value = LoadingStatus.READY;
     }
@@ -95,28 +100,28 @@ class KensetsuController extends GetxController {
   void goToFirstPage() {
     if (_pageMeta.hasPreviousPage) {
       _pageLoadingStatus.value = LoadingStatus.LOADING;
-      _fetchKensetsuBurns();
+      _fetchBurns();
     }
   }
 
   void goToPreviousPage() {
     if (_pageMeta.hasPreviousPage) {
       _pageLoadingStatus.value = LoadingStatus.LOADING;
-      _fetchKensetsuBurns(_pageMeta.pageNumber - 1);
+      _fetchBurns(_pageMeta.pageNumber - 1);
     }
   }
 
   void goToNextPage() {
     if (_pageMeta.hasNextPage) {
       _pageLoadingStatus.value = LoadingStatus.LOADING;
-      _fetchKensetsuBurns(_pageMeta.pageNumber + 1);
+      _fetchBurns(_pageMeta.pageNumber + 1);
     }
   }
 
   void goToLastPage() {
     if (_pageMeta.hasNextPage) {
       _pageLoadingStatus.value = LoadingStatus.LOADING;
-      _fetchKensetsuBurns(_pageMeta.pageCount);
+      _fetchBurns(_pageMeta.pageCount);
     }
   }
 
@@ -130,9 +135,9 @@ class KensetsuController extends GetxController {
         _wallets.add(Wallet.fromJson(jsonDecode(wallet)));
       }
 
-      _fetchKensetsuBurns();
+      _fetchBurns();
     } else {
-      _fetchKensetsuBurns();
+      _fetchBurns();
     }
   }
 
@@ -142,30 +147,30 @@ class KensetsuController extends GetxController {
     super.onInit();
   }
 
-  Future filterKensetsuBurns(String dateFrom, String timeFrom, String dateTo,
+  Future filterBurns(String dateFrom, String timeFrom, String dateTo,
       String timeTo, String accountId) async {
     DateTime? dateTimeFrom = combineDateAndTime(dateFrom, timeFrom);
     DateTime? dateTimeTo = combineDateAndTime(dateTo, timeTo);
 
-    KensetsuFilter kf = KensetsuFilter.arguments(
+    BurnFilter bf = BurnFilter.arguments(
       dateTimeFrom,
       dateTimeTo,
       accountId,
     );
 
-    if (kf != _kensetsuFilter.value) {
+    if (bf != _burnFilter.value) {
       Get.back();
       _pageLoadingStatus.value = LoadingStatus.LOADING;
-      _kensetsuFilter.value = kf;
-      _fetchKensetsuBurns();
+      _burnFilter.value = bf;
+      _fetchBurns();
     }
   }
 
   Future clearFilters() async {
-    if (_kensetsuFilter.value.isSet()) {
-      _kensetsuFilter.value = KensetsuFilter();
+    if (_burnFilter.value.isSet()) {
+      _burnFilter.value = BurnFilter();
       _pageLoadingStatus.value = LoadingStatus.LOADING;
-      _fetchKensetsuBurns();
+      _fetchBurns();
     }
   }
 }

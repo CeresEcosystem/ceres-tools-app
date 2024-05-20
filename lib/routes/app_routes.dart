@@ -12,6 +12,6 @@ abstract class Routes {
   static const PAIRS_LIQUIDITY = '/pairs_liquidity';
   static const TBC_RESERVES = '/tbc_reserves';
   static const TOKEN_HOLDERS = '/token_holders';
-  static const KENSETSU = '/kensetsu';
+  static const BURNING = '/burning';
   static const PAIRS_PROVIDERS = '/pairs_providers';
 }

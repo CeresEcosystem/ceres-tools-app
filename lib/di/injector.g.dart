@@ -24,7 +24,7 @@ class _$Injector extends Injector {
       ..registerFactory((c) => PriceAlertDatasource(client: c<RestClient>()))
       ..registerFactory((c) => TBCReservesDatasource(client: c<RestClient>()))
       ..registerFactory((c) => CurrencyDatasource(client: c<RestClient>()))
-      ..registerFactory((c) => KensetsuDatasource(client: c<RestClient>()))
+      ..registerFactory((c) => BurningDatasource(client: c<RestClient>()))
       ..registerFactory((c) => GetTokens(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetPairs(repository: c<PairsRepository>()))
       ..registerFactory((c) => GetFarming(repository: c<FarmingRepository>()))
@@ -61,8 +61,7 @@ class _$Injector extends Injector {
       ..registerFactory(
           (c) => GetTokenHolders(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetXorHolders(repository: c<TokensRepository>()))
-      ..registerFactory(
-          (c) => GetKensetsuBurns(repository: c<KensetsuRepository>()))
+      ..registerFactory((c) => GetBurns(repository: c<BurningRepository>()))
       ..registerFactory<TokensRepository>(
           (c) => TokensRepositoryImpl(datasource: c<TokensDatasource>()))
       ..registerFactory<PairsRepository>(
@@ -82,7 +81,7 @@ class _$Injector extends Injector {
               datasource: c<PairsLiquidityDatasource>()))
       ..registerFactory<TBCReservesRepository>((c) =>
           TBCReservesRepositoryImpl(datasource: c<TBCReservesDatasource>()))
-      ..registerFactory<KensetsuRepository>(
-          (c) => KensetsuRepositoryImpl(datasource: c<KensetsuDatasource>()));
+      ..registerFactory<BurningRepository>(
+          (c) => BurningRepositoryImpl(datasource: c<BurningDatasource>()));
   }
 }

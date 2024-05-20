@@ -55,7 +55,7 @@ class TokenFilters extends StatelessWidget {
               )
             ],
           ),
-          UIHelper.verticalSpaceMediumLarge(),
+          UIHelper.verticalSpaceSmallMedium(),
           SizedBox(
             height: 35,
             child: ListView.separated(

@@ -37,5 +37,5 @@ class ApiConstants {
   static const TOKEN_HOLDERS_PERMALINK = '/holders';
   static const SORA_SUBSCAN_HOLDERS_PERMALINK = '/accounts';
   static const CURRENCY_PERMALINK = '/currency-rate/{currency}';
-  static const KENSETSU_PERMALINK = '/kensetsu/burns';
+  static const BURNING_PERMALINK = '/burns/{token}';
 }

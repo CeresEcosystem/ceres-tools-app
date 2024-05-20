@@ -1,13 +1,13 @@
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/kensetsu_controller.dart';
-import 'package:ceres_tools_app/presentation/kensetsu/widgets/burns.dart';
+import 'package:ceres_tools_app/presentation/burning/burning_controller.dart';
+import 'package:ceres_tools_app/presentation/burning/widgets/burns_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class KensetsuView extends GetView<KensetsuController> {
-  const KensetsuView({Key? key}) : super(key: key);
+class BurningView extends GetView<BurningController> {
+  const BurningView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class KensetsuView extends GetView<KensetsuController> {
             height: sizingInformation.bottomSafeAreaSize,
             color: chartBackground,
           ),
-          body: KensetsuBurns(
+          body: BurnsList(
             sizingInformation: sizingInformation,
           ),
         );
