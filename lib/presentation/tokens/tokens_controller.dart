@@ -19,8 +19,10 @@ class TokensController extends GetxController {
 
   final List<String> filters = ['All', 'Favorites', 'Synthetics'];
   final _selectedFilter = 'All'.obs;
+  final _selectedPriceFilter = '\$'.obs;
 
   String get selectedFilter => _selectedFilter.value;
+  String get selectedPriceFilter => _selectedPriceFilter.value;
 
   LoadingStatus get loadingStatus => _loadingStatus.value;
   List<Token> get allTokens {
@@ -84,6 +86,12 @@ class TokensController extends GetxController {
     }
   }
 
+  void setPriceFilter(String priceFilter) {
+    if (priceFilter != _selectedPriceFilter.value) {
+      _selectedPriceFilter.value = priceFilter;
+    }
+  }
+
   @override
   void onInit() async {
     await _globalService.setOneSignal();
@@ -122,10 +130,16 @@ class TokensController extends GetxController {
       TokenList tokenList = TokenList.fromJson(response);
 
       if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
+        final xorPrice =
+            tokenList.tokens!.firstWhere((t) => t.shortName == 'XOR').price ??
+                0;
+
         for (Token t in tokenList.tokens!) {
           if (pngIcons.contains(t.shortName)) {
             t.imageExtension = kImagePNGExtension;
           }
+
+          t.valueInXor = t.price! / xorPrice;
         }
         _tokens = tokenList.tokens ?? [];
       }

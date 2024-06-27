@@ -8,6 +8,7 @@ class Token {
   final double? price;
   final String? assetId;
   final int? marketCap;
+  double? valueInXor;
   bool isFavorite = false;
   String imageExtension = kImageExtension;
 
@@ -39,6 +40,7 @@ class Token {
           price == other.price &&
           assetId == other.assetId &&
           marketCap == other.marketCap &&
+          valueInXor == other.valueInXor &&
           isFavorite == other.isFavorite &&
           imageExtension == other.imageExtension;
 
@@ -50,6 +52,7 @@ class Token {
       price.hashCode ^
       assetId.hashCode ^
       marketCap.hashCode ^
+      valueInXor.hashCode ^
       isFavorite.hashCode ^
       imageExtension.hashCode;
 }

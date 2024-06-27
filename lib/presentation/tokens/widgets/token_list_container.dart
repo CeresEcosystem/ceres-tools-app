@@ -128,13 +128,15 @@ class TokenListContainer extends StatelessWidget {
                           ),
                         ),
                         UIHelper.verticalSpaceExtraSmall(),
-                        Text(
-                          formatToCurrency(token.priceString,
-                              showSymbol: true, formatOnlyFirstPart: true),
-                          style: tokensPriceStyle(sizingInformation),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        Obx(() {
+                          return Text(
+                            controller.selectedPriceFilter == '\$'
+                                ? formatToCurrency(token.priceString,
+                                    showSymbol: true, formatOnlyFirstPart: true)
+                                : '${formatToCurrency(token.valueInXor, showSymbol: false, decimalDigits: 4)} XOR',
+                            style: tokensPriceStyle(sizingInformation),
+                          );
+                        }),
                       ],
                     ),
                   ),

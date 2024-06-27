@@ -6,7 +6,7 @@ import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_tools_app/core/widgets/status_bar.dart';
 import 'package:ceres_tools_app/presentation/tokens/tokens_controller.dart';
-import 'package:ceres_tools_app/presentation/tokens/widgets/burning_info.dart';
+// import 'package:ceres_tools_app/presentation/tokens/widgets/burning_info.dart';
 import 'package:ceres_tools_app/presentation/tokens/widgets/token_list_container.dart';
 import 'package:ceres_tools_app/presentation/tokens/widgets/token_price_calculator.dart';
 import 'package:flutter/material.dart';
@@ -47,21 +47,21 @@ class _TokensViewBodyState extends State<TokensViewBody> {
                 CeresHeader(
                   scaffoldKey: widget.scaffoldKey,
                 ),
-                UIHelper.verticalSpaceMedium(),
-                BurningInfo(
-                  sizingInformation: widget.sizingInformation,
-                  info:
-                      'The initial \$KARMA tokens will be earned by a burn-drop, where you can burn 100 million XOR by block 16,056,666 to earn 1 \$KARMA. Click',
-                  tokenFullName: 'Karma',
-                  tokenShortName: 'KARMA',
-                ),
-                BurningInfo(
-                  sizingInformation: widget.sizingInformation,
-                  info:
-                      'KEN (Kensetsu) will be allocated to accounts on the SORA network that burned at least 1 million XOR before block 14,939,200, at a rate of 1 KEN per 1 million XOR burned. Click',
-                  tokenFullName: 'Kensetsu',
-                  tokenShortName: 'KEN',
-                ),
+                // UIHelper.verticalSpaceMedium(),
+                // BurningInfo(
+                //   sizingInformation: widget.sizingInformation,
+                //   info:
+                //       'The initial \$KARMA tokens will be earned by a burn-drop, where you can burn 100 million XOR by block 16,056,666 to earn 1 \$KARMA. Click',
+                //   tokenFullName: 'Karma',
+                //   tokenShortName: 'KARMA',
+                // ),
+                // BurningInfo(
+                //   sizingInformation: widget.sizingInformation,
+                //   info:
+                //       'KEN (Kensetsu) will be allocated to accounts on the SORA network that burned at least 1 million XOR before block 14,939,200, at a rate of 1 KEN per 1 million XOR burned. Click',
+                //   tokenFullName: 'Kensetsu',
+                //   tokenShortName: 'KEN',
+                // ),
                 UIHelper.verticalSpaceMedium(),
               ]),
             ),

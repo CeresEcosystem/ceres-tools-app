@@ -11,6 +11,58 @@ import 'package:ceres_tools_app/presentation/tokens/tokens_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+class Filter extends StatelessWidget {
+  final bool isActive;
+  final String filter;
+  final Function(String filter) setFilter;
+  final Widget? filterIcon;
+  final SizingInformation sizingInformation;
+
+  const Filter({
+    Key? key,
+    required this.isActive,
+    required this.filter,
+    required this.setFilter,
+    this.filterIcon,
+    required this.sizingInformation,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => setFilter(filter),
+      child: Container(
+        constraints: const BoxConstraints(
+          minWidth: Dimensions.PAIRS_IMAGE_SIZE,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL / 2,
+          horizontal: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
+        ),
+        child: Opacity(
+          opacity: isActive ? 1 : 0.5,
+          child: Center(
+            child: Row(
+              children: [
+                filterIcon ?? const EmptyWidget(),
+                if (filterIcon != null) (UIHelper.horizontalSpaceExtraSmall()),
+                Text(
+                  filter,
+                  style: allButtonTextStyle(sizingInformation),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TokenFilters extends StatelessWidget {
   final SizingInformation sizingInformation;
   final Function setShowTokenPriceCalculator;
@@ -64,44 +116,46 @@ class TokenFilters extends StatelessWidget {
                 final filter = controller.filters[index];
                 final isActive = filter == controller.selectedFilter;
 
-                return GestureDetector(
-                  onTap: () => controller.setFilter(filter),
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: Dimensions.PAIRS_IMAGE_SIZE,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.DEFAULT_MARGIN),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL / 2,
-                      horizontal: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                    ),
-                    child: Opacity(
-                      opacity: isActive ? 1 : 0.5,
-                      child: Center(
-                        child: Row(
-                          children: [
-                            filterIcon(filter),
-                            if (filter != 'All')
-                              (UIHelper.horizontalSpaceExtraSmall()),
-                            Text(
-                              filter,
-                              style: allButtonTextStyle(sizingInformation),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                return Filter(
+                  isActive: isActive,
+                  filter: filter,
+                  setFilter: controller.setFilter,
+                  filterIcon: filterIcon(filter),
+                  sizingInformation: sizingInformation,
                 );
               },
               separatorBuilder: (_, __) => UIHelper.horizontalSpaceExtraSmall(),
               itemCount: controller.filters.length,
             ),
           ),
+          UIHelper.verticalSpaceSmall(),
+          SizedBox(
+              height: 35,
+              child: Obx(() {
+                return Row(
+                  children: [
+                    Filter(
+                      isActive: controller.selectedPriceFilter == '\$',
+                      filter: '\$',
+                      setFilter: (String filter) =>
+                          controller.setPriceFilter(filter),
+                      sizingInformation: sizingInformation,
+                    ),
+                    UIHelper.horizontalSpaceExtraSmall(),
+                    Filter(
+                      isActive: controller.selectedPriceFilter == 'XOR',
+                      filter: 'XOR',
+                      setFilter: (String filter) =>
+                          controller.setPriceFilter(filter),
+                      filterIcon: const RoundImage(
+                        image: '${kImageStorage}XOR.svg',
+                        size: Dimensions.SOCIAL_ICONS_SIZE,
+                      ),
+                      sizingInformation: sizingInformation,
+                    ),
+                  ],
+                );
+              })),
           UIHelper.verticalSpaceSmall(),
         ],
       ),
