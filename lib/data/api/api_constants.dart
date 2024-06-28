@@ -6,6 +6,7 @@ class ApiConstants {
   static const DEMETER_URL = 'https://api.deotoken.com/api/demeter';
   static const HERMES_TVL_URL =
       'https://api.hermes-dao.io/api/supply/supply-data';
+  static const APOLLO_URL = 'https://api.apolloprotocol.io/api';
   static const SORA_SUBSCAN_URL = 'https://sora.webapi.subscan.io/api/v2/scan';
   static const DEMETER_TVL_PERMALINK = '/supply-data';
   static const DEMETER_FARMS_PERMALINK = '/farms';
@@ -38,4 +39,5 @@ class ApiConstants {
   static const SORA_SUBSCAN_HOLDERS_PERMALINK = '/accounts';
   static const CURRENCY_PERMALINK = '/currency-rate/{currency}';
   static const BURNING_PERMALINK = '/burns/{token}';
+  static const APOLLO_DASHBOARD_PERMALINK = '/users/{address}';
 }

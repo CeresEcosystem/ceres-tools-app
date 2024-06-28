@@ -19,10 +19,34 @@ import 'package:ceres_tools_app/presentation/portfolio/widgets/portfolio_table.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PortfolioView extends GetView<PortfolioController> {
+class PortfolioView extends StatefulWidget {
+  const PortfolioView({Key? key}) : super(key: key);
+
+  @override
+  State<PortfolioView> createState() => _PortfolioViewState();
+}
+
+class _PortfolioViewState extends State<PortfolioView>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  PortfolioView({Key? key}) : super(key: key);
+  final controller = Get.find<PortfolioController>();
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+        length: controller.tabs.length,
+        initialIndex: controller.selectedTab,
+        vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +58,6 @@ class PortfolioView extends GetView<PortfolioController> {
           return Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
-            bottomNavigationBar: BottomNavigationBar(
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: chartBackground,
-              selectedFontSize: caption,
-              unselectedFontSize: overline,
-              items: controller.tabs.map((tab) {
-                return BottomNavigationBarItem(
-                  icon: tab['icon'],
-                  label: tab['label'],
-                );
-              }).toList(),
-              currentIndex: controller.selectedTab,
-              onTap: (index) => controller.changeSelectedTab(index),
-            ),
             endDrawer: address.isEmpty ? SideMenu() : null,
             body: Column(
               children: [
@@ -59,6 +68,30 @@ class PortfolioView extends GetView<PortfolioController> {
                   verticalSpace: true,
                   showBackButton: address.isNotEmpty,
                   showDrawerButton: address.isEmpty,
+                ),
+                Container(
+                  color: backgroundColorDark,
+                  child: TabBar(
+                    tabs: controller.tabs.map((tab) {
+                      return Tab(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            tab['icon'],
+                            UIHelper.horizontalSpaceExtraSmall(),
+                            Text(
+                              tab['label'],
+                              style: tabBarTextStyle(),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    controller: _tabController,
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    onTap: (index) => controller.changeSelectedTab(index),
+                  ),
                 ),
                 (() {
                   if (controller.pageLoading == LoadingStatus.LOADING) {

@@ -25,6 +25,7 @@ class _$Injector extends Injector {
       ..registerFactory((c) => TBCReservesDatasource(client: c<RestClient>()))
       ..registerFactory((c) => CurrencyDatasource(client: c<RestClient>()))
       ..registerFactory((c) => BurningDatasource(client: c<RestClient>()))
+      ..registerFactory((c) => ApolloDatasource(client: c<RestClient>()))
       ..registerFactory((c) => GetTokens(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetPairs(repository: c<PairsRepository>()))
       ..registerFactory((c) => GetFarming(repository: c<FarmingRepository>()))
@@ -62,6 +63,8 @@ class _$Injector extends Injector {
           (c) => GetTokenHolders(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetXorHolders(repository: c<TokensRepository>()))
       ..registerFactory((c) => GetBurns(repository: c<BurningRepository>()))
+      ..registerFactory(
+          (c) => GetApolloDashboard(repository: c<ApolloRepository>()))
       ..registerFactory<TokensRepository>(
           (c) => TokensRepositoryImpl(datasource: c<TokensDatasource>()))
       ..registerFactory<PairsRepository>(
@@ -82,6 +85,8 @@ class _$Injector extends Injector {
       ..registerFactory<TBCReservesRepository>((c) =>
           TBCReservesRepositoryImpl(datasource: c<TBCReservesDatasource>()))
       ..registerFactory<BurningRepository>(
-          (c) => BurningRepositoryImpl(datasource: c<BurningDatasource>()));
+          (c) => BurningRepositoryImpl(datasource: c<BurningDatasource>()))
+      ..registerFactory<ApolloRepository>(
+          (c) => ApolloRepositoryImpl(datasource: c<ApolloDatasource>()));
   }
 }

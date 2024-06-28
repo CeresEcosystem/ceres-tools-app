@@ -48,5 +48,10 @@ ThemeData darkThemeData() {
       selectedItemColor: backgroundPink,
       unselectedItemColor: Colors.white.withOpacity(.5),
     ),
+    tabBarTheme: TabBarTheme(
+      dividerHeight: 0,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white.withOpacity(.5),
+    ),
   );
 }

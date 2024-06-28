@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:ceres_tools_app/core/assets/fonts/flaticon.dart';
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/loading_status.dart';
+import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/core/utils/toast.dart';
 import 'package:ceres_tools_app/di/injector.dart';
+import 'package:ceres_tools_app/domain/models/apollo_dashboard.dart';
 import 'package:ceres_tools_app/domain/models/page_meta.dart';
 import 'package:ceres_tools_app/domain/models/portfolio_item.dart';
 import 'package:ceres_tools_app/domain/models/portfolio_list.dart';
@@ -17,46 +19,56 @@ import 'package:ceres_tools_app/domain/models/token_list.dart';
 import 'package:ceres_tools_app/domain/models/transfer.dart';
 import 'package:ceres_tools_app/domain/models/transfer_list.dart';
 import 'package:ceres_tools_app/domain/models/wallet.dart';
+import 'package:ceres_tools_app/domain/usecase/get_apollo_dashboard.dart';
 import 'package:ceres_tools_app/domain/usecase/get_portfolio_items.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const List<Map<String, dynamic>> _tabs = [
+final List<Map<String, dynamic>> _tabs = [
   {
     'label': 'Portfolio',
-    'icon': Icon(Icons.star),
+    'icon': const Icon(Icons.star),
     'index': 0,
   },
   {
     'label': 'Staking',
-    'icon': Icon(Flaticon.token),
+    'icon': const Icon(Flaticon.token),
     'index': 1,
   },
   {
     'label': 'Rewards',
-    'icon': Icon(Icons.emoji_events),
+    'icon': const Icon(Icons.emoji_events),
     'index': 2,
   },
   {
     'label': 'Liquidity',
-    'icon': HeroIcon(
+    'icon': const HeroIcon(
       HeroIcons.circleStack,
     ),
     'index': 3,
   },
   {
     'label': 'Swaps',
-    'icon': Icon(Icons.swap_horiz),
+    'icon': const Icon(Icons.swap_horiz),
     'index': 4,
   },
   {
     'label': 'Transfers',
-    'icon': Icon(Icons.swap_vert),
+    'icon': const Icon(Icons.swap_vert),
     'index': 5,
-  }
+  },
+  {
+    'label': 'Apollo',
+    'icon': SvgPicture.network(
+      '${kImageStorage}APOLLO.svg',
+      height: Dimensions.ICON_SIZE,
+    ),
+    'index': 6,
+  },
 ];
 const _timeFrames = ['1h', '24h', '7d', '30d'];
 const kSelectedWallet = 'SELECTED_WALLET';
@@ -65,6 +77,7 @@ const kWalletExistError = 'Wallet with entered address already exist.';
 class PortfolioController extends GetxController {
   final getPortfolioItems = Injector.resolve!<GetPortfolioItems>();
   final getTokens = Injector.resolve!<GetTokens>();
+  final getApolloDashboard = Injector.resolve!<GetApolloDashboard>();
 
   List<PortfolioItem> _portfolioItems = [];
   List<Swap> _swaps = [];
@@ -83,6 +96,8 @@ class PortfolioController extends GetxController {
   final _selectedTab = 0.obs;
   final _selectedTimeFrame = _timeFrames[0].obs;
 
+  ApolloDashboard _apolloDashboard = ApolloDashboard.empty();
+
   LoadingStatus get pageLoading => _pageLoading.value;
   LoadingStatus get loadingStatus => _loadingStatus.value;
 
@@ -100,11 +115,13 @@ class PortfolioController extends GetxController {
   List<String> get timeFrames => _timeFrames;
   int get selectedTab => _selectedTab.value;
   String get selectedTimeFrame => _selectedTimeFrame.value;
+  ApolloDashboard get apolloDashboard => _apolloDashboard;
 
   @override
-  void onInit() {
+  void onInit() async {
     String address = Get.arguments != null ? Get.arguments['address'] : '';
     getWalletsFromDatabase(address);
+    await setTokens();
     super.onInit();
   }
 
@@ -298,18 +315,18 @@ class PortfolioController extends GetxController {
     }
   }
 
-  setSwaps(dynamic response) async {
-    if (_tokens.isEmpty) {
-      final tokensResponse = await getTokens.execute();
+  Future setTokens() async {
+    final tokensResponse = await getTokens.execute();
 
-      if (tokensResponse != null) {
-        TokenList tokenList = TokenList.fromJson(tokensResponse);
-        if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
-          _tokens = tokenList.tokens!;
-        }
+    if (tokensResponse != null) {
+      TokenList tokenList = TokenList.fromJson(tokensResponse);
+      if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
+        _tokens = tokenList.tokens!;
       }
     }
+  }
 
+  setSwaps(dynamic response) async {
     SwapList swapList = SwapList.fromJson(response['data']);
     _pageMeta = PageMeta.fromJson(response['meta']);
 
@@ -341,17 +358,6 @@ class PortfolioController extends GetxController {
   }
 
   setTransfers(dynamic response) async {
-    if (_tokens.isEmpty) {
-      final tokensResponse = await getTokens.execute();
-
-      if (tokensResponse != null) {
-        TokenList tokenList = TokenList.fromJson(tokensResponse);
-        if (tokenList.tokens != null && tokenList.tokens!.isNotEmpty) {
-          _tokens = tokenList.tokens!;
-        }
-      }
-    }
-
     TransferList transferList = TransferList.fromJson(response['data']);
     _pageMeta = PageMeta.fromJson(response['meta']);
 
@@ -377,11 +383,77 @@ class PortfolioController extends GetxController {
     _loadingStatus.value = LoadingStatus.READY;
   }
 
+  Future _fetchApolloDashboard(String address) async {
+    final response = await getApolloDashboard.execute(address);
+
+    if (response != null) {
+      final rewardPrice =
+          _tokens.firstWhere((Token t) => t.shortName == 'APOLLO').price ?? 0;
+
+      _apolloDashboard = ApolloDashboard.fromJson(response);
+
+      _apolloDashboard = ApolloDashboard(
+        lendingInfo: _apolloDashboard.lendingInfo
+            .where((item) => item.amount > 0)
+            .map((item) {
+          item.amountPrice = item.amount *
+              (_tokens
+                      .firstWhere((Token t) => t.assetId == item.poolAssetId)
+                      .price ??
+                  0);
+          item.rewardPrice = item.rewards * rewardPrice;
+
+          return item;
+        }).toList(),
+        borrowingInfo: _apolloDashboard.borrowingInfo
+            .where((item) => item.amount > 0)
+            .map((item) {
+          double amountPrice = _tokens
+                  .firstWhere((Token t) => t.assetId == item.poolAssetId)
+                  .price ??
+              0;
+
+          item.amountPrice = item.amount * amountPrice;
+          item.interestPrice = item.interest * amountPrice;
+          item.rewardPrice = item.rewards * rewardPrice;
+          item.collaterals = item.collaterals.map((collateral) {
+            collateral.collateralAmountPrice = collateral.collateralAmount *
+                (_tokens
+                        .firstWhere((Token t) =>
+                            t.assetId == collateral.collateralAssetId)
+                        .price ??
+                    0);
+            collateral.borrowedAmountPrice =
+                collateral.borrowedAmount * amountPrice;
+            collateral.interestPrice = collateral.interest * amountPrice;
+            collateral.rewardPrice = collateral.rewards * rewardPrice;
+            return collateral;
+          }).toList();
+
+          return item;
+        }).toList(),
+        stats: _apolloDashboard.stats,
+      );
+      _loadingStatus.value = LoadingStatus.READY;
+    } else {
+      _loadingStatus.value = LoadingStatus.ERROR;
+    }
+  }
+
   Future fetchPortfolioItems([int page = 1]) async {
     if (_wallets.isNotEmpty && _selectedWallet.value.address.isNotEmpty) {
       _loadingStatus.value = LoadingStatus.LOADING;
 
       final url = getPortfolioItemsURL();
+
+      if (_selectedTab.value == 6) {
+        _portfolioItems = [];
+        _swaps = [];
+        _totalValue = 0;
+
+        await _fetchApolloDashboard(url);
+        return;
+      }
 
       final response = await getPortfolioItems.execute(url, page);
 

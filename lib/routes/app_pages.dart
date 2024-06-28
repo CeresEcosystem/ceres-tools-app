@@ -62,7 +62,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.PORTFOLIO,
-      page: () => PortfolioView(),
+      page: () => const PortfolioView(),
       binding: PortfolioBinding(),
     ),
     GetPage(

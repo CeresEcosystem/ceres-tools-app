@@ -618,3 +618,10 @@ TextStyle swapsStatsInfo() {
     fontWeight: FontWeight.w700,
   );
 }
+
+TextStyle tabBarTextStyle() {
+  return const TextStyle(
+    fontSize: caption,
+    fontWeight: FontWeight.w700,
+  );
+}

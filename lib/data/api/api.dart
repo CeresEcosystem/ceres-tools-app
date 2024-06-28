@@ -137,4 +137,7 @@ abstract class RestClient {
     @Query('dateTo') String? dateTo,
     @Query('accountId') String? accountId,
   );
+
+  @GET('${ApiConstants.APOLLO_URL}${ApiConstants.APOLLO_DASHBOARD_PERMALINK}')
+  Future getApolloDashboard(@Path("address") String address);
 }
