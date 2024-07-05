@@ -70,3 +70,15 @@ const kSideMenuTracker = 'Burning Tracker';
 const kSideMenuCharts = 'Charts & Swaps';
 const kSideMenuPortfolio = 'Portfolio';
 const kSideMenuReserves = 'TBC Reserves';
+
+// ADDRESSES //
+const kXorAddress =
+    '0x0200000000000000000000000000000000000000000000000000000000000000';
+const kDotAddress =
+    '0x0003b1dbee890acfb1b3bc12d1bb3b4295f52755423f84d1751b2545cebf000b';
+const kKSMAddress =
+    '0x00117b0fa73c4672e03a7d9d774e3b3f91beb893e93d9a8d0430295f44225db8';
+const kAstarAddress =
+    '0x009dd037fcb32f4fe17c513abd4641a2ece844d106e30788124f0c0acc6e748e';
+const kAcalaAddress =
+    '0x001ddbe1a880031da72f7ea421260bec635fa7d1aa72593d5412795408b6b2ba';

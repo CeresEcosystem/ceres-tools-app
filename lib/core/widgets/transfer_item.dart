@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/address_format.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
-import 'package:ceres_tools_app/core/utils/launch_url.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/toast.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
-import 'package:ceres_tools_app/core/widgets/empty_widget.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
 import 'package:ceres_tools_app/domain/models/transfer.dart';
 import 'package:flutter/material.dart';
@@ -25,33 +21,20 @@ class TransferItem extends StatelessWidget {
     required this.transfer,
   }) : super(key: key);
 
-  bool isBridgeTransfer(String? sender, String? receiver) {
-    if ((sender != null && sender.startsWith('0x')) ||
-        (receiver != null && receiver.startsWith('0x'))) {
-      return true;
-    }
-
-    return false;
-  }
-
-  Widget brigdeTransfer(String? sender, String? receiver) {
-    if (isBridgeTransfer(sender, receiver)) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(Dimensions.DEFAULT_MARGIN_EXTRA_SMALL),
-          ),
-          color: backgroundPink,
+  Widget transferDirection(String direction) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(Dimensions.DEFAULT_MARGIN_EXTRA_SMALL),
         ),
-        child: Text(
-          'BRIDGE',
-          style: bridgeTransferTextStyle(),
-        ),
-      );
-    }
-
-    return const EmptyWidget();
+        color: backgroundColorLight,
+      ),
+      child: Text(
+        direction,
+        style: bridgeTransferTextStyle(),
+      ),
+    );
   }
 
   @override
@@ -85,8 +68,6 @@ class TransferItem extends StatelessWidget {
                       '${transfer.tokenFormatted}',
                       style: dataTableTextStyle(sizingInformation),
                     ),
-                    UIHelper.horizontalSpaceExtraSmall(),
-                    brigdeTransfer(transfer.sender, transfer.receiver)
                   ],
                 ),
               ),
@@ -97,6 +78,8 @@ class TransferItem extends StatelessWidget {
               )
             ],
           ),
+          UIHelper.verticalSpaceSmall(),
+          transferDirection(transfer.directionFormatted),
           UIHelper.verticalSpaceSmall(),
           Row(
             children: [
@@ -109,19 +92,10 @@ class TransferItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (Platform.isAndroid &&
-                              transfer.sender != null &&
-                              transfer.sender!.startsWith('0x')) {
-                            launchURL('$kEthScan${transfer.sender}');
-                          }
-                        },
-                        child: Text(
-                          formatAddress(transfer.sender, 5),
-                          style: dataTableTextStyle(sizingInformation)
-                              .copyWith(fontSize: overline),
-                        ),
+                      Text(
+                        formatAddress(transfer.sender, 5),
+                        style: dataTableTextStyle(sizingInformation)
+                            .copyWith(fontSize: overline),
                       ),
                       UIHelper.horizontalSpaceExtraSmall(),
                       GestureDetector(
@@ -153,19 +127,10 @@ class TransferItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (Platform.isAndroid &&
-                              transfer.receiver != null &&
-                              transfer.receiver!.startsWith('0x')) {
-                            launchURL('$kEthScan${transfer.receiver}');
-                          }
-                        },
-                        child: Text(
-                          formatAddress(transfer.receiver, 5),
-                          style: dataTableTextStyle(sizingInformation)
-                              .copyWith(fontSize: overline),
-                        ),
+                      Text(
+                        formatAddress(transfer.receiver, 5),
+                        style: dataTableTextStyle(sizingInformation)
+                            .copyWith(fontSize: overline),
                       ),
                       UIHelper.horizontalSpaceExtraSmall(),
                       GestureDetector(
