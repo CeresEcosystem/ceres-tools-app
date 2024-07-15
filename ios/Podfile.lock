@@ -34,9 +34,6 @@ PODS:
     - OrderedSet (~> 5.0)
   - flutter_native_splash (0.0.1):
     - Flutter
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
   - GoogleAppMeasurement/WithoutAdIdSupport (10.16.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
@@ -67,46 +64,51 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - onesignal_flutter (5.0.4):
+  - onesignal_flutter (5.2.2):
     - Flutter
-    - OneSignalXCFramework (= 5.0.4)
-  - OneSignalXCFramework (5.0.4):
-    - OneSignalXCFramework/OneSignalComplete (= 5.0.4)
-  - OneSignalXCFramework/OneSignal (5.0.4):
+    - OneSignalXCFramework (= 5.2.2)
+  - OneSignalXCFramework (5.2.2):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.2)
+  - OneSignalXCFramework/OneSignal (5.2.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
+    - OneSignalXCFramework/OneSignalLiveActivities
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.0.4):
+  - OneSignalXCFramework/OneSignalComplete (5.2.2):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.0.4)
-  - OneSignalXCFramework/OneSignalExtension (5.0.4):
+  - OneSignalXCFramework/OneSignalCore (5.2.2)
+  - OneSignalXCFramework/OneSignalExtension (5.2.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.0.4):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.0.4):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.2):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalOSCore
+    - OneSignalXCFramework/OneSignalUser
+  - OneSignalXCFramework/OneSignalLocation (5.2.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.0.4):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.0.4):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.2):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.0.4):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.2):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.0.4):
+  - OneSignalXCFramework/OneSignalUser (5.2.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -121,7 +123,7 @@ PODS:
     - FlutterMacOS
   - sqflite (0.0.3):
     - Flutter
-    - FMDB (>= 2.7.5)
+    - FlutterMacOS
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -131,10 +133,10 @@ DEPENDENCIES:
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
-  - OneSignalXCFramework (= 5.0.4)
+  - OneSignalXCFramework (= 5.2.2)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -144,7 +146,6 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreInternal
     - FirebaseInstallations
-    - FMDB
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
@@ -166,7 +167,7 @@ EXTERNAL SOURCES:
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
+    :path: ".symlinks/plugins/sqflite/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
@@ -179,19 +180,18 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleAppMeasurement: 079d7632810e9d9704a99932547ba1554acc4342
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  onesignal_flutter: 2c2f01520fa953d93fad18162538cc98d6da009b
-  OneSignalXCFramework: 7e0a6d68dda7e80b03069bd145232f480f8c2279
+  onesignal_flutter: c64704854df3c77f5e8b464abc15b65c8c74001a
+  OneSignalXCFramework: f06edd9b146c7ac5935136a117ce2a5fdd6420f6
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
-  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
-  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: 8bd3203ebd6cd5b3e7bad6f48096e2e220dff057
+PODFILE CHECKSUM: a14c02169f6aaf9121cc4b6e5aaaf3a661af4f48
 
 COCOAPODS: 1.12.1

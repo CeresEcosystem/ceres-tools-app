@@ -31,6 +31,7 @@ class Sponsor extends StatelessWidget {
             onTap: () => launchURL(kPSWAPCommunity),
             child: const RoundImage(
               image: 'lib/core/assets/images/pococo_icon.png',
+              extension: kImagePNGExtension,
               localImage: true,
               size: Dimensions.SPONSORS_IMAGE_SIZE,
             ),

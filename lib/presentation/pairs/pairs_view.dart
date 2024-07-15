@@ -154,8 +154,7 @@ class PairsView extends GetView<PairsController> {
                                 children: [
                                   if (!showIcon) ...[
                                     RoundImage(
-                                      image:
-                                          '$kImageStorage$icon$kImageExtension',
+                                      image: '$kImageStorage$icon',
                                       size: Dimensions.SOCIAL_ICONS_SIZE,
                                     ),
                                     UIHelper.horizontalSpaceExtraSmall(),
@@ -428,13 +427,12 @@ class PairsView extends GetView<PairsController> {
             left:
                 Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}${pair.imageExtension}',
+              image: '$kImageStorage${pair.shortName}',
               size: Dimensions.PAIRS_IMAGE_SIZE,
-              extension: pair.imageExtension,
             ),
           ),
           RoundImage(
-            image: '$kImageStorage${pair.baseToken}$kImageExtension',
+            image: '$kImageStorage${pair.baseToken}',
             size: Dimensions.PAIRS_IMAGE_SIZE,
           ),
         ],

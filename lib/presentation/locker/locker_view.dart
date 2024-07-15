@@ -102,9 +102,8 @@ class LockerView extends GetView<LockerController> {
       child: Row(
         children: [
           RoundImage(
-            image: '$kImageStorage${token.shortName}${token.imageExtension}',
+            image: '$kImageStorage${token.shortName}',
             size: Dimensions.PAIRS_IMAGE_SIZE,
-            extension: token.imageExtension,
           ),
           UIHelper.horizontalSpaceSmall(),
           Text(
@@ -146,13 +145,12 @@ class LockerView extends GetView<LockerController> {
             left:
                 Dimensions.PAIRS_IMAGE_SIZE - (Dimensions.PAIRS_IMAGE_SIZE / 4),
             child: RoundImage(
-              image: '$kImageStorage${pair.shortName}${pair.imageExtension}',
+              image: '$kImageStorage${pair.shortName}',
               size: Dimensions.PAIRS_IMAGE_SIZE,
-              extension: pair.imageExtension,
             ),
           ),
           RoundImage(
-            image: '$kImageStorage${pair.baseToken}$kImageExtension',
+            image: '$kImageStorage${pair.baseToken}',
             size: Dimensions.PAIRS_IMAGE_SIZE,
           ),
         ],

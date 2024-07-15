@@ -341,10 +341,8 @@ class _TokenPriceCalculatorState extends State<TokenPriceCalculator> {
                       (Row(
                         children: [
                           RoundImage(
-                            image:
-                                '$kImageStorage${token.shortName}${token.imageExtension}',
+                            image: '$kImageStorage${token.shortName}',
                             size: Dimensions.ICON_SIZE,
-                            extension: token.imageExtension,
                           ),
                           UIHelper.horizontalSpaceExtraSmall(),
                         ],

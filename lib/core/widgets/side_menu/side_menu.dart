@@ -13,8 +13,8 @@ import 'package:ceres_tools_app/core/widgets/scroll_bar_container.dart';
 import 'package:ceres_tools_app/core/widgets/side_menu/side_menu_content.dart';
 import 'package:ceres_tools_app/domain/models/side_menu_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jovial_svg/jovial_svg.dart';
 
 class SideMenu extends StatelessWidget {
   final bool largeScreen;
@@ -141,9 +141,11 @@ class SideMenu extends StatelessWidget {
                   );
                 }
 
-                return SvgPicture.network(
-                  option['icon'],
-                  width: Dimensions.SIDE_MENU_ICON_SIZE,
+                return ScalableImageWidget.fromSISource(
+                  si: ScalableImageSource.fromSvgHttpUrl(
+                    Uri.parse(option['icon']),
+                    warnF: (_) {},
+                  ),
                 );
               })(),
               UIHelper.horizontalSpaceMedium(),

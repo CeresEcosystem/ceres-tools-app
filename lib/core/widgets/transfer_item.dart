@@ -58,10 +58,8 @@ class TransferItem extends StatelessWidget {
                 child: Row(
                   children: [
                     RoundImage(
-                      image:
-                          '$kImageStorage${transfer.tokenFormatted}${transfer.tokenImageExtension}',
+                      image: '$kImageStorage${transfer.tokenFormatted}',
                       size: Dimensions.GRID_LODO,
-                      extension: transfer.tokenImageExtension,
                     ),
                     UIHelper.horizontalSpaceSmall(),
                     Text(

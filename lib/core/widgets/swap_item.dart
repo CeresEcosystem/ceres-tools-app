@@ -54,17 +54,13 @@ class SwapItem extends StatelessWidget {
                             left: Dimensions.GRID_LODO -
                                 (Dimensions.GRID_LODO / 4),
                             child: RoundImage(
-                              image:
-                                  '$kImageStorage${swap.outputAsset}${swap.outputImageExtension}',
+                              image: '$kImageStorage${swap.outputAsset}',
                               size: Dimensions.GRID_LODO,
-                              extension: swap.outputImageExtension,
                             ),
                           ),
                           RoundImage(
-                            image:
-                                '$kImageStorage${swap.inputAsset}${swap.inputImageExtension}',
+                            image: '$kImageStorage${swap.inputAsset}',
                             size: Dimensions.GRID_LODO,
-                            extension: swap.inputImageExtension,
                           ),
                         ],
                       ),

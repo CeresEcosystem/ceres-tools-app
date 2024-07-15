@@ -42,15 +42,12 @@ class PortfolioItemWidget extends StatelessWidget {
                   Positioned(
                     left: Dimensions.GRID_LODO / 2,
                     child: RoundImage(
-                      image:
-                          '$kImageStorage${portfolioItem.token}${portfolioItem.imageExtension}',
+                      image: '$kImageStorage${portfolioItem.token}',
                       size: Dimensions.GRID_LODO,
-                      extension: portfolioItem.imageExtension,
                     ),
                   ),
                   RoundImage(
-                    image:
-                        '$kImageStorage${portfolioItem.baseAsset}$kImageExtension',
+                    image: '$kImageStorage${portfolioItem.baseAsset}',
                     size: Dimensions.GRID_LODO,
                   ),
                 ],
@@ -67,9 +64,7 @@ class PortfolioItemWidget extends StatelessWidget {
           children: [
             RoundImage(
               size: Dimensions.GRID_LODO,
-              image:
-                  '$kImageStorage${portfolioItem.token}${portfolioItem.imageExtension}',
-              extension: portfolioItem.imageExtension,
+              image: '$kImageStorage${portfolioItem.token}',
             ),
             UIHelper.horizontalSpaceSmall(),
             Text(

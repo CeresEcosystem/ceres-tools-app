@@ -54,7 +54,7 @@ class _BorrowingItemState extends State<BorrowingItem> {
                   children: [
                     RoundImage(
                       size: Dimensions.GRID_LODO,
-                      image: '$kImageStorage${widget.info.poolAssetSymbol}.svg',
+                      image: '$kImageStorage${widget.info.poolAssetSymbol}',
                     ),
                     UIHelper.horizontalSpaceSmall(),
                     Text(
@@ -207,7 +207,7 @@ class _BorrowingItemState extends State<BorrowingItem> {
                             RoundImage(
                               size: Dimensions.GRID_LODO,
                               image:
-                                  '$kImageStorage${collateralItem.collateralAssetSymbol}.svg',
+                                  '$kImageStorage${collateralItem.collateralAssetSymbol}',
                             ),
                             UIHelper.horizontalSpaceSmall(),
                             Text(

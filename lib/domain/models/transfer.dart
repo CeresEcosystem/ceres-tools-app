@@ -11,7 +11,6 @@ class Transfer {
   final String? direction;
   final String transferredAt;
   String? tokenFormatted;
-  String tokenImageExtension = kImageExtension;
   String? transferredAtFormatted;
 
   Transfer(

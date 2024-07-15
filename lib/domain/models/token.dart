@@ -1,4 +1,3 @@
-import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/utils/default_value.dart';
 
 class Token {
@@ -10,7 +9,6 @@ class Token {
   final int? marketCap;
   double? valueInXor;
   bool isFavorite = false;
-  String imageExtension = kImageExtension;
 
   Token({
     this.shortName,
@@ -41,8 +39,7 @@ class Token {
           assetId == other.assetId &&
           marketCap == other.marketCap &&
           valueInXor == other.valueInXor &&
-          isFavorite == other.isFavorite &&
-          imageExtension == other.imageExtension;
+          isFavorite == other.isFavorite;
 
   @override
   int get hashCode =>
@@ -53,6 +50,5 @@ class Token {
       assetId.hashCode ^
       marketCap.hashCode ^
       valueInXor.hashCode ^
-      isFavorite.hashCode ^
-      imageExtension.hashCode;
+      isFavorite.hashCode;
 }

@@ -5,7 +5,6 @@ import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/loading_status.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
-import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/core/utils/toast.dart';
 import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/apollo_dashboard.dart';
@@ -23,9 +22,9 @@ import 'package:ceres_tools_app/domain/usecase/get_apollo_dashboard.dart';
 import 'package:ceres_tools_app/domain/usecase/get_portfolio_items.dart';
 import 'package:ceres_tools_app/domain/usecase/get_tokens.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:jovial_svg/jovial_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final List<Map<String, dynamic>> _tabs = [
@@ -63,9 +62,15 @@ final List<Map<String, dynamic>> _tabs = [
   },
   {
     'label': 'Apollo',
-    'icon': SvgPicture.network(
-      '${kImageStorage}APOLLO.svg',
+    'icon': SizedBox(
       height: Dimensions.ICON_SIZE,
+      width: Dimensions.ICON_SIZE,
+      child: ScalableImageWidget.fromSISource(
+        si: ScalableImageSource.fromSvgHttpUrl(
+          Uri.parse('${kImageStorage}APOLLO.svg'),
+          warnF: (_) {},
+        ),
+      ),
     ),
     'index': 6,
   },
@@ -343,8 +348,6 @@ class PortfolioController extends GetxController {
                 .firstWhereOrNull((t) => t.assetId == s.outputAssetId)
                 ?.shortName ??
             '';
-        s.inputImageExtension = imageExtension(s.inputAsset);
-        s.outputImageExtension = imageExtension(s.outputAsset);
         s.swappedAt = formatDateToLocalTime(s.swappedAt);
         swapFormatted.add(s);
       }
@@ -369,7 +372,6 @@ class PortfolioController extends GetxController {
         tr.tokenFormatted =
             _tokens.firstWhereOrNull((t) => t.assetId == tr.asset)?.shortName ??
                 '';
-        tr.tokenImageExtension = imageExtension(tr.asset);
         tr.transferredAtFormatted = formatDateToLocalTime(tr.transferredAt);
 
         transferFormatted.add(tr);
@@ -467,11 +469,6 @@ class PortfolioController extends GetxController {
 
           if (portfolioList.portfolioItems != null &&
               portfolioList.portfolioItems!.isNotEmpty) {
-            for (PortfolioItem pi in portfolioList.portfolioItems!) {
-              if (pngIcons.contains(pi.token)) {
-                pi.imageExtension = kImagePNGExtension;
-              }
-            }
             List<PortfolioItem> itemsFiltered =
                 portfolioList.portfolioItems!.where((pi) {
               if (_selectedTab.value == 3) {

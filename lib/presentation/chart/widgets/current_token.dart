@@ -3,7 +3,6 @@ import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
 import 'package:ceres_tools_app/core/theme/dimensions.dart';
-import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
@@ -29,8 +28,6 @@ class CurrentToken extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ChartController controller = Get.find<ChartController>();
-    final String imgExtension = imageExtension(controller.token);
-
     return Responsive(
       builder: (_, sizingInformation) {
         return Padding(
@@ -86,9 +83,7 @@ class CurrentToken extends StatelessWidget {
                         );
                       } else {
                         return RoundImage(
-                          image:
-                              '$kImageStorage${controller.token}$imgExtension',
-                          extension: imgExtension,
+                          image: '$kImageStorage${controller.token}',
                           size: Dimensions.TOKEN_ICONS_SIZE,
                         );
                       }

@@ -81,9 +81,8 @@ class SupplyView extends GetView<SupplyController> {
       child: Row(
         children: [
           RoundImage(
-            image: '$kImageStorage${token.shortName}${token.imageExtension}',
+            image: '$kImageStorage${token.shortName}',
             size: Dimensions.PAIRS_IMAGE_SIZE,
-            extension: token.imageExtension,
           ),
           UIHelper.horizontalSpaceSmall(),
           Text(

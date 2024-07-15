@@ -1,7 +1,7 @@
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/widgets/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:jovial_svg/jovial_svg.dart';
 
 class RoundImage extends StatelessWidget {
   final double? size;
@@ -40,14 +40,22 @@ class RoundImage extends StatelessWidget {
                         image,
                         fit: boxFit,
                       )
-                    : extension == kImageExtension
-                        ? SvgPicture.network(
-                            image,
-                            fit: boxFit!,
-                          )
-                        : Image.network(
+                    : extension == kImagePNGExtension
+                        ? Image.network(
                             image,
                             fit: boxFit,
+                          )
+                        : ScalableImageWidget.fromSISource(
+                            onError: (_) {
+                              return Image.network(
+                                '$image.png',
+                                fit: boxFit,
+                              );
+                            },
+                            si: ScalableImageSource.fromSvgHttpUrl(
+                              Uri.parse('$image.svg'),
+                              warnF: (_) {},
+                            ),
                           )
                 : const EmptyWidget(),
           ),

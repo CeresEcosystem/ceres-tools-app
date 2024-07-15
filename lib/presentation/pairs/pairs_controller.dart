@@ -1,7 +1,6 @@
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/loading_status.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
-import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/pair.dart';
 import 'package:ceres_tools_app/domain/models/pair_list.dart';
@@ -132,10 +131,6 @@ class PairsController extends GetxController {
         double vol = 0;
 
         for (Pair pair in _pairs!) {
-          if (pngIcons.contains(pair.shortName)) {
-            pair.imageExtension = kImagePNGExtension;
-          }
-
           if (pair.liquidity != null) {
             liq += pair.liquidity!;
           }

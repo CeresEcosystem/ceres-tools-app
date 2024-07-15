@@ -46,7 +46,7 @@ class Lending extends StatelessWidget {
                   children: [
                     RoundImage(
                       size: Dimensions.GRID_LODO,
-                      image: '$kImageStorage${info.poolAssetSymbol}.svg',
+                      image: '$kImageStorage${info.poolAssetSymbol}',
                     ),
                     UIHelper.horizontalSpaceSmall(),
                     Text(

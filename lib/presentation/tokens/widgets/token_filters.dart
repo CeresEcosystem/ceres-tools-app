@@ -148,7 +148,7 @@ class TokenFilters extends StatelessWidget {
                       setFilter: (String filter) =>
                           controller.setPriceFilter(filter),
                       filterIcon: const RoundImage(
-                        image: '${kImageStorage}XOR.svg',
+                        image: '${kImageStorage}XOR',
                         size: Dimensions.SOCIAL_ICONS_SIZE,
                       ),
                       sizingInformation: sizingInformation,
@@ -162,16 +162,16 @@ class TokenFilters extends StatelessWidget {
     );
   }
 
-  Widget filterIcon(String filter) {
+  Widget? filterIcon(String filter) {
     if (filter == 'Favorites') {
       return const Icon(Icons.star);
     } else if (filter == 'Synthetics') {
       return const RoundImage(
-        image: '${kImageStorage}XST.svg',
+        image: '${kImageStorage}XST',
         size: Dimensions.SOCIAL_ICONS_SIZE,
       );
-    } else {
-      return const EmptyWidget();
     }
+
+    return null;
   }
 }

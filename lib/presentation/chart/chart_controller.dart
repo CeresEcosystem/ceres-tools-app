@@ -6,7 +6,6 @@ import 'package:ceres_tools_app/core/enums/loading_status.dart';
 import 'package:ceres_tools_app/core/services/global_service.dart';
 import 'package:ceres_tools_app/core/utils/address_format.dart';
 import 'package:ceres_tools_app/core/utils/currency_format.dart';
-import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/favorite_token.dart';
 import 'package:ceres_tools_app/domain/models/page_meta.dart';
@@ -249,8 +248,6 @@ class ChartController extends GetxController {
                   '';
               s.type = address == s.inputAssetId ? 'Sell' : 'Buy';
               s.assetInputAmount = s.assetInputAmount.toPrecision(2);
-              s.inputImageExtension = imageExtension(s.inputAsset);
-              s.outputImageExtension = imageExtension(s.outputAsset);
               s.swappedAt = formatDateToLocalTime(s.swappedAt);
               s.formattedAccountId = _wallets
                       .firstWhereOrNull((w) => w.address == s.accountId)
@@ -352,8 +349,6 @@ class ChartController extends GetxController {
                     ?.shortName ??
                 '';
             s.type = _addresses[0] == s.inputAssetId ? 'Sell' : 'Buy';
-            s.inputImageExtension = imageExtension(s.inputAsset);
-            s.outputImageExtension = imageExtension(s.outputAsset);
             s.swappedAt = formatDateToLocalTime(s.swappedAt);
             s.formattedAccountId = _wallets
                     .firstWhereOrNull((w) => w.address == s.accountId)
@@ -441,10 +436,6 @@ class ChartController extends GetxController {
 
         for (final t in tokenList.tokens!) {
           bool isFavorite = _checkIfFavorite(t);
-
-          if (pngIcons.contains(t.shortName)) {
-            t.imageExtension = kImagePNGExtension;
-          }
 
           if (isFavorite) {
             t.isFavorite = true;

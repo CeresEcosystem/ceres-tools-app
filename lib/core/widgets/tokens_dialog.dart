@@ -142,9 +142,7 @@ class _TokensDialogState extends State<TokensDialog> {
                         horizontalTitleGap:
                             Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
                         leading: RoundImage(
-                          image:
-                              '$kImageStorage${token.shortName}${token.imageExtension}',
-                          extension: token.imageExtension,
+                          image: '$kImageStorage${token.shortName}',
                           size: Dimensions.ICON_SIZE,
                         ),
                         title: Row(

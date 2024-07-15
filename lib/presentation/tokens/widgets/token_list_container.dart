@@ -80,9 +80,7 @@ class TokenListContainer extends StatelessWidget {
               child: Row(
                 children: [
                   RoundImage(
-                    image:
-                        '$kImageStorage${token.shortName}${token.imageExtension}',
-                    extension: token.imageExtension,
+                    image: '$kImageStorage${token.shortName}',
                   ),
                   UIHelper.horizontalSpaceSmall(),
                   Expanded(

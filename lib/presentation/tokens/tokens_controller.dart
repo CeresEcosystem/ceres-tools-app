@@ -1,7 +1,6 @@
 import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/enums/loading_status.dart';
 import 'package:ceres_tools_app/core/services/global_service.dart';
-import 'package:ceres_tools_app/core/utils/image_extension.dart';
 import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/token.dart';
 import 'package:ceres_tools_app/domain/models/token_list.dart';
@@ -32,10 +31,6 @@ class TokensController extends GetxController {
     for (final t in _tokens) {
       bool isFavorite = checkIfFavorite(t);
 
-      if (pngIcons.contains(t.shortName)) {
-        t.imageExtension = kImagePNGExtension;
-      }
-
       if (isFavorite) {
         t.isFavorite = true;
         favoriteTokens.add(t);
@@ -51,7 +46,6 @@ class TokensController extends GetxController {
     if (_tokens.isNotEmpty) {
       List<Token> filterTokens = _tokens.where((token) {
         token.isFavorite = checkIfFavorite(token);
-        if (token.price != null && token.price! <= 0) return false;
         if (token.fullName != null && token.assetId != null) {
           return (token.fullName!
                   .toUpperCase()
@@ -135,10 +129,6 @@ class TokensController extends GetxController {
                 0;
 
         for (Token t in tokenList.tokens!) {
-          if (pngIcons.contains(t.shortName)) {
-            t.imageExtension = kImagePNGExtension;
-          }
-
           t.valueInXor = t.price! / xorPrice;
         }
         _tokens = tokenList.tokens ?? [];

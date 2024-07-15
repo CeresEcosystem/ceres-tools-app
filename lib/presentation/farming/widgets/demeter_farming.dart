@@ -57,14 +57,12 @@ class DemeterFarming extends StatelessWidget {
             Positioned(
               left: Dimensions.GRID_LODO - (Dimensions.GRID_LODO / 4),
               child: RoundImage(
-                image:
-                    '$kImageStorage${item["token"]}${item['imageExtension']}',
+                image: '$kImageStorage${item["token"]}',
                 size: Dimensions.GRID_LODO,
-                extension: item['imageExtension'],
               ),
             ),
             RoundImage(
-              image: '$kImageStorage${item["baseAsset"]}$kImageExtension',
+              image: '$kImageStorage${item["baseAsset"]}',
               size: Dimensions.GRID_LODO,
             ),
           ],
@@ -73,9 +71,8 @@ class DemeterFarming extends StatelessWidget {
     }
 
     return RoundImage(
-      image: '$kImageStorage${item["token"]}${item['imageExtension']}',
+      image: '$kImageStorage${item["token"]}',
       size: Dimensions.GRID_LODO,
-      extension: item['imageExtension'],
     );
   }
 

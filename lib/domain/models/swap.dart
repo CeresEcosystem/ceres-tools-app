@@ -1,4 +1,3 @@
-import 'package:ceres_tools_app/core/constants/constants.dart';
 import 'package:ceres_tools_app/core/utils/default_value.dart';
 
 class Swap {
@@ -13,8 +12,6 @@ class Swap {
   String? outputAsset;
   String? type;
   String? formattedAccountId;
-  String inputImageExtension = kImageExtension;
-  String outputImageExtension = kImageExtension;
 
   Swap(
     this.id,
