@@ -8,6 +8,8 @@ import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/toast.dart';
 import 'package:ceres_tools_app/di/injector.dart';
 import 'package:ceres_tools_app/domain/models/apollo_dashboard.dart';
+import 'package:ceres_tools_app/domain/models/kensetsu_position.dart';
+import 'package:ceres_tools_app/domain/models/kensetsu_position_list.dart';
 import 'package:ceres_tools_app/domain/models/page_meta.dart';
 import 'package:ceres_tools_app/domain/models/portfolio_item.dart';
 import 'package:ceres_tools_app/domain/models/portfolio_list.dart';
@@ -74,6 +76,20 @@ final List<Map<String, dynamic>> _tabs = [
     ),
     'index': 6,
   },
+  {
+    'label': 'Kensetsu',
+    'icon': SizedBox(
+      height: Dimensions.ICON_SIZE,
+      width: Dimensions.ICON_SIZE,
+      child: ScalableImageWidget.fromSISource(
+        si: ScalableImageSource.fromSvgHttpUrl(
+          Uri.parse('${kImageStorage}KUSD.svg'),
+          warnF: (_) {},
+        ),
+      ),
+    ),
+    'index': 7,
+  },
 ];
 const _timeFrames = ['1h', '24h', '7d', '30d'];
 const kSelectedWallet = 'SELECTED_WALLET';
@@ -87,6 +103,7 @@ class PortfolioController extends GetxController {
   List<PortfolioItem> _portfolioItems = [];
   List<Swap> _swaps = [];
   List<Transfer> _transfers = [];
+  List<KensetsuPosition> _kensetsuPoisitions = [];
   List<Token> _tokens = [];
   PageMeta _pageMeta = PageMeta(0, 0, 0, 0, false, false);
 
@@ -113,6 +130,7 @@ class PortfolioController extends GetxController {
   List<PortfolioItem> get portfolioItems => _portfolioItems;
   List<Swap> get swaps => _swaps;
   List<Transfer> get transfers => _transfers;
+  List<KensetsuPosition> get kensetsuPositions => _kensetsuPoisitions;
   PageMeta get pageMeta => _pageMeta;
   double get totalValue => _totalValue;
   double get totalValueChangeForTimeFrame => _totalValueChangeForTimeFrame;
@@ -315,6 +333,8 @@ class PortfolioController extends GetxController {
         return 'swaps/${_selectedWallet.value.address}';
       case 5:
         return 'transfers/${_selectedWallet.value.address}';
+      case 7:
+        return '${_selectedWallet.value.address}/kensetsu';
       default:
         return _selectedWallet.value.address;
     }
@@ -331,7 +351,7 @@ class PortfolioController extends GetxController {
     }
   }
 
-  setSwaps(dynamic response) async {
+  Future _setSwaps(dynamic response) async {
     SwapList swapList = SwapList.fromJson(response['data']);
     _pageMeta = PageMeta.fromJson(response['meta']);
 
@@ -360,7 +380,7 @@ class PortfolioController extends GetxController {
     _loadingStatus.value = LoadingStatus.READY;
   }
 
-  setTransfers(dynamic response) async {
+  Future _setTransfers(dynamic response) async {
     TransferList transferList = TransferList.fromJson(response['data']);
     _pageMeta = PageMeta.fromJson(response['meta']);
 
@@ -379,7 +399,7 @@ class PortfolioController extends GetxController {
 
       _transfers = transferFormatted;
     } else {
-      _swaps = [];
+      _transfers = [];
     }
 
     _loadingStatus.value = LoadingStatus.READY;
@@ -442,6 +462,31 @@ class PortfolioController extends GetxController {
     }
   }
 
+  Future _setKensetsuPositions(dynamic response) async {
+    KensetsuPositionList kensetsuPositionList =
+        KensetsuPositionList.fromJson(response);
+
+    if (kensetsuPositionList.kensetsuPositions.isNotEmpty) {
+      List<KensetsuPosition> kensetsuPositionFormatted = [];
+
+      for (final kensetsuPosition in kensetsuPositionList.kensetsuPositions) {
+        KensetsuPosition kp = kensetsuPosition;
+        kp.collateralToken =
+            _tokens.firstWhereOrNull((t) => t.assetId == kp.collateralAssetId);
+        kp.stablecoinToken =
+            _tokens.firstWhereOrNull((t) => t.assetId == kp.stablecoinAssetId);
+
+        kensetsuPositionFormatted.add(kp);
+      }
+
+      _kensetsuPoisitions = kensetsuPositionFormatted;
+    } else {
+      _kensetsuPoisitions = [];
+    }
+
+    _loadingStatus.value = LoadingStatus.READY;
+  }
+
   Future fetchPortfolioItems([int page = 1]) async {
     if (_wallets.isNotEmpty && _selectedWallet.value.address.isNotEmpty) {
       _loadingStatus.value = LoadingStatus.LOADING;
@@ -461,9 +506,11 @@ class PortfolioController extends GetxController {
 
       if (response != null) {
         if (_selectedTab.value == 4) {
-          setSwaps(response);
+          _setSwaps(response);
         } else if (_selectedTab.value == 5) {
-          setTransfers(response);
+          _setTransfers(response);
+        } else if (_selectedTab.value == 7) {
+          _setKensetsuPositions(response);
         } else {
           PortfolioList portfolioList = PortfolioList.fromJson(response);
 

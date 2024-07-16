@@ -6,6 +6,7 @@ import 'package:ceres_tools_app/core/utils/currency_format.dart';
 import 'package:ceres_tools_app/core/utils/sizing_information.dart';
 import 'package:ceres_tools_app/core/utils/ui_helpers.dart';
 import 'package:ceres_tools_app/core/widgets/apollo/apollo.dart';
+import 'package:ceres_tools_app/core/widgets/kensetsu/kensetsu_portfolio.dart';
 import 'package:ceres_tools_app/core/widgets/round_image.dart';
 import 'package:ceres_tools_app/core/widgets/swap_item.dart';
 import 'package:ceres_tools_app/core/widgets/transfer_item.dart';
@@ -420,6 +421,21 @@ class PortfolioTable extends StatelessWidget {
 
       if (controller.selectedTab == 6) {
         return Apollo(sizingInformation: sizingInformation);
+      }
+
+      if (controller.selectedTab == 7) {
+        if (controller.kensetsuPositions.isEmpty) {
+          return EmptyArray(
+            sizingInformation: sizingInformation,
+            tabs: controller.tabs,
+            selectedTab: controller.selectedTab,
+          );
+        }
+
+        return KensetsuPortfolio(
+          sizingInformation: sizingInformation,
+          kensetsuPositions: controller.kensetsuPositions,
+        );
       }
 
       if (controller.portfolioItems.isEmpty) {
