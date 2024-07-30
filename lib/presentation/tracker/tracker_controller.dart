@@ -11,7 +11,7 @@ import 'package:ceres_tools_app/domain/usecase/get_tracker_blocks.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
-const _tabs = ['PSWAP', 'VAL'];
+const _tabs = ['PSWAP', 'VAL', 'XOR'];
 const Map<String, String> _filterTimes = {
   'DAY': '24h',
   'WEEK': '7d',
@@ -165,11 +165,16 @@ class TrackerController extends GetxController {
         .firstWhere(
             (spot) => spot['x'] == touchedSpot.x && spot['y'] == touchedSpot.y);
 
-    if (_selectedToken.value == _tabs[0]) {
-      return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR spent: ${formatToCurrency(item['spent'])}\nReminted LP: ${formatToCurrency(item['lp'])}\nReminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nNet Burn: ${formatToCurrency(item['net'])}';
+    switch (_selectedToken.value) {
+      case 'PSWAP':
+        return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR spent: ${formatToCurrency(item['spent'])}\nReminted LP: ${formatToCurrency(item['lp'])}\nReminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nNet Burn: ${formatToCurrency(item['net'])}';
+      case 'VAL':
+        return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR fees: ${formatToCurrency(item['spent'])}\nXOR for buyback: ${formatToCurrency(item['back'])}\nReminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nNet Burn: ${formatToCurrency(item['net'])}';
+      case 'XOR':
+        return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}';
+      default:
+        return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}';
     }
-
-    return 'DATE: ${formatDate(item['x'], formatFullDate: true)}\nGross Burn: ${formatToCurrency(touchedSpot.y)}\nXOR fees: ${formatToCurrency(item['spent'])}\nXOR for buyback: ${formatToCurrency(item['back'])}\nReminted Parliament: ${formatToCurrency(item['parl'])}\nTotal Reminted: ${formatToCurrency(item['lp'] + item['parl'])}\nNet Burn: ${formatToCurrency(item['net'])}';
   }
 
   String getSupplyTooltipData(LineBarSpot touchedSpot) {

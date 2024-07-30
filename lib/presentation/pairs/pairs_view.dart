@@ -1,5 +1,4 @@
 import 'package:ceres_tools_app/core/constants/constants.dart';
-import 'package:ceres_tools_app/core/enums/device_screen_type.dart';
 import 'package:ceres_tools_app/core/enums/loading_status.dart';
 import 'package:ceres_tools_app/core/style/app_colors.dart';
 import 'package:ceres_tools_app/core/style/app_text_style.dart';
@@ -19,6 +18,8 @@ import 'package:ceres_tools_app/core/widgets/side_menu/side_menu.dart';
 import 'package:ceres_tools_app/core/widgets/status_bar.dart';
 import 'package:ceres_tools_app/domain/models/pair.dart';
 import 'package:ceres_tools_app/presentation/pairs/pairs_controller.dart';
+import 'package:ceres_tools_app/presentation/pairs/widgets/pairs_filter.dart';
+import 'package:ceres_tools_app/presentation/pairs/widgets/pairs_sum_info.dart';
 import 'package:ceres_tools_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -73,25 +74,7 @@ class PairsView extends GetView<PairsController> {
                   UIHelper.verticalSpaceMediumLarge(),
                 ]),
               ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: UIHelper.pagePadding(sizingInformation),
-                    ),
-                    child: Row(
-                      children: [
-                        sumContainer(kTotalLiquidity, controller.totalLiquidity,
-                            sizingInformation),
-                        UIHelper.horizontalSpaceSmall(),
-                        sumContainer(kTotalVolume, controller.totalVolume,
-                            sizingInformation),
-                      ],
-                    ),
-                  ),
-                  UIHelper.verticalSpaceMedium(),
-                ]),
-              ),
+              PairsSumInfo(sizingInformation: sizingInformation),
               SliverList(
                 delegate: SliverChildListDelegate([
                   Padding(
@@ -105,78 +88,8 @@ class PairsView extends GetView<PairsController> {
                   ),
                 ]),
               ),
-              SliverToBoxAdapter(
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    top: Dimensions.DEFAULT_MARGIN_SMALL,
-                    bottom: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: UIHelper.pagePadding(sizingInformation),
-                  ),
-                  height: 35,
-                  child: ListView.separated(
-                    itemBuilder: (_, index) {
-                      String item = controller.baseAssets[index];
-                      bool showIcon = item == 'All';
-                      String icon = item == 'Synthetics' ? 'XST' : item;
-                      bool isActive = item == 'Synthetics'
-                          ? controller.syntheticsFilter
-                          : item == controller.baseAsset
-                              ? true
-                              : false;
-
-                      return GestureDetector(
-                        onTap: () {
-                          if (item == 'Synthetics') {
-                            controller.setSyntheticsFilter();
-                          } else {
-                            controller.setBaseAsset(item);
-                          }
-                        },
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minWidth: Dimensions.PAIRS_IMAGE_SIZE,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(
-                                Dimensions.DEFAULT_MARGIN),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL / 2,
-                            horizontal: Dimensions.DEFAULT_MARGIN_EXTRA_SMALL,
-                          ),
-                          child: Opacity(
-                            opacity: isActive ? 1 : 0.7,
-                            child: Center(
-                              child: Row(
-                                children: [
-                                  if (!showIcon) ...[
-                                    RoundImage(
-                                      image: '$kImageStorage$icon',
-                                      size: Dimensions.SOCIAL_ICONS_SIZE,
-                                    ),
-                                    UIHelper.horizontalSpaceExtraSmall(),
-                                  ],
-                                  Text(
-                                    item,
-                                    style:
-                                        allButtonTextStyle(sizingInformation),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (_, __) =>
-                        UIHelper.horizontalSpaceExtraSmall(),
-                    itemCount: controller.baseAssets.length,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
+              PairsFilter(
+                sizingInformation: sizingInformation,
               ),
               SliverToBoxAdapter(
                 child: Padding(
@@ -241,35 +154,6 @@ class PairsView extends GetView<PairsController> {
         ),
       );
     });
-  }
-
-  Widget sumContainer(
-      String label, String info, SizingInformation sizingInformation) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(
-            sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-                ? Dimensions.DEFAULT_MARGIN_SMALL
-                : Dimensions.DEFAULT_MARGIN),
-        decoration: BoxDecoration(
-          color: backgroundColorDark,
-          borderRadius: BorderRadius.circular(Dimensions.DEFAULT_MARGIN_SMALL),
-        ),
-        child: Column(
-          children: [
-            Text(
-              label,
-              style: pairsSumContainerLabelStyle(sizingInformation),
-            ),
-            UIHelper.verticalSpaceSmall(),
-            Text(
-              info,
-              style: pairsSumContainerInfoStyle(sizingInformation),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget pairItem(Pair pair, SizingInformation sizingInformation) {

@@ -5,7 +5,7 @@ import 'package:ceres_tools_app/core/theme/dimensions.dart';
 import 'package:ceres_tools_app/core/widgets/responsive.dart';
 import 'package:flutter/material.dart';
 
-class SearchTextField extends StatelessWidget {
+class SearchTextField extends StatefulWidget {
   final String hint;
   final Function onChanged;
   final bool showIcon;
@@ -20,7 +20,15 @@ class SearchTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SearchTextField> createState() => _SearchTextFieldState();
+}
+
+class _SearchTextFieldState extends State<SearchTextField>
+    with AutomaticKeepAliveClientMixin<SearchTextField> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Responsive(
       builder: (context, sizingInformation) {
         return TextField(
@@ -37,18 +45,18 @@ class SearchTextField extends StatelessWidget {
             ),
             contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.DEFAULT_MARGIN_SMALL,
-              horizontal: showIcon
+              horizontal: widget.showIcon
                   ? Dimensions.DEFAULT_MARGIN_SMALL / 2
                   : Dimensions.DEFAULT_MARGIN_SMALL,
             ),
             filled: true,
-            hintText: hint,
-            hintStyle: smallerFont
+            hintText: widget.hint,
+            hintStyle: widget.smallerFont
                 ? searchTextFieldHintStyle(sizingInformation)
                     .copyWith(fontSize: subtitle2)
                 : searchTextFieldHintStyle(sizingInformation),
             fillColor: backgroundColorDark,
-            prefixIcon: showIcon
+            prefixIcon: widget.showIcon
                 ? const Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: Dimensions.DEFAULT_MARGIN_SMALL,
@@ -61,10 +69,10 @@ class SearchTextField extends StatelessWidget {
                   )
                 : null,
           ),
-          onChanged: (text) => onChanged(text),
+          onChanged: (text) => widget.onChanged(text),
           autocorrect: false,
           autofocus: false,
-          style: smallerFont
+          style: widget.smallerFont
               ? searchTextFieldTextStyle(sizingInformation)
                   .copyWith(fontSize: subtitle2)
               : searchTextFieldTextStyle(sizingInformation),
@@ -72,4 +80,7 @@ class SearchTextField extends StatelessWidget {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

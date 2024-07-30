@@ -115,7 +115,8 @@ class TrackerView extends GetView<TrackerController> {
                       sizingInformation: sizingInformation,
                     ),
                   ],
-                  if (controller.blocksGrossTable.isNotEmpty) ...[
+                  if (controller.blocksGrossTable.isNotEmpty &&
+                      controller.selectedToken != 'XOR') ...[
                     UIHelper.verticalSpaceSmall(),
                     GrossTable(
                       sizingInformation: sizingInformation,
@@ -136,8 +137,6 @@ class TrackerView extends GetView<TrackerController> {
                     Faqs(
                       sizingInformation: sizingInformation,
                     ),
-                  ],
-                  if (controller.selectedToken == 'PSWAP') ...[
                     UIHelper.verticalSpaceLarge(),
                     Sponsor(sizingInformation: sizingInformation),
                   ],

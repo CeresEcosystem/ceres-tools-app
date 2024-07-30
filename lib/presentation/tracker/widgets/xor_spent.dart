@@ -22,6 +22,32 @@ class XorSpent extends StatelessWidget {
     required this.sizingInformation,
   }) : super(key: key);
 
+  String getTokenTitle(String selectedToken) {
+    switch (selectedToken) {
+      case 'PSWAP':
+        return 'XOR spent';
+      case 'VAL':
+        return 'TBC burns';
+      case 'XOR':
+        return 'XOR burnt';
+      default:
+        return '';
+    }
+  }
+
+  String getTokenBurn(String selectedToken, Block block) {
+    switch (selectedToken) {
+      case 'PSWAP':
+        return '${formatToCurrency(block.xorSpent, decimalDigits: 4)} $kXOR';
+      case 'VAL':
+        return '${formatToCurrency(block.grossBurn, decimalDigits: 4)} VAL';
+      case 'XOR':
+        return '${formatToCurrency(block.grossBurn, decimalDigits: 2)} $kXOR';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final TrackerController controller = Get.find<TrackerController>();
@@ -36,9 +62,7 @@ class XorSpent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  controller.selectedToken == 'PSWAP'
-                      ? 'XOR spent'
-                      : 'TBC burns',
+                  getTokenTitle(controller.selectedToken),
                   style: trackerBlockLabelTitleStyle(sizingInformation),
                 ),
                 UIHelper.verticalSpaceSmallMedium(),
@@ -60,9 +84,7 @@ class XorSpent extends StatelessWidget {
                           UIHelper.horizontalSpaceSmall(),
                           Expanded(
                             child: Text(
-                              controller.selectedToken == 'VAL'
-                                  ? '${formatToCurrency(block.grossBurn, decimalDigits: 4)} VAL'
-                                  : '${formatToCurrency(block.xorSpent, decimalDigits: 4)} $kXOR',
+                              getTokenBurn(controller.selectedToken, block),
                               style: trackerBlockBlockStyle(sizingInformation),
                               textAlign: TextAlign.end,
                             ),

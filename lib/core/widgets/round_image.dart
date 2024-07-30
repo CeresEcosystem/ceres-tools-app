@@ -54,7 +54,7 @@ class RoundImage extends StatelessWidget {
                             },
                             si: ScalableImageSource.fromSvgHttpUrl(
                               Uri.parse('$image.svg'),
-                              warnF: (_) {},
+                              // warnF: (_) {},
                             ),
                           )
                 : const EmptyWidget(),

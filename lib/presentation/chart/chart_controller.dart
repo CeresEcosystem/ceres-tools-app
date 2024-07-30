@@ -143,7 +143,7 @@ class ChartController extends GetxController {
         if (reloadWebView) {
           _webViewController?.loadUrl(
               urlRequest: URLRequest(
-            url: Uri.parse('$kChartURL$t'),
+            url: WebUri('$kChartURL$t'),
           ));
         }
 

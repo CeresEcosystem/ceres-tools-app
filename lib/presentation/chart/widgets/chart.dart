@@ -44,12 +44,10 @@ class _ChartState extends State<Chart>
           Expanded(
             child: InAppWebView(
               initialUrlRequest: URLRequest(
-                url: Uri.parse('$kChartURL${controller.token}'),
+                url: WebUri('$kChartURL${controller.token}'),
               ),
-              initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(
-                  transparentBackground: true,
-                ),
+              initialSettings: InAppWebViewSettings(
+                transparentBackground: true,
               ),
               onWebViewCreated: (contrl) {
                 controller.setInAppWebViewController(contrl);

@@ -54,37 +54,55 @@ class Chart extends StatelessWidget {
         touchTooltipData: LineTouchTooltipData(
           getTooltipItems: defaultTooltipItem,
           fitInsideVertically: true,
-          tooltipBgColor: backgroundColorLight,
+          getTooltipColor: (touchedSpot) => backgroundColorLight,
           maxContentWidth: sizingInformation.screenSize.width -
               Dimensions.DEFAULT_MARGIN_LARGE,
           fitInsideHorizontally: true,
         ),
       ),
-      gridData: FlGridData(
+      gridData: const FlGridData(
         show: true,
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          rotateAngle: -45,
-          showTitles: true,
-          interval: graphData!['intervalX'],
-          getTextStyles: (context, value) => graphTitleTextStyle(),
-          getTitles: (value) =>
-              formatDate(value, formatFullDate: showFullValueX),
-          reservedSize: 30,
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 35,
+            interval: graphData!['intervalX'],
+            getTitlesWidget: (value, meta) {
+              return SideTitleWidget(
+                axisSide: meta.axisSide,
+                angle: -1.04719755,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Text(
+                    formatDate(value),
+                    style: graphTitleTextStyle(),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          interval: graphData!['intervalY'],
-          getTextStyles: (context, value) => graphTitleTextStyle(),
-          getTitles: (value) => showFullValueY
-              ? formatToCurrency(value, decimalDigits: 3)
-              : formatCurrencyGraph(value),
-          reservedSize: showFullValueY ? 80 : 30,
-          margin: 10,
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 35,
+            interval: graphData!['intervalY'],
+            getTitlesWidget: (value, meta) {
+              return SideTitleWidget(
+                axisSide: meta.axisSide,
+                child: Text(
+                  formatCurrencyGraph(value),
+                  style: graphTitleTextStyle(),
+                ),
+              );
+            },
+          ),
         ),
       ),
       borderData: FlBorderData(
@@ -110,15 +128,15 @@ class Chart extends StatelessWidget {
             return FlSpot(spot['x'], spot['y']);
           }).toList(),
           isCurved: false,
-          colors: [Colors.white],
+          color: Colors.white,
           barWidth: 2,
           isStrokeCapRound: true,
-          dotData: FlDotData(
+          dotData: const FlDotData(
             show: false,
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors: [backgroundPink],
+            color: backgroundPink,
           ),
         ),
       ],
