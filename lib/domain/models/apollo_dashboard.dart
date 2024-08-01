@@ -20,7 +20,7 @@ class LendingInfo {
   factory LendingInfo.fromJson(Map<String, dynamic> json) => LendingInfo(
         poolAssetId: json['poolAssetId'],
         poolAssetSymbol: json['poolAssetSymbol'],
-        apr: json['apr'],
+        apr: getDefaultDoubleValueNotNullable(json['apr']),
         amount: getDefaultDoubleValueNotNullable(json['amount']),
         rewards: getDefaultDoubleValueNotNullable(json['rewards']),
       );

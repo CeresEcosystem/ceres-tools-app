@@ -15,6 +15,7 @@ import 'package:ceres_tools_app/domain/models/swap.dart';
 import 'package:ceres_tools_app/domain/models/transfer.dart';
 import 'package:ceres_tools_app/presentation/portfolio/portfolio_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
 class PortfolioItemWidget extends StatelessWidget {
@@ -454,6 +455,26 @@ class PortfolioTable extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (controller.selectedTab == 0) ...[
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.pagePadding(sizingInformation)),
+                  child: SizedBox(
+                    height: 300,
+                    child: InAppWebView(
+                      initialUrlRequest: URLRequest(
+                        url: WebUri(
+                          '$kPortfolioChartURL${controller.selectedWallet.address}',
+                        ),
+                      ),
+                      initialSettings: InAppWebViewSettings(
+                        transparentBackground: true,
+                      ),
+                    ),
+                  ),
+                ),
+                UIHelper.verticalSpaceMedium(),
+              ],
               Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: UIHelper.pagePadding(sizingInformation),

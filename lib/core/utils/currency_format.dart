@@ -15,7 +15,7 @@ String formatToCurrency(dynamic value,
         final formatCurrency =
             NumberFormat.currency(symbol: symbol, decimalDigits: 0);
         String firstPart = formatCurrency.format(int.tryParse(parts[0]));
-        if (parts[1] == '0') {
+        if (parts.length > 1 && parts[1] == '0') {
           return firstPart;
         }
 
@@ -23,7 +23,20 @@ String formatToCurrency(dynamic value,
       } else {
         final formatCurrency =
             NumberFormat.currency(symbol: symbol, decimalDigits: decimalDigits);
-        return formatCurrency.format(value);
+        String formattedValue = formatCurrency.format(value);
+
+        if (formattedValue.contains('.')) {
+          List<String> parts = formattedValue.split('.');
+          String integerPart = parts[0];
+          String decimalPart = parts[1].replaceAll(RegExp(r'0+$'), '');
+          if (decimalPart.isEmpty) {
+            return integerPart;
+          } else {
+            return '$integerPart.$decimalPart';
+          }
+        }
+
+        return formattedValue;
       }
     }
 
