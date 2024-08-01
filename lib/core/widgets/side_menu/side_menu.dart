@@ -14,7 +14,7 @@ import 'package:ceres_tools_app/core/widgets/side_menu/side_menu_content.dart';
 import 'package:ceres_tools_app/domain/models/side_menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jovial_svg/jovial_svg.dart';
+import 'package:heroicons/heroicons.dart';
 
 class SideMenu extends StatelessWidget {
   final bool largeScreen;
@@ -134,18 +134,17 @@ class SideMenu extends StatelessWidget {
               ),
               UIHelper.horizontalSpace(Dimensions.DEFAULT_MARGIN),
               (() {
-                if (option['type'] == 'icon') {
-                  return Icon(
+                if (option['type'] == 'heroicon') {
+                  return HeroIcon(
                     option['icon'],
+                    style: HeroIconStyle.solid,
                     size: Dimensions.SIDE_MENU_ICON_SIZE,
                   );
                 }
 
-                return ScalableImageWidget.fromSISource(
-                  si: ScalableImageSource.fromSvgHttpUrl(
-                    Uri.parse(option['icon']),
-                    warnF: (_) {},
-                  ),
+                return Icon(
+                  option['icon'],
+                  size: Dimensions.SIDE_MENU_ICON_SIZE,
                 );
               })(),
               UIHelper.horizontalSpaceMedium(),

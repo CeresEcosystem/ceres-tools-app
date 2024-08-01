@@ -10,7 +10,6 @@ const kChartURL = 'https://tools.cerestoken.io/trading?token=';
 const kPortfolioChartURL =
     'https://tools.cerestoken.io/portfolio-chart?address=';
 const kSwapsSocketURL = 'http://data.cerestoken.io/swapsocket';
-const kEthScan = 'https://etherscan.io/address/';
 const kImageExtension = '.svg';
 const kImagePNGExtension = '.png';
 const kBannerTitle = 'Ceres is live!';
@@ -61,8 +60,6 @@ const kTBCReservesAddress = 'cnTQ1kbv7PBNNQrEb1tZpmK7eE2hQTwktcdewhc55bpkDrYBX';
 const kSyntheticsAddress = '0x0300';
 const kWallets = 'WALLETS';
 const kPageSize = 10;
-
-const kChartIcon = 'https://tools.cerestoken.io/chart.svg';
 
 // SIDE MENU //
 const kSideMenuTokens = 'Tokens';
